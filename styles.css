@@ -348,6 +348,9 @@ body{background:#e7ebeb;color:var(--ink)}
 
 /* Automatic dark mode follows device appearance */
 @media (prefers-color-scheme: dark) {
+.desktop-nav{background:#202d30;border-color:#39494b;box-shadow:0 14px 28px rgba(0,0,0,.38)}
+.desktop-nav a{background:#263638;color:#e5eeee;border:1px solid #39494b}
+.desktop-nav a:hover{background:#304447;color:#63d2c8}
 :root{color-scheme:dark;--ink:#e5eeee;--muted:#a4b3b4;--line:#344346;--pale:#273538;--white:#202b2e;--shadow:0 18px 50px rgba(0,0,0,.24)}
 body{background:#182326;color:var(--ink)}.site-header{background:rgba(29,41,44,.97);border-color:#344346}.brand b,.desktop-nav a,.icon-btn,.menu-btn{color:#e5eeee}.brand small,.eyebrow,.hero h1 em,.price,.art-caption b{color:#50c9bf}
 .cart-btn,.category-card,.product-card,.checkout-dialog,.product-details-dialog,.cart-drawer,.admin-login-card,.admin-dialog{background:#202d30;color:#e5eeee;border-color:#39494b}
