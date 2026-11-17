@@ -16,6 +16,8 @@ let sb = null;
 let products = hasBackend ? [] : [...demoProducts];
 let cart = JSON.parse(localStorage.getItem("honor-cart")||"[]");
 let activeCategory = "الكل";
+let visibleProductCount = 8;
+const productsPerPage = 8;
 let storeCategories = [];
 let productLoadMessage = "";
 
@@ -42,7 +44,8 @@ function renderProducts(){
    (activeCategory==="الكل"||String(p.categoryId)===String(activeCategory)) &&
    (`${p.name} ${p.description||""} ${p.brand||""}`).toLowerCase().includes(q)
  );
- $("product-grid").innerHTML=filtered.map(p=>`<article class="product-card">
+ const visibleProducts=filtered.slice(0,visibleProductCount);
+ $("product-grid").innerHTML=visibleProducts.map(p=>`<article class="product-card">
    ${p.tag?`<span class="product-tag">${escapeHtml(p.tag)}</span>`:""}
    <button type="button" class="product-view" data-details="${escapeHtml(p.id)}" aria-label="تفاصيل ${escapeHtml(p.name)}">
      <div class="product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<div class="product-placeholder"><span>${escapeHtml(p.brand||"TECH")}</span><b>${escapeHtml(p.name)}</b><small>HONOR AL-DIWANIYAH</small></div>`}</div>
@@ -59,6 +62,11 @@ function renderProducts(){
  empty.classList.toggle("hidden",filtered.length>0);
  if(!filtered.length && productLoadMessage) empty.textContent=productLoadMessage;
  else empty.textContent="ماكو منتجات تطابق بحثك حالياً.";
+ const moreButton=$("load-more-products");
+ if(moreButton){
+   moreButton.classList.toggle("hidden",filtered.length<=visibleProductCount);
+   moreButton.textContent=`عرض المزيد (${filtered.length-visibleProductCount})`;
+ }
  document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>addToCart(b.dataset.add)));
  document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
 }
@@ -155,6 +163,7 @@ function renderCategories(categories){
    grid.querySelectorAll(".category-card").forEach(x=>x.classList.remove("active"));
    b.classList.add("active");
    activeCategory=b.dataset.category;
+   visibleProductCount=productsPerPage;
    renderProducts();
  }));
 }
@@ -286,7 +295,8 @@ async function submitOrder(e){
 }
 
 // Category buttons are rendered dynamically from Supabase categories.
-$("search-input").addEventListener("input",renderProducts);
+$("search-input").addEventListener("input",()=>{visibleProductCount=productsPerPage;renderProducts()});
+if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
 $("search-toggle").onclick=()=>{$("search-box").scrollIntoView({behavior:"smooth"});$("search-input").focus()};
 $("search-clear").onclick=()=>{$("search-input").value="";renderProducts()};
 $("cart-open").onclick=openCart;
@@ -297,7 +307,7 @@ $("checkout-close").onclick=()=>$("checkout-dialog").close();
 $("product-details-close").onclick=()=>$("product-details-dialog").close();
 $("checkout-form").addEventListener("submit",submitOrder);
 $("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
-document.querySelectorAll("[data-nav-category]").forEach(link=>link.addEventListener("click",()=>{ const category=storeCategories.find(c=>c.slug===link.dataset.navCategory); if(category){ activeCategory=category.id; renderProducts(); document.querySelectorAll("#category-grid .category-card").forEach(b=>b.classList.toggle("active",b.dataset.category===String(category.id))); } document.querySelector(".desktop-nav")?.classList.remove("mobile-open"); }));
+document.querySelectorAll("[data-nav-category]").forEach(link=>link.addEventListener("click",()=>{ const category=storeCategories.find(c=>c.slug===link.dataset.navCategory); if(category){ activeCategory=category.id; visibleProductCount=productsPerPage; renderProducts(); document.querySelectorAll("#category-grid .category-card").forEach(b=>b.classList.toggle("active",b.dataset.category===String(category.id))); } document.querySelector(".desktop-nav")?.classList.remove("mobile-open"); }));
 $("year").textContent=new Date().getFullYear();
 initGovernors();
 renderProducts();
