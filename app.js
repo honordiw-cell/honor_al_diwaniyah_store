@@ -89,8 +89,12 @@ function showProductDetails(id){
 function addToCart(id){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
+ const stock=Math.max(0,Number(p.stock)||0);
+ if(stock<=0){toast("نفذ من المخزون");return}
  const row=cart.find(x=>String(x.id)===String(id));
- row?row.qty++:cart.push({id:p.id,name:p.name,price:Number(p.price)||0,qty:1});
+ if(row&&row.qty>=stock){toast("الكمية المتوفرة بالمخزون: "+stock);return}
+ if(row)row.qty++;
+ else cart.push({id:p.id,name:p.name,price:Number(p.price)||0,qty:1});
  persistCart();
  toast("انضاف المنتج إلى السلة");
 }
@@ -105,7 +109,14 @@ function renderCart(){
 }
 function changeQty(id,d){
  const x=cart.find(x=>String(x.id)===String(id));
- if(x)x.qty+=d;
+ if(!x)return;
+ if(d>0){
+   const p=products.find(p=>String(p.id)===String(id));
+   const stock=Math.max(0,Number(p?.stock)||0);
+   if(stock<=0){toast("نفذ من المخزون");return}
+   if(x.qty>=stock){toast("الكمية المتوفرة بالمخزون: "+stock);return}
+ }
+ x.qty+=d;
  cart=cart.filter(x=>x.qty>0);
  persistCart();
 }
@@ -218,6 +229,14 @@ async function loadProducts(){
 async function submitOrder(e){
  e.preventDefault();
  if(!cart.length){toast("السلة فارغة");return}
+ for(const item of cart){
+   const p=products.find(p=>String(p.id)===String(item.id));
+   const stock=Math.max(0,Number(p?.stock)||0);
+   if(!p||stock<=0||item.qty>stock){
+     toast(stock<=0?"نفذ من المخزون":"الكمية المطلوبة غير متوفرة حالياً");
+     return;
+   }
+ }
  if(hasBackend&&!sb){
    $("form-message").textContent="الاتصال بقاعدة البيانات غير جاهز. حاول لاحقاً.";
    return;
