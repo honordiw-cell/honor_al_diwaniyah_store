@@ -522,3 +522,42 @@ html,body{max-width:100%;overflow-x:hidden}
   .x9e-editorial-copy h1{font-size:clamp(19px,6vw,24px);overflow-wrap:anywhere}
   .x9e-editorial-devices{max-width:100%;gap:clamp(12px,5vw,25px)}
 }
+
+
+/* Logo display repair: preserve the full square artwork and its circular mark */
+.brand-logo-frame,
+.footer-logo-frame{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:visible !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+.brand-logo-frame{
+  width:64px !important;
+  height:64px !important;
+  flex:0 0 64px !important;
+}
+.footer-logo-frame{
+  width:156px !important;
+  height:156px !important;
+}
+.brand-logo-frame img,
+.footer-logo-frame img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  border-radius:0 !important;
+  clip-path:none !important;
+}
+@media(max-width:700px){
+  .brand-logo-frame{width:54px !important;height:54px !important;flex-basis:54px !important}
+  .footer-logo-frame{width:140px !important;height:140px !important}
+}
