@@ -132,6 +132,11 @@ function categoryIcon(category){
 function renderCategories(categories){
  storeCategories=categories||[];
  const grid=$("category-grid");
+ const categoryOrder=["honor","redmi","apple","samsung","xiaomi","infinix","tecno","realme","poco","motorola","tablets","accessories","maintenance"];
+ storeCategories.sort((a,b)=>{
+   const ai=categoryOrder.indexOf(a.slug), bi=categoryOrder.indexOf(b.slug);
+   return (ai<0?999:ai)-(bi<0?999:bi);
+ });
  const items=[{id:"الكل",name:"كل المنتجات",slug:"all"},...storeCategories];
  grid.innerHTML=items.map((c,i)=>`<button class="category-card ${i===0?"active":""}" data-category="${escapeHtml(c.id)}"><span>${i===0?"▣":categoryIcon(c)}</span><b>${escapeHtml(c.name)}</b></button>`).join("");
  grid.querySelectorAll("[data-category]").forEach(b=>b.addEventListener("click",()=>{
