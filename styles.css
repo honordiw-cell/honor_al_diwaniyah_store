@@ -254,3 +254,89 @@ body{background:#e7ebeb;color:var(--ink)}
   .price{font-size:11px}
   .category-card{flex-basis:132px}
 }
+
+
+/* MOBILE ART DIRECTION — compact editorial storefront */
+@media(max-width:850px){
+  body{background:#dfe4e4}
+  .site-header{
+    height:64px;padding:0 12px;background:rgba(224,229,229,.97);
+    border-bottom:1px solid #cbd2d2;box-shadow:0 3px 14px rgba(28,40,42,.06)
+  }
+  .brand{gap:7px}
+  .brand-logo-frame{width:43px;height:38px;border-radius:9px}
+  .brand-wordmark b{font-size:12px;letter-spacing:.8px}
+  .brand-wordmark small{font-size:6px;letter-spacing:1.2px}
+  .header-actions{gap:3px}
+  .icon-btn,.menu-btn{width:34px;height:38px;font-size:22px}
+  .cart-btn{min-height:38px;padding:6px 10px;font-size:11px}
+  .hero{
+    display:flex;flex-direction:column;align-items:stretch;
+    margin:12px 10px 0;padding:22px 19px 19px;min-height:0;
+    border-radius:20px;background:linear-gradient(145deg,#cfd6d6 0%,#e5e9e9 58%,#d3dddd 100%);
+    border:1px solid #c5cece;box-shadow:0 9px 25px rgba(31,47,49,.08)
+  }
+  .hero-copy{order:1;max-width:none;text-align:right}
+  .hero-copy .eyebrow{font-size:8px;letter-spacing:2px;margin:0 0 8px}
+  .hero h1{font-size:clamp(29px,8vw,37px);line-height:1.32;letter-spacing:-.7px;margin:0 0 8px}
+  .hero h1 em{color:#087f79}
+  .hero p{font-size:12px;line-height:1.85;color:#566367;margin:0 0 14px;max-width:100%}
+  .primary-btn{min-height:43px;padding:10px 17px;font-size:13px;gap:18px;box-shadow:0 5px 13px rgba(8,127,121,.16)}
+  .hero-trust{display:flex;flex-wrap:nowrap;gap:6px;margin-top:14px;overflow:hidden}
+  .hero-trust span{font-size:9px;white-space:nowrap;padding:5px 8px;background:#e9eded;border:1px solid #cbd5d5;border-radius:20px}
+  .hero-art{
+    order:2;height:112px;min-height:112px;width:100%;margin:13px 0 0;
+    display:block;overflow:hidden;border-radius:14px;background:linear-gradient(100deg,#c6d1d0,#dce5e3)
+  }
+  .art-glow{width:125px;height:125px;right:calc(50% - 62px);top:-8px;background:radial-gradient(circle,#9fd5ce 0,#c7e1dd 65%,transparent 74%)}
+  .phone{width:57px;height:103px;border-width:3px;border-radius:13px;top:5px}
+  .phone-back{right:calc(50% - 50px);transform:rotate(-12deg)}
+  .phone-front{right:calc(50% - 8px);transform:rotate(9deg)}
+  .camera{top:7px;right:6px;width:21px;height:21px;border:3px solid #b9c8c5;border-radius:7px}
+  .camera:after{width:6px;height:6px;margin:4px}
+  .screen-shine{inset:12px 7px;border-radius:9px}
+  .island{top:5px;left:17px;width:22px;height:5px}
+  .art-caption{display:none}
+  .benefits{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;
+    margin:11px 10px;padding:10px 8px;border-radius:15px;
+    background:#d3dada;border:1px solid #c4cece;box-shadow:none
+  }
+  .benefits>div{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;min-width:0}
+  .benefit-icon{width:33px;height:33px;border-radius:10px;font-size:15px}
+  .benefits b{font-size:10px;line-height:1.4}
+  .benefits small{font-size:8px;line-height:1.5;margin-top:2px}
+  .section{padding:29px 13px}
+  .section-heading{margin-bottom:14px}
+  .section h2{font-size:20px}
+  .eyebrow{font-size:8px;margin-bottom:5px}
+  .category-grid{gap:8px;padding-bottom:5px}
+  .category-card{flex:0 0 132px;min-height:60px;padding:8px 9px;border-radius:12px;background:#e7ebeb}
+  .category-card span{width:32px;height:32px;flex:0 0 32px;border-radius:9px;font-size:16px}
+  .category-card b{font-size:10px}
+  .products-section{background:#d8dede;border:0;border-top:1px solid #cbd3d3}
+  .search-box{background:#eef1f1;border-color:#c6d0d0}
+  .product-grid{gap:9px}
+  .product-card{background:#edf0f0;border-color:#cbd4d4;border-radius:13px;padding:7px;box-shadow:0 3px 11px rgba(30,45,46,.04)}
+  .product-image{height:clamp(118px,34vw,150px);background:linear-gradient(145deg,#e3e8e8,#d4dddd);border:0;border-radius:9px}
+  .product-card h3{font-size:11px;line-height:1.5;min-height:33px;margin:8px 0 2px}
+  .product-meta{font-size:9px;min-height:25px}
+  .product-bottom{margin-top:7px;gap:5px;align-items:center}
+  .price{font-size:11px}
+  .add-btn{font-size:10px;min-height:34px;padding:6px 8px;border-radius:8px}
+  .promo-band{margin:12px 13px 28px;padding:22px 18px;border-radius:16px}
+  .promo-band h2{font-size:20px}
+  .promo-band p{font-size:11px}
+  .site-footer{margin-top:28px;padding:28px 18px 15px}
+}
+@media(max-width:390px){
+  .brand-wordmark{display:block}
+  .hero{padding:19px 16px 16px}
+  .hero h1{font-size:29px}
+  .hero-trust span{font-size:8px;padding:5px 6px}
+  .benefits{gap:4px;padding:9px 5px}
+  .benefits b{font-size:9px}
+  .benefits small{font-size:7px}
+  .product-grid{gap:7px}
+  .product-card{padding:6px}
+}
