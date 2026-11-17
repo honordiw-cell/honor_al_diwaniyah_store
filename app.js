@@ -69,10 +69,7 @@ function showProductDetails(id){
  (p.oldPrice>p.price?'<del class="old-price">'+money(p.oldPrice)+'</del>':"")+
  '<p class="detail-description">'+escapeHtml(p.description||"")+"</p>"+
  '<div class="detail-specs">'+
- (p.ram?'<div><span>الرام</span><b>'+escapeHtml(p.ram)+'</b></div>':"")+
- (p.storage?'<div><span>الذاكرة</span><b>'+escapeHtml(p.storage)+'</b></div>':"")+
- (p.color?'<div><span>اللون</span><b>'+escapeHtml(p.color)+'</b></div>':"")+
- '<div><span>التوفر</span><b>'+(p.stock>0?"متوفر":"غير متوفر حالياً")+'</b></div></div>'+
+ (p.ram?'<div><span>الرام</span><b>'+escapeHtml(p.ram)+'</b></div>':"")+\n (p.storage?'<div><span>الذاكرة</span><b>'+escapeHtml(p.storage)+'</b></div>':"")+\n (p.chipset?'<div><span>المعالج</span><b>'+escapeHtml(p.chipset)+'</b></div>':"")+\n (p.screen?'<div><span>الشاشة</span><b>'+escapeHtml(p.screen)+'</b></div>':"")+\n (p.camera?'<div><span>الكاميرات</span><b>'+escapeHtml(p.camera)+'</b></div>':"")+\n (p.battery?'<div><span>البطارية والشحن</span><b>'+escapeHtml(p.battery)+'</b></div>':"")+\n (p.protection?'<div><span>مقاومة الماء والغبار</span><b>'+escapeHtml(p.protection)+'</b></div>':"")+\n (p.color?'<div><span>اللون</span><b>'+escapeHtml(p.color)+'</b></div>':"")+\n '<div><span>التوفر</span><b>'+(p.stock>0?"متوفر":"غير متوفر حالياً")+'</b></div></div>'+
  '<button type="button" class="primary-btn full" id="detail-add-cart" '+(p.stock<=0?"disabled":"")+">أضف للسلة +</button></div>";
  $("detail-add-cart").addEventListener("click",()=>{addToCart(p.id);dialog.close()});
  dialog.showModal();
@@ -160,6 +157,7 @@ async function loadProducts(){
    const categoryMap=new Map((categories||[]).map(c=>[String(c.id),c]));
    products=(rows||[]).map(row=>{
      const category=categoryMap.get(String(row.category_id));
+     const isX9d=/x\\s*9d/i.test(row.name||"");
      return {
        id:String(row.id),
        name:row.name,
@@ -172,9 +170,14 @@ async function loadProducts(){
        image:row.image_url||"",
        images:Array.isArray(row.images)?row.images:[],
        brand:row.brand||"",
-       ram:row.ram||"",
-       storage:row.storage||"",
+       ram:row.ram||(isX9d?"12GB":""),
+       storage:row.storage||(isX9d?"256GB":""),
        color:row.color||"",
+       chipset:isX9d?"Snapdragon 6 Gen 4":"",
+       screen:isX9d?"6.79 بوصة AMOLED — 120Hz":"",
+       camera:isX9d?"108MP مع OIS + 5MP واسعة، أمامية 16MP":"",
+       battery:isX9d?"8300mAh مع شحن سريع 66W":"",
+       protection:isX9d?"IP66 / IP68 / IP69 / IP69K":"",
        tag:row.tag||""
      };
    });
