@@ -452,3 +452,36 @@ body{background:#182326;color:var(--ink)}.site-header{background:rgba(29,41,44,.
   .brand-logo-frame{width:48px;height:48px;flex-basis:48px}
   .footer-logo-frame{width:132px;height:132px}
 }
+
+
+/* Fix checkerboard margins in the supplied circular logo artwork */
+.brand-logo-frame img,
+.footer-logo-frame img{
+  width:112%;
+  height:112%;
+  max-width:none;
+  max-height:none;
+  object-fit:cover;
+  border-radius:50%;
+  clip-path:circle(46% at 50% 50%);
+}
+.brand-logo-frame,
+.footer-logo-frame{
+  overflow:hidden;
+  border-radius:50%;
+}
+
+/* Keep the editorial X9e hero consistent with the dark storefront */
+@media (prefers-color-scheme: dark){
+  .hero-x9e-editorial{
+    background:linear-gradient(125deg,#263638 0%,#202e31 58%,#26383a 100%);
+    border-color:#3a4b4d;
+    color:#edf5f4;
+  }
+  .hero-x9e-editorial:before{background:#18b6ad}
+  .x9e-brand,.x9e-editorial-copy h1{color:#edf5f4}
+  .x9e-pro-word{color:#3b5555}
+  .x9e-editorial-copy p{color:#b2c0bf}
+  .x9e-editorial-copy h1 span{border-color:#b9c9c7;color:#edf5f4}
+  .x9e-editorial-foot{border-color:#405456;color:#a9bcba}
+}
