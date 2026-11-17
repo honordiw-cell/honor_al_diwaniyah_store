@@ -187,13 +187,23 @@ async function submitOrder(e){
    status:"new"
  };
  if(sb){
-   const {error}=await sb.from("orders").insert(order);
+   $("form-message").textContent="جارٍ إرسال طلبك...";
+   const {data:orderNumber,error}=await sb.rpc("submit_store_order",{
+     p_customer_name:form.get("customer_name"),
+     p_phone:form.get("phone"),
+     p_province:form.get("governorate"),
+     p_district:form.get("district"),
+     p_address:form.get("address"),
+     p_payment_method:form.get("payment_method"),
+     p_notes:form.get("notes"),
+     p_items:cart.map(x=>({product_id:x.id,quantity:x.qty}))
+   });
    if(error){
-     console.error("Order insert failed:",error);
-     $("form-message").textContent="تعذر إرسال الطلب حالياً. تأكد من صلاحيات إدخال الطلبات في Supabase.";
+     console.error("Order submission failed:",error);
+     $("form-message").textContent=error.message||"تعذر إرسال الطلب حالياً. حاول مرة ثانية.";
      return;
    }
-   $("form-message").textContent="تم استلام طلبك بنجاح. راح نتواصل وياك لتأكيد التفاصيل.";
+   $("form-message").textContent="تم استلام طلبك بنجاح. رقم طلبك: "+orderNumber;
  }else{
    const localOrders=JSON.parse(localStorage.getItem("honor-demo-orders")||"[]");
    order.id="DEMO-"+Date.now();
