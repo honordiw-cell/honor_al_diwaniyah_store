@@ -12,13 +12,25 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
+  <div class="store-announcement">
+    <span>HONOR AL-DIWANIYAH</span>
+    <span>توصيل لجميع محافظات العراق</span>
+    <a href="tel:07874400300" dir="ltr">0787 440 0300</a>
+  </div>
+
+  <header class="site-header store-header">
     <a class="brand" href="#home" aria-label="HONOR AL-DIWANIYAH - الرئيسية">
       <span class="brand-logo-frame"><img src="assets/honor-al-diwaniyah-logo.png" alt="شعار هونر الديوانية"></span>
       <span class="brand-wordmark"><b>HONOR</b><small>AL-DIWANIYAH</small></span>
     </a>
     <nav class="desktop-nav">
-      <a href="#home">الرئيسية</a><a href="#products">المنتجات</a><a href="#products" data-nav-category="accessories">الإكسسوارات</a><a href="#products" data-nav-category="maintenance">الصيانة</a><a href="#about">عن المتجر</a><a href="#contact">تواصل ويانه</a>
+      <a href="#home">الرئيسية</a>
+      <a href="#categories">الأقسام</a>
+      <a href="#products">المنتجات</a>
+      <a href="#accessories" data-nav-category="accessories">الإكسسوارات</a>
+      <a href="#maintenance">الصيانة</a>
+      <a href="#about">عن المتجر</a>
+      <a href="#contact">تواصل ويانه</a>
     </nav>
     <div class="header-actions">
       <button class="icon-btn" id="search-toggle" aria-label="بحث">⌕</button>
@@ -27,29 +39,43 @@
     </div>
   </header>
 
-  <main>
-    <section class="hero hero-x9e-editorial" id="home">
-      <div class="x9e-editorial-copy">
-        <span class="x9e-brand">HONOR</span>
-        <div class="x9e-pro-word">PRO</div>
+  <main class="store-home-redesign">
+    <section class="store-hero" id="home">
+      <div class="store-hero-copy">
+        <span class="store-kicker"><i></i> YOUR TECH DESTINATION</span>
+        <p class="store-overline">وصل حديثاً من HONOR</p>
         <h1>HONOR X9e Pro <span>5G</span></h1>
-        <p>أناقة تلفت النظر. وتجربة تواكب يومك.</p>
-        <a class="primary-btn" href="#products">اكتشف الجهاز <span>←</span></a>
+        <p class="store-hero-lead">تصميم يلفت النظر، وتجربة تواكب يومك بكل تفاصيلها.</p>
+        <div class="store-battery">
+          <span class="store-battery-icon">▱</span>
+          <strong>11,000mAh</strong>
+          <small>بطارية عملاقة تدوم أطول</small>
+        </div>
+        <div class="store-hero-actions">
+          <a class="store-btn-primary" href="#products">تسوق الأجهزة <span>←</span></a>
+          <a class="store-btn-quiet" href="#categories">تصفح الأقسام</a>
+        </div>
+        <div class="store-hero-note"><span>HONOR AL-DIWANIYAH</span><span>الجديد يستاهل التجربة</span></div>
       </div>
-      <div class="x9e-editorial-devices" aria-label="الصورة الأصلية لهاتف HONOR X9e Pro">
-        <img class="x9e-editorial-product-image" src="/assets/honor-x9e-pro-devices.webp?v=2" alt="HONOR X9e Pro باللونين البنفسجي والأحمر" loading="eager" fetchpriority="high" width="900" height="817">
+      <div class="store-hero-visual">
+        <span class="store-visual-orbit"></span>
+        <img src="/assets/honor-x9e-pro-devices.webp?v=3" alt="هاتف HONOR X9e Pro باللونين البنفسجي والأحمر" width="900" height="817" fetchpriority="high">
+        <span class="store-visual-label">X9e PRO <b>5G</b></span>
       </div>
-      <div class="x9e-editorial-foot"><span>HONOR AL-DIWANIYAH</span><span>YOUR TECH DESTINATION</span></div>
+      <div class="store-hero-index"><b>01</b><span>NEW ARRIVAL</span></div>
     </section>
 
-    <section class="benefits">
-      <div><span class="benefit-icon">▣</span><span><b>توصيل لكل العراق</b><small>إلى محافظتك ومنطقتك</small></span></div>
-      <div><span class="benefit-icon">◇</span><span><b>طرق دفع مرنة</b><small>عند الاستلام أو إلكترونياً عند التفعيل</small></span></div>
-      <div><span class="benefit-icon">✓</span><span><b>خدمة ومتابعة</b><small>نتابع طلبك خطوة بخطوة</small></span></div>
+    <section class="store-trust" aria-label="مميزات المتجر">
+      <article><span class="store-trust-icon">⌂</span><div><b>توصيل لكل العراق</b><small>نوصل طلبك لمحافظتك</small></div></article>
+      <article><span class="store-trust-icon">◇</span><div><b>خيارات دفع مرنة</b><small>تفاصيل واضحة قبل تأكيد الطلب</small></div></article>
+      <article><span class="store-trust-icon">✓</span><div><b>خدمة ومتابعة</b><small>متابعة من الطلب إلى الاستلام</small></div></article>
     </section>
 
-    <section class="section" id="categories">
-      <div class="section-heading"><div><span class="eyebrow">EXPLORE</span><h2>تسوق حسب القسم</h2></div></div>
+    <section class="store-section store-categories-section" id="categories">
+      <div class="store-section-heading">
+        <div><span class="store-kicker">SHOP BY CATEGORY</span><h2>اختار عالمك التقني</h2><p>كل الماركات والأجهزة بمكان واحد.</p></div>
+        <a href="#products" class="store-text-link">كل المنتجات <span>←</span></a>
+      </div>
       <div id="category-grid" class="category-grid">
         <button class="category-card active" data-category="الكل"><span>▣</span><b>كل المنتجات</b></button>
         <button class="category-card" data-category="هواتف"><span>▯</span><b>الهواتف</b></button>
@@ -58,21 +84,64 @@
       </div>
     </section>
 
-    <section class="section products-section" id="products">
-      <div class="section-heading">
-        <div><span class="eyebrow">OUR COLLECTION</span><h2>أحدث المنتجات</h2></div>
-        <div class="search-box" id="search-box"><input id="search-input" placeholder="ابحث عن جهاز أو منتج..." aria-label="بحث"><button id="search-clear">×</button></div>
+    <section class="store-pickup-row">
+      <article class="store-pick-card store-pick-dark">
+        <span class="store-pick-index">01 / DEVICES</span>
+        <div><span class="store-kicker">FIND YOUR NEXT DEVICE</span><h2>جهازك القادم<br>يبدي من هنا.</h2><a href="#products">شوف الأجهزة <span>←</span></a></div>
+        <strong class="store-pick-ghost">TECH</strong>
+      </article>
+      <article class="store-pick-card store-pick-teal">
+        <span class="store-pick-index">02 / SUPPORT</span>
+        <div><span class="store-kicker">WE ARE HERE TO HELP</span><h2>تحتاج مساعدة<br>باختيار جهازك؟</h2><a href="#contact">تواصل ويانه <span>←</span></a></div>
+        <strong class="store-pick-ghost">HELP</strong>
+      </article>
+    </section>
+
+    <section class="store-section store-products-section products-section" id="products">
+      <div class="store-section-heading store-products-heading">
+        <div><span class="store-kicker">THE COLLECTION</span><h2>تسوّق أحدث الأجهزة</h2><p>تصفّح الخيارات وقارن المواصفات والأسعار بسهولة.</p></div>
+        <div class="search-box" id="search-box"><input id="search-input" placeholder="ابحث عن جهاز أو منتج..." aria-label="بحث"><button id="search-clear" aria-label="مسح البحث">×</button></div>
       </div>
+      <div class="store-product-tools"><span>اختار المنتج المناسب إلك</span><span>أسعار بالدينار العراقي</span></div>
       <div class="product-grid" id="product-grid"></div>
       <p class="empty-state hidden" id="empty-state">ماكو منتجات تطابق بحثك حالياً.</p>
     </section>
 
-    <section class="promo-band" id="about">
-      <div><span class="eyebrow">HONOR AL-DIWANIYAH</span><h2>شريكك في عالم التقنية</h2><p>تسوق بثقة، واختار جهازك القادم بسهولة.</p></div>
-      <a href="#products" class="light-btn">اكتشف المنتجات ←</a>
+    <section class="store-service-section" id="accessories">
+      <div class="store-service-copy">
+        <span class="store-kicker">ACCESSORIES</span>
+        <h2>كل التفاصيل<br>اللي تكمل جهازك.</h2>
+        <p>اختار الإكسسوارات اللي تحتاجها من شواحن وسماعات وملحقات يومية، وشوف المتوفر بالمتجر.</p>
+        <a href="#products" data-nav-category="accessories" class="store-btn-light">تصفح الإكسسوارات <span>←</span></a>
+      </div>
+      <div class="store-accessory-list">
+        <div><span>01</span><b>شواحن وكوابل</b><i>↗</i></div>
+        <div><span>02</span><b>سماعات</b><i>↗</i></div>
+        <div><span>03</span><b>حمايات وكفرات</b><i>↗</i></div>
+        <div><span>04</span><b>ملحقات متنوعة</b><i>↗</i></div>
+      </div>
+    </section>
+
+    <section class="store-maintenance-section" id="maintenance">
+      <div class="store-maintenance-heading">
+        <span class="store-kicker">MOBILE CARE & REPAIR</span>
+        <h2>جهازك يحتاج صيانة؟<br><em>إحنا بخدمتك.</em></h2>
+        <p>خدمات صيانة الموبايل ومتابعة احتياجات جهازك بمكان واحد.</p>
+        <a class="store-btn-primary" href="https://wa.me/9647874400300?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%B5%D9%8A%D8%A7%D9%86%D8%A9" target="_blank" rel="noopener">استفسر عن الصيانة <span>↗</span></a>
+      </div>
+      <div class="store-maintenance-grid">
+        <article><span>01</span><b>تبديل الشاشات</b><small>خدمة تبديل وصيانة الشاشات</small></article>
+        <article><span>02</span><b>البطاريات والشحن</b><small>فحص مشاكل البطارية والشحن</small></article>
+        <article><span>03</span><b>البرمجة والفحص</b><small>تشخيص ومتابعة أعطال الجهاز</small></article>
+      </div>
+    </section>
+
+    <section class="store-about-section" id="about">
+      <div class="store-about-mark">H<span>+</span></div>
+      <div><span class="store-kicker">HONOR AL-DIWANIYAH</span><h2>مو بس تشتري جهاز.<br>تلقى شريكك بالتقنية.</h2><p>من اختيار الجهاز والإكسسوارات إلى خدمات الصيانة، هدفنا نخلي تجربتك أسهل وأوضح.</p></div>
+      <a href="#contact" class="store-about-link">تعرف علينا أكثر <span>←</span></a>
     </section>
   </main>
-
   <footer class="site-footer" id="contact">
     <div class="footer-main">
       <div class="footer-identity">
