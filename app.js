@@ -76,7 +76,8 @@ function showProductDetails(id){
  (p.camera?'<div><span>الكاميرات</span><b>'+escapeHtml(p.camera)+'</b></div>':"")+
  (p.battery?'<div><span>البطارية والشحن</span><b>'+escapeHtml(p.battery)+'</b></div>':"")+
  (p.protection?'<div><span>مقاومة الماء والغبار</span><b>'+escapeHtml(p.protection)+'</b></div>':"")+
- (p.color?'<div><span>اللون</span><b>'+escapeHtml(p.color)+'</b></div>':"")+\n '<div><span>التوفر</span><b>'+(p.stock>0?"متوفر":"غير متوفر حالياً")+'</b></div></div>'+
+ (p.color?'<div><span>اللون</span><b>'+escapeHtml(p.color)+'</b></div>':"")+
+ '<div><span>التوفر</span><b>'+(p.stock>0?"متوفر":"غير متوفر حالياً")+'</b></div></div>'+
  '<button type="button" class="primary-btn full" id="detail-add-cart" '+(p.stock<=0?"disabled":"")+">أضف للسلة +</button></div>";
  $("detail-add-cart").addEventListener("click",()=>{addToCart(p.id);dialog.close()});
  dialog.showModal();
