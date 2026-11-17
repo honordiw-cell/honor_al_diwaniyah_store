@@ -6,14 +6,14 @@
 
 /* Official store logo and contact footer */
 .brand{gap:11px}
-.brand-logo-frame{width:66px;height:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#050909;border-radius:10px;box-shadow:0 5px 18px rgba(0,150,145,.16)}
-.brand-logo-frame img{width:100%;height:100%;object-fit:contain}
+.brand-logo-frame{width:56px;height:56px;flex:0 0 56px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:transparent;border-radius:50%;box-shadow:0 5px 18px rgba(0,150,145,.16)}
+.brand-logo-frame img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .brand-wordmark b{display:block;font:800 16px Montserrat;letter-spacing:1.2px}
 .brand-wordmark small{display:block;font:600 8px Montserrat;letter-spacing:2px;color:var(--teal-dark)}
 .site-footer{background:#20292d;color:#f5f8f8;padding:48px clamp(20px,7vw,100px) 18px;margin-top:55px}
 .footer-main{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:40px;max-width:1200px;margin:auto;padding-bottom:35px}
-.footer-logo-frame{width:190px;height:126px;background:#030606;border-radius:14px;overflow:hidden;box-shadow:0 0 28px rgba(0,180,173,.18)}
-.footer-logo-frame img{width:100%;height:100%;object-fit:contain}
+.footer-logo-frame{width:150px;height:150px;background:transparent;border-radius:50%;overflow:hidden;box-shadow:0 0 28px rgba(0,180,173,.18)}
+.footer-logo-frame img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
 .footer-identity p{color:#c5d0d0;font-size:13px;margin-top:14px}
 .footer-contact h3,.footer-service h3{font-size:16px;margin:0 0 16px;color:#fff}
 .footer-contact a,.footer-contact p{display:flex;flex-direction:column;gap:3px;margin:0 0 13px;color:#d4dddd;font-size:13px;line-height:1.8}
@@ -22,7 +22,7 @@
 .footer-contact b{font-weight:600}
 .footer-service p{color:#c5d0d0;font-size:13px;margin:0 0 10px}
 .footer-bottom{max-width:1200px;margin:auto;border-top:1px solid #3b484b;padding-top:16px;display:flex;justify-content:space-between;gap:12px;color:#aebbbb;font-size:10px}
-@media(max-width:700px){.brand-logo-frame{width:52px;height:39px}.brand-wordmark b{font-size:13px}.brand-wordmark small{font-size:7px}.footer-main{grid-template-columns:1fr;gap:25px}.footer-logo-frame{width:160px;height:106px}.footer-bottom{flex-direction:column}}
+@media(max-width:700px){.brand-logo-frame{width:44px;height:44px;flex-basis:44px}.brand-wordmark b{font-size:13px}.brand-wordmark small{font-size:7px}.footer-main{grid-template-columns:1fr;gap:25px}.footer-logo-frame{width:160px;height:106px}.footer-bottom{flex-direction:column}}
 
 
 /* Product details modal */
@@ -878,7 +878,7 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
  .site-footer{margin-top:35px;padding:25px 16px 14px}
  .site-footer .footer-main{grid-template-columns:1fr 1fr;gap:18px}
  .site-footer .footer-identity{grid-column:1/-1}
- .site-footer .footer-logo-frame{width:94px;height:94px}
+ .site-footer .footer-logo-frame{width:104px;height:104px}
  .site-footer h3{font-size:13px}
  .site-footer p,.site-footer a{font-size:9px}
  .site-footer a b,.site-footer p b{font-size:10px}
