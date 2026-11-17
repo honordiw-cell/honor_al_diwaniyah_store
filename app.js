@@ -277,6 +277,7 @@ $("checkout-close").onclick=()=>$("checkout-dialog").close();
 $("product-details-close").onclick=()=>$("product-details-dialog").close();
 $("checkout-form").addEventListener("submit",submitOrder);
 $("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
+document.querySelectorAll("[data-nav-category]").forEach(link=>link.addEventListener("click",()=>{ const category=storeCategories.find(c=>c.slug===link.dataset.navCategory); if(category){ activeCategory=category.id; renderProducts(); document.querySelectorAll("#category-grid .category-card").forEach(b=>b.classList.toggle("active",b.dataset.category===String(category.id))); } document.querySelector(".desktop-nav")?.classList.remove("mobile-open"); }));
 $("year").textContent=new Date().getFullYear();
 initGovernors();
 renderProducts();
