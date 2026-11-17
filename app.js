@@ -142,11 +142,13 @@ function initGovernors(){
 function categoryIcon(category){
  const slug=String(category?.slug||"").toLowerCase();
  const name=String(category?.name||"");
- if(slug.includes("tablet") || name.includes("تابلت")) return "▤";
- if(slug.includes("accessor") || name.includes("إكسسوارات")) return "♬";
- if(slug.includes("maint") || name.includes("صيانة")) return "⚙";
- if(slug.includes("apple") || name.includes("آيفون")) return "";
- return "▯";
+ const paths={
+   all:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+   tablet:'<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 18h4"/>',
+   phone:'<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>'
+ };
+ const type=slug.includes("tablet")||name.includes("تابلت")?"tablet":"phone";
+ return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(type==="tablet"?paths.tablet:paths.phone)+'</svg>';
 }
 function renderCategories(categories){
  storeCategories=categories||[];
@@ -158,7 +160,7 @@ function renderCategories(categories){
  });
  const phoneCategories=storeCategories.filter(c=>!["accessories","maintenance"].includes(c.slug));
  const items=[{id:"الكل",name:"كل المنتجات",slug:"all"},...phoneCategories];
- grid.innerHTML=items.map((c,i)=>`<button class="category-card ${i===0?"active":""}" data-category="${escapeHtml(c.id)}"><span>${i===0?"▣":categoryIcon(c)}</span><b>${escapeHtml(c.name)}</b></button>`).join("");
+ grid.innerHTML=items.map((c,i)=>`<button class="category-card ${i===0?"active":""}" data-category="${escapeHtml(c.id)}"><span class="category-icon">${i===0?'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>':categoryIcon(c)}</span><b>${escapeHtml(c.name)}</b></button>`).join("");
  grid.querySelectorAll("[data-category]").forEach(b=>b.addEventListener("click",()=>{
    grid.querySelectorAll(".category-card").forEach(x=>x.classList.remove("active"));
    b.classList.add("active");
