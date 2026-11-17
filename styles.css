@@ -893,3 +893,15 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
  .store-hero h1{font-size:27px}
  .store-battery strong{font-size:15px}
 }
+
+
+/* Hero product image visibility and mobile composition fix */
+.store-hero-visual{min-height:350px;overflow:visible}
+.store-hero-visual img{opacity:1!important;visibility:visible!important;max-width:540px;width:100%;height:100%;object-fit:contain;mix-blend-mode:normal}
+@media(max-width:600px){
+ .store-hero{padding-bottom:10px}
+ .store-hero-visual{height:clamp(245px,72vw,330px);min-height:245px;margin:8px -5px 0}
+ .store-hero-visual img{width:100%;height:100%;max-width:440px;object-fit:contain}
+ .store-visual-orbit{width:78%;max-width:290px}
+ .store-visual-label{bottom:2px}
+}
