@@ -374,3 +374,37 @@ body{background:#182326;color:var(--ink)}.site-header{background:rgba(29,41,44,.
 .hero-x9e .hero-art-bottom{border-color:#526b69;}
 @media(max-width:850px){.x9e-showcase{min-height:190px}.x9e-phone{width:94px;height:185px}.x9e-copy strong{font-size:58px}}
 @media(max-width:520px){.hero-x9e{height:235px;padding:14px 18px}.x9e-showcase{min-height:155px;gap:22px}.x9e-phone{width:76px;height:151px;border-radius:18px}.x9e-camera{width:38px;height:38px;top:17px;right:9px}.x9e-copy strong{font-size:53px}.x9e-copy small,.x9e-copy>span{font-size:8px}.hero-x9e .hero-art-top,.hero-x9e .hero-art-bottom{font-size:8px}}
+
+/* Editorial HONOR X9e Pro banner inspired by supplied reference */
+.hero-x9e-editorial{position:relative;display:grid;grid-template-columns:.95fr 1.05fr;align-items:center;gap:12px;min-height:440px;margin:22px 0 0;padding:38px 5%;overflow:hidden;border:1px solid #eee6e2;border-radius:4px;background:linear-gradient(110deg,#fff 0%,#fff 55%,#fbf8f6 100%);box-shadow:none;color:#171717}
+.hero-x9e-editorial:before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:#d7c1b7}
+.x9e-editorial-copy{position:relative;z-index:2}
+.x9e-brand{font:800 22px Montserrat,sans-serif;letter-spacing:-1px;color:#111}
+.x9e-pro-word{font:800 clamp(90px,14vw,176px)/.82 Montserrat,sans-serif;letter-spacing:-9px;color:#eadbd4;margin:28px 0 12px}
+.x9e-editorial-copy h1{font:500 clamp(23px,3vw,36px)/1.2 Montserrat,sans-serif;letter-spacing:-1px;color:#151515;margin:0 0 14px}
+.x9e-editorial-copy h1 span{display:inline-block;border:1px solid #222;border-radius:6px;padding:1px 5px;font-size:.55em;vertical-align:middle}
+.x9e-editorial-copy p{color:#626262;font-size:15px;margin:0 0 22px}
+.hero-x9e-editorial .primary-btn{display:inline-flex;width:auto;padding:13px 22px;border-radius:5px;box-shadow:none}
+.x9e-editorial-devices{height:340px;display:flex;align-items:center;justify-content:center;gap:clamp(15px,4vw,48px);perspective:900px}
+.x9e-editorial-phone{position:relative;width:clamp(105px,13vw,158px);height:clamp(225px,28vw,315px);border:5px solid #d6c6a5;border-radius:27px;box-shadow:0 16px 22px #00000019,inset 0 0 0 1px #fff8;transform:rotateY(-8deg);overflow:hidden}
+.x9e-editorial-phone.purple{background:linear-gradient(145deg,#80539a,#542d70 72%,#3f2258)}
+.x9e-editorial-phone.red{background:linear-gradient(145deg,#d94c45,#b51e25 72%,#8f161d);transform:rotateY(8deg)}
+.x9e-editorial-phone i{position:absolute;top:18px;left:50%;transform:translateX(-50%);width:76px;height:76px;border-radius:50%;border:7px solid #d8c08b;background:radial-gradient(circle at 35% 35%,#637078 0 7%,#14191e 9% 48%,#050709 51%);box-shadow:0 0 0 2px #6d604b}
+.x9e-editorial-phone i:before,.x9e-editorial-phone i:after{content:"";position:absolute;width:17px;height:17px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#83939c,#090d12 65%);border:2px solid #34383c}
+.x9e-editorial-phone i:before{top:9px;left:8px}
+.x9e-editorial-phone i:after{bottom:8px;right:8px}
+.x9e-editorial-phone b{position:absolute;bottom:34px;left:0;right:0;text-align:center;color:#e5c77f;font:700 10px Montserrat;letter-spacing:1px}
+.x9e-editorial-foot{position:absolute;bottom:18px;left:5%;right:5%;display:flex;justify-content:space-between;border-top:1px solid #e9e2de;padding-top:10px;color:#7b7774;font:700 9px Montserrat;letter-spacing:2px}
+@media(max-width:700px){
+ .hero-x9e-editorial{grid-template-columns:1fr;gap:0;min-height:unset;margin:10px 9px 0;padding:23px 19px 48px}
+ .x9e-brand{font-size:18px}
+ .x9e-pro-word{font-size:100px;margin:16px 0 9px;letter-spacing:-6px}
+ .x9e-editorial-copy h1{font-size:24px}
+ .x9e-editorial-copy p{font-size:13px;margin-bottom:14px}
+ .hero-x9e-editorial .primary-btn{padding:10px 17px;font-size:13px}
+ .x9e-editorial-devices{height:220px;gap:25px;margin-top:8px}
+ .x9e-editorial-phone{width:100px;height:205px;border-radius:21px;border-width:4px}
+ .x9e-editorial-phone i{width:58px;height:58px;border-width:5px;top:14px}
+ .x9e-editorial-phone b{bottom:23px;font-size:8px}
+ .x9e-editorial-foot{bottom:12px;font-size:7px;letter-spacing:1px}
+}
