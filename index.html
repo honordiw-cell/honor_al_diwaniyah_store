@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#16aaa2">
+  <title>HONOR AL-DIWANIYAH | هونر الديوانية</title>
+  <meta name="description" content="تسوق الهواتف الذكية والإكسسوارات من هونر الديوانية. توصيل لجميع محافظات العراق.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="HONOR AL-DIWANIYAH - الرئيسية">
+      <span class="brand-logo-frame"><img src="assets/honor-al-diwaniyah-logo.png" alt="شعار هونر الديوانية"></span>
+      <span class="brand-wordmark"><b>HONOR</b><small>AL-DIWANIYAH</small></span>
+    </a>
+    <nav class="desktop-nav">
+      <a href="#home">الرئيسية</a><a href="#products">المنتجات</a><a href="#categories">الأقسام</a><a href="#about">عن المتجر</a><a href="#contact">تواصل ويانه</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="search-toggle" aria-label="بحث">⌕</button>
+      <button class="cart-btn" id="cart-open">السلة <span id="cart-count">0</span></button>
+      <button class="menu-btn" id="menu-toggle" aria-label="القائمة">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <span class="eyebrow">YOUR TECH DESTINATION</span>
+        <h1>كل التقنية،<br><em>بمكان واحد.</em></h1>
+        <p>اكتشف أحدث الهواتف الذكية والإكسسوارات، واطلب بسهولة من هونر الديوانية مع التوصيل لجميع محافظات العراق.</p>
+        <a class="primary-btn" href="#products">تسوق الآن <span>←</span></a>
+        <div class="hero-trust"><span>✓ منتجات متنوعة</span><span>✓ طلب سهل</span><span>✓ توصيل عراقي</span></div>
+      </div>
+      <div class="hero-art">
+        <div class="art-glow"></div>
+        <div class="phone phone-back"><div class="camera"></div></div>
+        <div class="phone phone-front"><div class="screen-shine"></div><div class="island"></div></div>
+        <div class="art-caption">SMARTER<br><b>CHOICES.</b></div>
+      </div>
+    </section>
+
+    <section class="benefits">
+      <div><span class="benefit-icon">▣</span><span><b>توصيل لكل العراق</b><small>إلى محافظتك ومنطقتك</small></span></div>
+      <div><span class="benefit-icon">◇</span><span><b>طرق دفع مرنة</b><small>عند الاستلام أو إلكترونياً عند التفعيل</small></span></div>
+      <div><span class="benefit-icon">✓</span><span><b>خدمة ومتابعة</b><small>نتابع طلبك خطوة بخطوة</small></span></div>
+    </section>
+
+    <section class="section" id="categories">
+      <div class="section-heading"><div><span class="eyebrow">EXPLORE</span><h2>تسوق حسب القسم</h2></div></div>
+      <div class="category-grid">
+        <button class="category-card active" data-category="الكل"><span>▣</span><b>كل المنتجات</b></button>
+        <button class="category-card" data-category="هواتف"><span>▯</span><b>الهواتف</b></button>
+        <button class="category-card" data-category="تابلت"><span>▤</span><b>التابلت</b></button>
+        <button class="category-card" data-category="إكسسوارات"><span>♬</span><b>الإكسسوارات</b></button>
+      </div>
+    </section>
+
+    <section class="section products-section" id="products">
+      <div class="section-heading">
+        <div><span class="eyebrow">OUR COLLECTION</span><h2>أحدث المنتجات</h2></div>
+        <div class="search-box" id="search-box"><input id="search-input" placeholder="ابحث عن جهاز أو منتج..." aria-label="بحث"><button id="search-clear">×</button></div>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+      <p class="empty-state hidden" id="empty-state">ماكو منتجات تطابق بحثك حالياً.</p>
+    </section>
+
+    <section class="promo-band" id="about">
+      <div><span class="eyebrow">HONOR AL-DIWANIYAH</span><h2>شريكك في عالم التقنية</h2><p>تسوق بثقة، واختار جهازك القادم بسهولة.</p></div>
+      <a href="#products" class="light-btn">اكتشف المنتجات ←</a>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="footer-main">
+      <div class="footer-identity">
+        <div class="footer-logo-frame"><img src="assets/honor-al-diwaniyah-logo.png" alt="شعار هونر الديوانية"></div>
+        <p>شريكك في عالم التقنية</p>
+      </div>
+      <div class="footer-contact">
+        <h3>تواصل ويانه</h3>
+        <a href="tel:07874400300"><span>الهاتف</span><b dir="ltr">0787 440 0300</b></a>
+        <a href="https://www.instagram.com/honor.diw/" target="_blank" rel="noopener"><span>إنستغرام</span><b dir="ltr">@honor.diw</b></a>
+        <p><span>العنوان</span><b>الديوانية – شارع المصورين مقابل المصرف العقاري</b></p>
+      </div>
+      <div class="footer-service">
+        <h3>خدمات المتجر</h3>
+        <p>هواتف ذكية وإكسسوارات</p>
+        <p>صيانة وخدمات الموبايل</p>
+        <p>توصيل لجميع محافظات العراق</p>
+      </div>
+    </div>
+    <div class="footer-bottom"><small>© <span id="year"></span> HONOR AL-DIWANIYAH. جميع الحقوق محفوظة.</small><small>YOUR TECH DESTINATION</small></div>
+  </footer>
+
+  <div class="overlay" id="overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="سلة التسوق">
+    <div class="drawer-head"><h3>سلة التسوق</h3><button class="close-btn" id="cart-close">×</button></div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer"><div class="total-line"><span>المجموع</span><b id="cart-total">0 د.ع</b></div><button class="primary-btn full" id="checkout-open">إكمال الطلب</button></div>
+  </aside>
+
+  <dialog id="checkout-dialog" class="checkout-dialog">
+    <form id="checkout-form">
+      <div class="drawer-head"><h3>إتمام الطلب</h3><button type="button" class="close-btn" id="checkout-close">×</button></div>
+      <div class="form-grid">
+        <label>الاسم الكامل<input name="customer_name" required minlength="3" placeholder="اسمك الكامل"></label>
+        <label>رقم الهاتف<input name="phone" required inputmode="tel" placeholder="07xxxxxxxxx"></label>
+        <label>المحافظة<select name="governorate" required><option value="">اختر المحافظة</option></select></label>
+        <label>المنطقة / القضاء<input name="district" required placeholder="المنطقة أو القضاء"></label>
+        <label class="wide">العنوان بالتفصيل<textarea name="address" required rows="2" placeholder="أقرب نقطة دالة، الشارع، رقم الدار..."></textarea></label>
+        <label class="wide">طريقة الدفع<select name="payment_method" required><option value="cod">الدفع عند الاستلام</option><option value="online" disabled>الدفع الإلكتروني — قريباً</option></select><small class="field-note">الدفع الإلكتروني يتفعّل بعد ربط بوابة دفع معتمدة.</small></label>
+        <label class="wide">ملاحظات إضافية<textarea name="notes" rows="2" placeholder="اختياري"></textarea></label>
+      </div>
+      <div class="checkout-summary"><span>المجموع التقديري</span><b id="checkout-total">0 د.ع</b></div>
+      <button class="primary-btn full" type="submit">تأكيد الطلب</button>
+      <p class="form-message" id="form-message"></p>
+    </form>
+  </dialog>
+  <div class="toast" id="toast"></div>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
