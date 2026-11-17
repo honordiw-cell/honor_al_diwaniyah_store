@@ -189,7 +189,7 @@ async function loadProducts(){
  try{
    const [{data:categories,error:categoryError},{data:rows,error:productError}]=await Promise.all([
      sb.from("categories").select("id,name,slug").eq("is_active",true),
-     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,is_active,created_at").eq("is_active",true).order("created_at",{ascending:false})
+     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_active,created_at").eq("is_active",true).order("created_at",{ascending:false})
    ]);
 
    if(productError) throw productError;
@@ -213,11 +213,11 @@ async function loadProducts(){
        ram:row.ram||(isX9d?"12GB":""),
        storage:row.storage||(isX9d?"256GB":""),
        color:row.color||"",
-       chipset:isX9d?"Snapdragon 6 Gen 4":"",
-       screen:isX9d?"6.79 بوصة AMOLED — 120Hz":"",
-       camera:isX9d?"108MP مع OIS + 5MP واسعة، أمامية 16MP":"",
-       battery:isX9d?"8300mAh مع شحن سريع 66W":"",
-       protection:isX9d?"IP66 / IP68 / IP69 / IP69K":"",
+       chipset:row.chipset||"",
+       screen:row.screen||"",
+       camera:row.camera||"",
+       battery:row.battery||"",
+       protection:row.protection||"",
        tag:row.tag||""
      };
    });
