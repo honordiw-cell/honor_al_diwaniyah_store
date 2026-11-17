@@ -132,7 +132,7 @@ function categoryIcon(category){
 function renderCategories(categories){
  storeCategories=categories||[];
  const grid=$("category-grid");
- const categoryOrder=["honor","redmi","apple","samsung","xiaomi","infinix","tecno","realme","poco","motorola","tablets","accessories","maintenance"];
+ const categoryOrder=["accessories","maintenance","honor","redmi","apple","samsung","xiaomi","infinix","tecno","realme","poco","motorola","tablets"];
  storeCategories.sort((a,b)=>{
    const ai=categoryOrder.indexOf(a.slug), bi=categoryOrder.indexOf(b.slug);
    return (ai<0?999:ai)-(bi<0?999:bi);
