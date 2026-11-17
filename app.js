@@ -45,11 +45,15 @@ function renderProducts(){
  $("product-grid").innerHTML=filtered.map(p=>`<article class="product-card">
    ${p.tag?`<span class="product-tag">${escapeHtml(p.tag)}</span>`:""}
    <button type="button" class="product-view" data-details="${escapeHtml(p.id)}" aria-label="تفاصيل ${escapeHtml(p.name)}">
-     <div class="product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<span>صورة المنتج<br>تُضاف من لوحة الإدارة</span>`}</div>
-     <h3>${escapeHtml(p.name)}</h3><div class="product-meta">${escapeHtml(p.description||p.category||"")}</div>
-     <b class="price">${money(p.price)}</b><span class="details-hint">عرض التفاصيل ←</span>
+     <div class="product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<div class="product-placeholder"><span>${escapeHtml(p.brand||"TECH")}</span><b>${escapeHtml(p.name)}</b><small>HONOR AL-DIWANIYAH</small></div>`}</div>
+     <div class="product-card-copy">
+       <span class="product-brand">${escapeHtml(p.brand||p.category||"")}</span>
+       <h3>${escapeHtml(p.name)}</h3>
+       <div class="product-meta">${[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(" · ")||escapeHtml(p.description||p.category||"")}</div>
+       <div class="product-price-row"><b class="price">${money(p.price)}</b>${p.oldPrice>p.price?`<del class="old-price">${money(p.oldPrice)}</del>`:""}</div>
+     </div>
    </button>
-   <div class="product-bottom"><button class="add-btn" data-add="${escapeHtml(p.id)}">أضف للسلة +</button></div>
+   <div class="product-bottom"><button class="add-btn" data-add="${escapeHtml(p.id)}">أضف للسلة</button><span class="details-hint">التفاصيل ←</span></div>
  </article>`).join("");
  const empty=$("empty-state");
  empty.classList.toggle("hidden",filtered.length>0);
