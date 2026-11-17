@@ -16,6 +16,7 @@ let sb = null;
 let products = hasBackend ? [] : [...demoProducts];
 let cart = JSON.parse(localStorage.getItem("honor-cart")||"[]");
 let activeCategory = "الكل";
+let storeCategories = [];
 let productLoadMessage = "";
 
 if (hasBackend && window.supabase?.createClient) {
@@ -38,7 +39,7 @@ function escapeHtml(s=""){
 function renderProducts(){
  const q=$("search-input").value.trim().toLowerCase();
  const filtered=products.filter(p=>
-   (activeCategory==="الكل"||p.category===activeCategory) &&
+   (activeCategory==="الكل"||String(p.categoryId)===String(activeCategory)) &&
    (`${p.name} ${p.description||""} ${p.brand||""}`).toLowerCase().includes(q)
  );
  $("product-grid").innerHTML=filtered.map(p=>`<article class="product-card">
@@ -87,13 +88,26 @@ function closeCart(){
 function initGovernors(){
  $("checkout-form").governorate.innerHTML='<option value="">اختر المحافظة</option>'+IRAQI_GOVERNORATES.map(x=>`<option>${x}</option>`).join("");
 }
-function categoryGroup(category){
+function categoryIcon(category){
  const slug=String(category?.slug||"").toLowerCase();
  const name=String(category?.name||"");
- if(slug==="tablets" || slug.includes("tablet") || name.includes("تابلت")) return "تابلت";
- if(slug==="accessories" || slug.includes("accessor") || name.includes("إكسسوارات")) return "إكسسوارات";
- if(slug==="maintenance" || slug.includes("maintenance") || name.includes("الصيانة")) return "خدمات";
- return "هواتف";
+ if(slug.includes("tablet") || name.includes("تابلت")) return "▤";
+ if(slug.includes("accessor") || name.includes("إكسسوارات")) return "♬";
+ if(slug.includes("maint") || name.includes("صيانة")) return "⚙";
+ if(slug.includes("apple") || name.includes("آيفون")) return "";
+ return "▯";
+}
+function renderCategories(categories){
+ storeCategories=categories||[];
+ const grid=$("category-grid");
+ const items=[{id:"الكل",name:"كل المنتجات",slug:"all"},...storeCategories];
+ grid.innerHTML=items.map((c,i)=>`<button class="category-card ${i===0?"active":""}" data-category="${escapeHtml(c.id)}"><span>${i===0?"▣":categoryIcon(c)}</span><b>${escapeHtml(c.name)}</b></button>`).join("");
+ grid.querySelectorAll("[data-category]").forEach(b=>b.addEventListener("click",()=>{
+   grid.querySelectorAll(".category-card").forEach(x=>x.classList.remove("active"));
+   b.classList.add("active");
+   activeCategory=b.dataset.category;
+   renderProducts();
+ }));
 }
 async function loadProducts(){
  if(!hasBackend){
@@ -126,7 +140,8 @@ async function loadProducts(){
      return {
        id:String(row.id),
        name:row.name,
-       category:categoryGroup(category),
+       categoryId:row.category_id||"",
+       category:category?.name||"غير مصنف",
        description:row.description||row.brand||category?.name||"",
        price:Number(row.price)||0,
        stock:Number(row.stock)||0,
@@ -135,9 +150,14 @@ async function loadProducts(){
        tag:row.tag||""
      };
    });
-   productLoadMessage=categoryError
-     ?"تم تحميل المنتجات، لكن تعذّر تحميل الأقسام؛ راجع صلاحيات قراءة جدول categories."
-     :"";
+   if(categoryError){
+     console.error("Supabase categories load failed:",categoryError);
+     renderCategories([]);
+     productLoadMessage="تم تحميل المنتجات، لكن تعذّر تحميل الأقسام. راجع صلاحيات قراءة جدول categories.";
+   }else{
+     renderCategories(categories||[]);
+     productLoadMessage="";
+   }
    renderProducts();
  }catch(error){
    console.error("Supabase products load failed:",error);
@@ -167,13 +187,13 @@ async function submitOrder(e){
    status:"new"
  };
  if(sb){
-   const {data,error}=await sb.from("orders").insert(order).select("id").single();
+   const {error}=await sb.from("orders").insert(order);
    if(error){
      console.error("Order insert failed:",error);
      $("form-message").textContent="تعذر إرسال الطلب حالياً. تأكد من صلاحيات إدخال الطلبات في Supabase.";
      return;
    }
-   $("form-message").textContent="تم استلام طلبك بنجاح. رقم الطلب: "+data.id;
+   $("form-message").textContent="تم استلام طلبك بنجاح. راح نتواصل وياك لتأكيد التفاصيل.";
  }else{
    const localOrders=JSON.parse(localStorage.getItem("honor-demo-orders")||"[]");
    order.id="DEMO-"+Date.now();
@@ -187,12 +207,7 @@ async function submitOrder(e){
  setTimeout(()=>$("checkout-dialog").close(),3000);
 }
 
-document.querySelectorAll(".category-card").forEach(b=>b.addEventListener("click",()=>{
- document.querySelectorAll(".category-card").forEach(x=>x.classList.remove("active"));
- b.classList.add("active");
- activeCategory=b.dataset.category;
- renderProducts();
-}));
+// Category buttons are rendered dynamically from Supabase categories.
 $("search-input").addEventListener("input",renderProducts);
 $("search-toggle").onclick=()=>{$("search-box").scrollIntoView({behavior:"smooth"});$("search-input").focus()};
 $("search-clear").onclick=()=>{$("search-input").value="";renderProducts()};
