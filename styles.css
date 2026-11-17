@@ -408,3 +408,47 @@ body{background:#182326;color:var(--ink)}.site-header{background:rgba(29,41,44,.
  .x9e-editorial-phone b{bottom:23px;font-size:8px}
  .x9e-editorial-foot{bottom:12px;font-size:7px;letter-spacing:1px}
 }
+
+
+/* Logo sizing: preserve the original circular transparent PNG */
+.brand-logo-frame{
+  width:56px;
+  height:56px;
+  flex:0 0 56px;
+  display:grid;
+  place-items:center;
+  overflow:visible;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+.brand-logo-frame img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+}
+.footer-logo-frame{
+  width:148px;
+  height:148px;
+  display:grid;
+  place-items:center;
+  overflow:visible;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+.footer-logo-frame img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+}
+@media(max-width:700px){
+  .brand-logo-frame{width:48px;height:48px;flex-basis:48px}
+  .footer-logo-frame{width:132px;height:132px}
+}
