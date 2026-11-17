@@ -44,15 +44,38 @@ function renderProducts(){
  );
  $("product-grid").innerHTML=filtered.map(p=>`<article class="product-card">
    ${p.tag?`<span class="product-tag">${escapeHtml(p.tag)}</span>`:""}
-   <div class="product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<span>صورة المنتج<br>تُضاف من لوحة الإدارة</span>`}</div>
-   <h3>${escapeHtml(p.name)}</h3><div class="product-meta">${escapeHtml(p.description||p.category||"")}</div>
-   <div class="product-bottom"><b class="price">${money(p.price)}</b><button class="add-btn" data-add="${escapeHtml(p.id)}">أضف للسلة +</button></div>
+   <button type="button" class="product-view" data-details="${escapeHtml(p.id)}" aria-label="تفاصيل ${escapeHtml(p.name)}">
+     <div class="product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<span>صورة المنتج<br>تُضاف من لوحة الإدارة</span>`}</div>
+     <h3>${escapeHtml(p.name)}</h3><div class="product-meta">${escapeHtml(p.description||p.category||"")}</div>
+     <b class="price">${money(p.price)}</b><span class="details-hint">عرض التفاصيل ←</span>
+   </button>
+   <div class="product-bottom"><button class="add-btn" data-add="${escapeHtml(p.id)}">أضف للسلة +</button></div>
  </article>`).join("");
  const empty=$("empty-state");
  empty.classList.toggle("hidden",filtered.length>0);
  if(!filtered.length && productLoadMessage) empty.textContent=productLoadMessage;
  else empty.textContent="ماكو منتجات تطابق بحثك حالياً.";
  document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>addToCart(b.dataset.add)));
+ document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
+}
+function showProductDetails(id){
+ const p=products.find(x=>String(x.id)===String(id));
+ if(!p)return;
+ const dialog=$("product-details-dialog");
+ if(!dialog)return;
+ const image=p.image||(p.images&&p.images[0])||"";
+ $("product-details-content").innerHTML='<div class="product-detail-image">'+(image?'<img src="'+escapeHtml(image)+'" alt="'+escapeHtml(p.name)+'">':'<span>صورة المنتج غير متوفرة</span>')+'</div>'+
+ '<div class="product-detail-info"><span class="eyebrow">'+escapeHtml(p.brand||"HONOR AL-DIWANIYAH")+'</span><h2>'+escapeHtml(p.name)+'</h2><b class="price">'+money(p.price)+'</b>'+
+ (p.oldPrice>p.price?'<del class="old-price">'+money(p.oldPrice)+'</del>':"")+
+ '<p class="detail-description">'+escapeHtml(p.description||"")+"</p>"+
+ '<div class="detail-specs">'+
+ (p.ram?'<div><span>الرام</span><b>'+escapeHtml(p.ram)+'</b></div>':"")+
+ (p.storage?'<div><span>الذاكرة</span><b>'+escapeHtml(p.storage)+'</b></div>':"")+
+ (p.color?'<div><span>اللون</span><b>'+escapeHtml(p.color)+'</b></div>':"")+
+ '<div><span>التوفر</span><b>'+(p.stock>0?"متوفر":"غير متوفر حالياً")+'</b></div></div>'+
+ '<button type="button" class="primary-btn full" id="detail-add-cart" '+(p.stock<=0?"disabled":"")+">أضف للسلة +</button></div>";
+ $("detail-add-cart").addEventListener("click",()=>{addToCart(p.id);dialog.close()});
+ dialog.showModal();
 }
 function addToCart(id){
  const p=products.find(x=>String(x.id)===String(id));
@@ -129,7 +152,7 @@ async function loadProducts(){
  try{
    const [{data:categories,error:categoryError},{data:rows,error:productError}]=await Promise.all([
      sb.from("categories").select("id,name,slug").eq("is_active",true),
-     sb.from("products").select("id,category_id,name,description,price,stock,image_url,brand,is_active,created_at").eq("is_active",true).order("created_at",{ascending:false})
+     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,is_active,created_at").eq("is_active",true).order("created_at",{ascending:false})
    ]);
 
    if(productError) throw productError;
@@ -144,9 +167,14 @@ async function loadProducts(){
        category:category?.name||"غير مصنف",
        description:row.description||row.brand||category?.name||"",
        price:Number(row.price)||0,
+       oldPrice:Number(row.old_price)||0,
        stock:Number(row.stock)||0,
        image:row.image_url||"",
+       images:Array.isArray(row.images)?row.images:[],
        brand:row.brand||"",
+       ram:row.ram||"",
+       storage:row.storage||"",
+       color:row.color||"",
        tag:row.tag||""
      };
    });
@@ -226,6 +254,7 @@ $("cart-close").onclick=closeCart;
 $("overlay").onclick=closeCart;
 $("checkout-open").onclick=()=>{if(!cart.length)return toast("السلة فارغة");closeCart();$("checkout-dialog").showModal()};
 $("checkout-close").onclick=()=>$("checkout-dialog").close();
+$("product-details-close").onclick=()=>$("product-details-dialog").close();
 $("checkout-form").addEventListener("submit",submitOrder);
 $("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
 $("year").textContent=new Date().getFullYear();
