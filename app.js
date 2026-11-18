@@ -75,23 +75,49 @@ function showProductDetails(id){
  if(!p)return;
  const dialog=$("product-details-dialog");
  if(!dialog)return;
- const image=p.image||(p.images&&p.images[0])||"";
- $("product-details-content").innerHTML='<div class="product-detail-image">'+(image?'<img src="'+escapeHtml(image)+'" alt="'+escapeHtml(p.name)+'">':'<span>صورة المنتج غير متوفرة</span>')+'</div>'+
- '<div class="product-detail-info"><span class="eyebrow">'+escapeHtml(p.brand||"HONOR AL-DIWANIYAH")+'</span><h2>'+escapeHtml(p.name)+'</h2><b class="price">'+money(p.price)+'</b>'+
- (p.oldPrice>p.price?'<del class="old-price">'+money(p.oldPrice)+'</del>':"")+
- '<p class="detail-description">'+escapeHtml(p.description||"")+"</p>"+
- '<div class="detail-specs">'+
- (p.ram?'<div><span>الرام</span><b>'+escapeHtml(p.ram)+'</b></div>':"")+
- (p.storage?'<div><span>الذاكرة</span><b>'+escapeHtml(p.storage)+'</b></div>':"")+
- (p.chipset?'<div><span>المعالج</span><b>'+escapeHtml(p.chipset)+'</b></div>':"")+
- (p.screen?'<div><span>الشاشة</span><b>'+escapeHtml(p.screen)+'</b></div>':"")+
- (p.camera?'<div><span>الكاميرات</span><b>'+escapeHtml(p.camera)+'</b></div>':"")+
- (p.battery?'<div><span>البطارية والشحن</span><b>'+escapeHtml(p.battery)+'</b></div>':"")+
- (p.protection?'<div><span>مقاومة الماء والغبار</span><b>'+escapeHtml(p.protection)+'</b></div>':"")+
- (p.color?'<div><span>اللون</span><b>'+escapeHtml(p.color)+'</b></div>':"")+
- '<div><span>التوفر</span><b>'+(p.stock>0?"متوفر":"غير متوفر حالياً")+'</b></div></div>'+
- '<button type="button" class="primary-btn full" id="detail-add-cart" '+(p.stock<=0?"disabled":"")+">أضف للسلة +</button></div>";
- $("detail-add-cart").addEventListener("click",()=>{addToCart(p.id);dialog.close()});
+ const images=[...new Set([p.image,...(Array.isArray(p.images)?p.images:[])].filter(Boolean))];
+ const specs=[
+  ["الرام",p.ram],["الذاكرة الداخلية",p.storage],["المعالج",p.chipset],
+  ["الشاشة",p.screen],["الكاميرات",p.camera],["البطارية والشحن",p.battery],
+  ["مقاومة الماء والغبار",p.protection],["اللون",p.color]
+ ].filter(x=>x[1]);
+ const related=products.filter(x=>String(x.id)!==String(p.id)&&((p.brand&&x.brand===p.brand)||(p.categoryId&&String(x.categoryId)===String(p.categoryId)))).slice(0,4);
+ const gallery=images.length?'<div class="landing-gallery"><div class="landing-main-image"><img id="landing-main-image" src="'+escapeHtml(images[0])+'" alt="'+escapeHtml(p.name)+'"></div>'+(images.length>1?'<div class="landing-thumbs">'+images.map((src,i)=>'<button type="button" class="landing-thumb '+(i===0?'active':'')+'" data-gallery-image="'+i+'" aria-label="الصورة '+(i+1)+'"><img src="'+escapeHtml(src)+'" alt=""></button>').join('')+'</div>':'')+'</div>':'<div class="landing-gallery"><div class="landing-main-image landing-no-image">صورة المنتج غير متوفرة حالياً</div></div>';
+ $("product-details-content").innerHTML=
+ '<div class="product-landing">'+
+  '<div class="landing-topline"><span class="eyebrow">HONOR AL-DIWANIYAH</span><span class="landing-stock '+(p.stock>0?'available':'unavailable')+'">'+(p.stock>0?'متوفر حالياً':'غير متوفر حالياً')+'</span></div>'+
+  '<div class="landing-overview">'+gallery+
+   '<div class="landing-buy-panel"><span class="landing-brand">'+escapeHtml(p.brand||p.category||"متجر هونر الديوانية")+'</span>'+
+    '<h1>'+escapeHtml(p.name)+'</h1>'+
+    '<div class="landing-memory">'+[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(' · ')+'</div>'+
+    '<div class="landing-price-line"><strong>'+money(p.price)+'</strong>'+(p.oldPrice>p.price?'<del>'+money(p.oldPrice)+'</del>':'')+'</div>'+
+    (p.description?'<p class="landing-description">'+escapeHtml(p.description)+'</p>':'')+
+    '<div class="landing-actions"><button type="button" class="primary-btn" id="detail-order-now" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(p.stock<=0?'disabled':'')+'>أضف للسلة</button></div>'+
+    '<p class="landing-delivery-note">توصيل لجميع محافظات العراق · تواصل ويانه لأي استفسار</p>'+
+   '</div>'+
+  '</div>'+
+  '<section class="landing-section"><div class="landing-section-title"><span>01 / SPECIFICATIONS</span><h2>المواصفات التقنية</h2><p>المعلومات المعروضة هي المواصفات المسجلة لهذا المنتج في المتجر.</p></div>'+
+   (specs.length?'<div class="landing-spec-grid">'+specs.map((s,i)=>'<article class="landing-spec"><small>'+String(i+1).padStart(2,'0')+'</small><span>'+escapeHtml(s[0])+'</span><b>'+escapeHtml(s[1])+'</b></article>').join('')+'</div>':'<p class="landing-empty-specs">المواصفات التفصيلية غير مضافة لهذا المنتج حالياً.</p>')+
+  '</section>'+
+  '<section class="landing-benefits"><article><b>توصيل لكل العراق</b><span>نوصل طلبك إلى محافظتك</span></article><article><b>متابعة الطلب</b><span>نتابع وياك من الطلب للاستلام</span></article><article><b>خدمة ما بعد البيع</b><span>متواجدين للمساعدة والاستفسار</span></article></section>'+
+  '<section class="landing-section landing-faq"><div class="landing-section-title"><span>02 / BEFORE YOU ORDER</span><h2>قبل لا تطلب</h2></div>'+
+   '<details><summary>شلون أطلب الجهاز؟</summary><p>اضغط «اطلب الآن» وكمل معلومات التوصيل حتى يوصلنا طلبك.</p></details>'+
+   '<details><summary>هل التوصيل متوفر خارج الديوانية؟</summary><p>نوفّر التوصيل لجميع محافظات العراق.</p></details>'+
+   '<details><summary>أكدر أتأكد من تفاصيل النسخة قبل الطلب؟</summary><p>إي، تواصل ويانه حتى نأكدلك تفاصيل النسخة والتوفر قبل إكمال الطلب.</p></details>'+
+  '</section>'+
+  (related.length?'<section class="landing-section"><div class="landing-section-title"><span>03 / YOU MAY ALSO LIKE</span><h2>منتجات مشابهة</h2></div><div class="landing-related">'+related.map(x=>'<button type="button" class="landing-related-card" data-related-product="'+escapeHtml(x.id)+'">'+(x.image?'<img src="'+escapeHtml(x.image)+'" alt="'+escapeHtml(x.name)+'">':'<span class="landing-related-placeholder">HONOR AL-DIWANIYAH</span>')+'<b>'+escapeHtml(x.name)+'</b><strong>'+money(x.price)+'</strong></button>').join('')+'</div></section>':'')+
+  '<div class="landing-bottom-cta"><div><b>جاهز تطلب '+escapeHtml(p.name)+'؟</b><span>اختار اطلب الآن حتى نكمل طلبك.</span></div><button type="button" class="primary-btn" id="detail-order-bottom" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button></div>'+
+ '</div>';
+ const mainImage=$("landing-main-image");
+ document.querySelectorAll("[data-gallery-image]").forEach(b=>b.addEventListener("click",()=>{
+  const index=Number(b.dataset.galleryImage);
+  if(mainImage&&images[index])mainImage.src=images[index];
+  document.querySelectorAll(".landing-thumb").forEach(x=>x.classList.toggle("active",x===b));
+ }));
+ const orderNow=()=>{if(p.stock<=0)return;addToCart(p.id);dialog.close();$("checkout-dialog").showModal()};
+ ["detail-order-now","detail-order-bottom"].forEach(id=>$(id)?.addEventListener("click",orderNow));
+ $("detail-add-cart")?.addEventListener("click",()=>{addToCart(p.id);dialog.close()});
+ document.querySelectorAll("[data-related-product]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.relatedProduct)));
  dialog.showModal();
 }
 function addToCart(id){
