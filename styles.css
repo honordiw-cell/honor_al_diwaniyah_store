@@ -1237,3 +1237,87 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
  .store-hero-no-image .store-overline{margin-top:31px}
  .store-hero-no-image .store-hero-note{margin-top:18px}
 }
+
+
+/* Feature device name inside the battery panel + refined atmospheric hero */
+.store-hero-no-image{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:
+    radial-gradient(ellipse at 50% 8%,rgba(67,190,179,.18) 0%,rgba(67,190,179,0) 36%),
+    radial-gradient(ellipse at 4% 52%,rgba(41,137,133,.15) 0%,transparent 34%),
+    radial-gradient(ellipse at 96% 78%,rgba(31,168,157,.12) 0%,transparent 32%),
+    linear-gradient(145deg,#1b3031 0%,#1b2b2d 48%,#17282a 100%);
+  border-color:rgba(125,190,184,.32);
+}
+.store-hero-no-image::before,
+.store-hero-no-image::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  pointer-events:none;
+  border-radius:50%;
+}
+.store-hero-no-image::before{
+  width:340px;height:340px;
+  top:-190px;right:-115px;
+  border:1px solid rgba(104,213,203,.15);
+  box-shadow:0 0 0 24px rgba(104,213,203,.025),0 0 0 52px rgba(104,213,203,.018);
+}
+.store-hero-no-image::after{
+  width:260px;height:260px;
+  bottom:-170px;left:-110px;
+  border:1px solid rgba(104,213,203,.12);
+  box-shadow:0 0 0 22px rgba(104,213,203,.025),0 0 55px rgba(42,185,174,.08);
+}
+.store-hero-no-image .store-battery{
+  position:relative;
+  gap:5px;
+  padding:17px 18px 15px;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(54,196,185,.18),transparent 65%),
+    linear-gradient(145deg,rgba(25,91,88,.62),rgba(20,48,49,.82));
+  border-color:rgba(102,218,207,.58);
+  box-shadow:0 14px 38px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.08);
+}
+.store-hero-no-image .store-battery-device{
+  margin:0 0 4px;
+  color:#f7fbfa;
+  font:850 clamp(23px,4vw,31px)/1.2 Montserrat,sans-serif;
+  letter-spacing:-.8px;
+}
+.store-hero-no-image .store-battery-device span{
+  display:inline-block;
+  margin-left:5px;
+  padding:3px 7px;
+  vertical-align:middle;
+  border:1px solid rgba(124,225,216,.6);
+  border-radius:7px;
+  color:#8ce4dc;
+  font-size:.48em;
+  letter-spacing:0;
+}
+.store-hero-no-image .store-battery-separator{
+  width:54px;height:2px;
+  margin:1px auto 4px;
+  border-radius:4px;
+  background:linear-gradient(90deg,transparent,#52c9bf,transparent);
+}
+.store-hero-no-image .store-battery-icon{
+  width:34px;height:34px;
+  margin:0 auto 0;
+}
+.store-hero-no-image .store-battery strong{font-size:clamp(28px,4vw,36px)}
+@media(max-width:600px){
+ .store-hero-no-image{background:
+   radial-gradient(ellipse at 50% 7%,rgba(67,190,179,.2),transparent 38%),
+   radial-gradient(ellipse at 0% 55%,rgba(41,137,133,.13),transparent 35%),
+   radial-gradient(ellipse at 100% 85%,rgba(31,168,157,.1),transparent 34%),
+   linear-gradient(145deg,#1b3031 0%,#1b2b2d 48%,#17282a 100%)}
+ .store-hero-no-image .store-battery{padding:14px 14px 12px;gap:4px}
+ .store-hero-no-image .store-battery-device{font-size:24px;letter-spacing:-.7px}
+ .store-hero-no-image .store-battery-device span{font-size:11px;padding:3px 6px}
+ .store-hero-no-image .store-battery-separator{margin:0 auto 3px}
+ .store-hero-no-image .store-battery strong{font-size:27px}
+}
