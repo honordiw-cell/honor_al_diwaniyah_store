@@ -1150,3 +1150,16 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
  .store-hero-no-image .store-battery strong{font-size:28px}
  .store-hero-no-image .store-battery small{font-size:11px}
 }
+
+/* Hero battery icon and order CTA */
+.store-hero-no-image .store-battery-icon svg{
+  display:block;width:23px;height:23px;
+}
+.store-hero-no-image .store-btn-primary{
+  min-width:160px;
+  justify-content:center;
+  gap:10px;
+}
+@media(max-width:600px){
+ .store-hero-no-image .store-btn-primary{min-width:145px}
+}
