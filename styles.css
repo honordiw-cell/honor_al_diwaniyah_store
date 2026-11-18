@@ -1452,3 +1452,30 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
  .site-footer .footer-service p{font-size:11px;margin-bottom:9px}
  .site-footer .footer-bottom{margin-top:12px;padding-top:10px;flex-direction:column;align-items:center;text-align:center;gap:5px;font-size:9px}
 }
+
+
+/* Larger, more readable maintenance service cards on phones */
+@media(max-width:600px){
+ .store-maintenance-grid{
+   grid-template-columns:repeat(2,minmax(0,1fr));
+   gap:11px;
+ }
+ .store-maintenance-grid article{
+   min-height:148px;
+   padding:16px 13px;
+   border-radius:13px;
+ }
+ .store-maintenance-grid article span{
+   margin-bottom:20px;
+   font-size:10px;
+ }
+ .store-maintenance-grid article b{
+   font-size:13px;
+   line-height:1.6;
+ }
+ .store-maintenance-grid article small{
+   margin-top:8px;
+   font-size:10px;
+   line-height:1.8;
+ }
+}
