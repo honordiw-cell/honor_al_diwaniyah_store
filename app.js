@@ -118,7 +118,7 @@ function showProductDetails(id){
  ["detail-order-now","detail-order-bottom"].forEach(id=>$(id)?.addEventListener("click",orderNow));
  $("detail-add-cart")?.addEventListener("click",()=>{addToCart(p.id);dialog.close()});
  document.querySelectorAll("[data-related-product]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.relatedProduct)));
- dialog.showModal();
+ if(!dialog.open)dialog.showModal();
 }
 function addToCart(id){
  const p=products.find(x=>String(x.id)===String(id));
