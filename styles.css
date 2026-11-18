@@ -1321,3 +1321,66 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
  .store-hero-no-image .store-battery-separator{margin:0 auto 3px}
  .store-hero-no-image .store-battery strong{font-size:27px}
 }
+
+
+/* Footer repair: compact mobile layout and clean circular logo crop */
+.site-footer{
+  margin-top:28px;
+  padding:30px clamp(16px,4vw,48px) 16px;
+}
+.site-footer .footer-main{
+  max-width:1120px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:28px;
+  align-items:start;
+}
+.site-footer .footer-identity{grid-column:auto;grid-row:auto}
+.site-footer .footer-logo-frame{
+  width:112px;height:112px;
+  margin:0 auto 8px;
+  overflow:hidden;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+}
+.site-footer .footer-logo-frame img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center;
+  border-radius:50%;
+  clip-path:circle(46% at 50% 50%);
+}
+.site-footer .footer-contact a,
+.site-footer .footer-contact p{margin:0 0 10px}
+.site-footer .footer-bottom{margin-top:20px;padding-top:12px}
+@media(max-width:700px){
+ .site-footer{margin-top:20px;padding:22px 16px 14px}
+ .site-footer .footer-main{
+   grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+   grid-template-areas:"identity identity" "contact service";
+   gap:18px 14px;
+   padding-bottom:8px;
+ }
+ .site-footer .footer-identity{grid-area:identity}
+ .site-footer .footer-contact{grid-area:contact;min-width:0}
+ .site-footer .footer-service{grid-area:service;min-width:0}
+ .site-footer .footer-logo-frame{width:92px;height:92px;margin-bottom:7px}
+ .site-footer .footer-identity p{margin:6px 0 0;font-size:11px}
+ .site-footer h3{font-size:13px;margin-bottom:9px}
+ .site-footer p,.site-footer a{font-size:10px;line-height:1.75}
+ .site-footer a{margin:5px 0}
+ .site-footer a b,.site-footer p b{font-size:10px;overflow-wrap:anywhere}
+ .site-footer .footer-contact p{overflow-wrap:anywhere}
+ .site-footer .footer-bottom{
+   margin-top:12px;padding-top:10px;
+   display:flex;flex-direction:column;align-items:center;
+   gap:6px;text-align:center;font-size:9px;
+ }
+}
+@media(max-width:370px){
+ .site-footer .footer-main{gap:15px 10px}
+ .site-footer .footer-logo-frame{width:84px;height:84px}
+ .site-footer h3{font-size:12px}
+ .site-footer p,.site-footer a{font-size:9px}
+}
