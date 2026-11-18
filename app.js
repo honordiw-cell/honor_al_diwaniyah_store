@@ -44,7 +44,9 @@ function renderProducts(){
    (activeCategory==="الكل"||String(p.categoryId)===String(activeCategory)) &&
    (`${p.name} ${p.description||""} ${p.brand||""}`).toLowerCase().includes(q)
  );
- const visibleProducts=filtered.slice(0,visibleProductCount);
+ // المتوفر أولاً، ثم نفذت الكمية مع الحفاظ على ترتيب المنتجات داخل كل مجموعة.
+  const sortedProducts=[...filtered].sort((a,b)=>(Number(b.stock)>0?1:0)-(Number(a.stock)>0?1:0));
+  const visibleProducts=sortedProducts.slice(0,visibleProductCount);
  $("product-grid").innerHTML=visibleProducts.map(p=>`<article class="product-card">
    ${p.tag?`<span class="product-tag">${escapeHtml(p.tag)}</span>`:""}
    <button type="button" class="product-view" data-details="${escapeHtml(p.id)}" aria-label="تفاصيل ${escapeHtml(p.name)}">
