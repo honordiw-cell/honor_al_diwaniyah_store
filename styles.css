@@ -1384,3 +1384,71 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
  .site-footer h3{font-size:12px}
  .site-footer p,.site-footer a{font-size:9px}
 }
+
+
+/* Rebuild footer as a compact information section; remove faulty logo artwork */
+.site-footer{
+  margin:24px auto 0;
+  padding:24px 20px 14px;
+  border-top:1px solid rgba(130,177,174,.22);
+  background:linear-gradient(180deg,rgba(20,38,39,.45),rgba(13,27,29,.92));
+}
+.site-footer .footer-main{
+  width:min(100%,900px);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+  align-items:start;
+}
+.site-footer .footer-contact,
+.site-footer .footer-service{min-width:0}
+.site-footer h3{
+  margin:0 0 14px;
+  color:#f0f6f5;
+  font-size:16px;
+  font-weight:800;
+}
+.site-footer .footer-contact a{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:3px;
+  margin:0 0 12px;
+  text-decoration:none;
+}
+.site-footer .footer-contact p{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  margin:0;
+}
+.site-footer .footer-contact span{color:#91aaa7;font-size:12px}
+.site-footer .footer-contact b{color:#e5eeee;font-size:13px;font-weight:600;line-height:1.7}
+.site-footer .footer-service p{
+  margin:0 0 12px;
+  color:#b4c3c1;
+  font-size:13px;
+  line-height:1.7;
+}
+.site-footer .footer-bottom{
+  width:min(100%,900px);
+  margin:18px auto 0;
+  padding-top:12px;
+  border-top:1px solid rgba(130,177,174,.2);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  color:#91aaa7;
+  font-size:11px;
+}
+@media(max-width:600px){
+ .site-footer{margin-top:20px;padding:20px 18px 12px}
+ .site-footer .footer-main{grid-template-columns:1fr 1fr;gap:16px}
+ .site-footer h3{font-size:13px;margin-bottom:10px}
+ .site-footer .footer-contact a{margin-bottom:10px}
+ .site-footer .footer-contact span{font-size:10px}
+ .site-footer .footer-contact b{font-size:11px;overflow-wrap:anywhere}
+ .site-footer .footer-service p{font-size:11px;margin-bottom:9px}
+ .site-footer .footer-bottom{margin-top:12px;padding-top:10px;flex-direction:column;align-items:center;text-align:center;gap:5px;font-size:9px}
+}
