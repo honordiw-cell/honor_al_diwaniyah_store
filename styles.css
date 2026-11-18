@@ -1163,3 +1163,44 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
 @media(max-width:600px){
  .store-hero-no-image .store-btn-primary{min-width:145px}
 }
+
+
+/* Hero polish: calmer hierarchy and tighter vertical rhythm */
+.store-hero-no-image .store-kicker,
+.store-hero-no-image .store-hero-index,
+.store-hero-no-image .store-hero-divider{
+  display:none;
+}
+.store-hero-no-image .store-arabic-title{
+  margin:4px 0 0;
+  padding-bottom:11px;
+}
+.store-hero-no-image .store-arabic-tagline{margin-top:3px}
+.store-hero-no-image .store-overline{margin:19px 0 4px;font-size:12px}
+.store-hero-no-image .store-feature-title{margin:0}
+.store-hero-no-image .store-hero-lead{margin:8px 0 10px;line-height:1.7}
+.store-hero-no-image .store-battery{
+  margin-top:11px;
+  padding:11px 18px 10px;
+  gap:3px;
+}
+.store-hero-no-image .store-battery-icon{width:32px;height:32px;margin-bottom:0}
+.store-hero-no-image .store-hero-actions{gap:13px;margin-top:12px}
+.store-hero-no-image .store-hero-note{margin-top:14px;padding-top:10px}
+@media(max-width:600px){
+ .store-hero-no-image{padding:35px 18px 25px}
+ .store-hero-no-image .store-arabic-title{margin-top:0;padding-bottom:10px}
+ .store-hero-no-image .store-arabic-tagline{margin-top:3px}
+ .store-hero-no-image .store-overline{margin:16px 0 3px;font-size:11px}
+ .store-hero-no-image .store-feature-title{font-size:clamp(26px,7.3vw,34px);letter-spacing:-1px}
+ .store-hero-no-image .store-hero-lead{margin:7px 0 8px;font-size:11px}
+ .store-hero-no-image .store-battery{width:min(88%,310px);margin-top:10px;padding:10px 14px 9px;gap:2px}
+ .store-hero-no-image .store-battery-icon{width:29px;height:29px}
+ .store-hero-no-image .store-battery-icon svg{width:20px;height:20px}
+ .store-hero-no-image .store-battery strong{font-size:26px}
+ .store-hero-no-image .store-battery small{font-size:10px}
+ .store-hero-no-image .store-hero-actions{gap:10px;margin-top:10px}
+ .store-hero-no-image .store-btn-primary{min-height:38px;padding:8px 13px;font-size:11px}
+ .store-hero-no-image .store-btn-quiet{font-size:10px}
+ .store-hero-no-image .store-hero-note{margin-top:12px;padding-top:8px;gap:10px}
+}
