@@ -1204,3 +1204,36 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
  .store-hero-no-image .store-btn-quiet{font-size:10px}
  .store-hero-no-image .store-hero-note{margin-top:12px;padding-top:8px;gap:10px}
 }
+
+
+/* Give the Arabic store identity more room; remove secondary slogan clutter */
+.store-hero-no-image .store-hero-copy{padding-top:24px}
+.store-hero-no-image .store-arabic-title{
+  margin-top:17px;
+  padding-bottom:15px;
+  font-size:clamp(54px,9vw,94px);
+}
+.store-hero-no-image .store-arabic-tagline{
+  margin-top:12px;
+  font-size:clamp(17px,2.4vw,22px);
+}
+.store-hero-no-image .store-overline{margin-top:34px}
+.store-hero-no-image .store-hero-note{
+  justify-content:center;
+  margin-top:20px;
+}
+@media(max-width:600px){
+ .store-hero-no-image .store-hero-copy{padding-top:20px}
+ .store-hero-no-image .store-arabic-title{
+   margin-top:15px;
+   padding-bottom:14px;
+   font-size:clamp(52px,13.5vw,64px);
+   letter-spacing:-1.5px;
+ }
+ .store-hero-no-image .store-arabic-tagline{
+   margin-top:10px;
+   font-size:17px;
+ }
+ .store-hero-no-image .store-overline{margin-top:31px}
+ .store-hero-no-image .store-hero-note{margin-top:18px}
+}
