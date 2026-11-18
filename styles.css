@@ -1070,3 +1070,83 @@ body{background:var(--store-bg);color:var(--store-text);font-family:"Cairo",sans
   .store-products-section .product-card h3{font-size:12px}
   .store-products-section .price{font-size:12px}
 }
+
+
+/* Final Arabic brand lockup and centered battery highlight */
+.store-hero-no-image .store-hero-copy{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.store-hero-no-image .store-arabic-title{
+  position:relative;
+  display:inline-block;
+  margin:15px 0 2px;
+  padding:0 10px 13px;
+  font-family:"Cairo","GE SS Two",Tahoma,sans-serif;
+  font-size:clamp(48px,8vw,88px);
+  font-weight:900;
+  line-height:1.35;
+  letter-spacing:-2px;
+  color:#f7fbfa;
+  text-shadow:0 5px 22px rgba(0,0,0,.28);
+}
+.store-hero-no-image .store-arabic-title::after{
+  content:"";
+  position:absolute;
+  width:76px;height:4px;
+  bottom:2px;left:50%;transform:translateX(-50%);
+  border-radius:8px;
+  background:linear-gradient(90deg,#72ded5,#16aaa2);
+  box-shadow:0 0 18px rgba(35,193,183,.35);
+}
+.store-hero-no-image .store-arabic-tagline{
+  margin:5px 0 0;
+  font-family:"Cairo","GE SS Two",Tahoma,sans-serif;
+  font-size:clamp(15px,2vw,20px);
+  font-weight:700;
+  letter-spacing:.2px;
+}
+.store-hero-no-image .store-battery{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  width:min(100%,340px);
+  margin:18px auto 0;
+  padding:15px 22px 14px;
+  text-align:center;
+  border:1px solid rgba(103,220,211,.45);
+  border-radius:18px;
+  background:linear-gradient(145deg,rgba(27,174,165,.19),rgba(14,35,37,.55));
+  box-shadow:0 10px 30px rgba(0,0,0,.16),inset 0 1px rgba(255,255,255,.06);
+}
+.store-hero-no-image .store-battery-icon{
+  display:grid;place-items:center;
+  width:36px;height:36px;
+  margin:0 auto 2px;
+  border-radius:50%;
+  color:#7ce2d9;
+  background:rgba(30,181,171,.16);
+  font-size:22px;
+}
+.store-hero-no-image .store-battery strong{
+  display:block;
+  color:#fff;
+  font:900 clamp(27px,4vw,36px)/1.15 Montserrat,sans-serif;
+  letter-spacing:.2px;
+}
+.store-hero-no-image .store-battery small{
+  display:block;
+  color:#b9d8d4;
+  font:600 12px/1.5 "Cairo",Tahoma,sans-serif;
+}
+.store-hero-no-image .store-hero-actions{justify-content:center}
+.store-hero-no-image .store-hero-note{justify-content:center}
+@media(max-width:600px){
+ .store-hero-no-image .store-arabic-title{font-size:clamp(43px,12vw,58px);letter-spacing:-1.5px;margin-top:12px}
+ .store-hero-no-image .store-arabic-tagline{font-size:14px}
+ .store-hero-no-image .store-battery{width:min(88%,310px);margin-top:15px;padding:13px 16px 12px;border-radius:15px}
+ .store-hero-no-image .store-battery-icon{width:32px;height:32px;font-size:20px}
+ .store-hero-no-image .store-battery strong{font-size:28px}
+ .store-hero-no-image .store-battery small{font-size:11px}
+}
