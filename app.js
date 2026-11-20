@@ -135,7 +135,9 @@ function addToCart(id){
  toast("انضاف المنتج إلى السلة");
 }
 function renderCart(){
- $("cart-count").textContent=cart.reduce((a,x)=>a+x.qty,0);
+ const cartCount=cart.reduce((a,x)=>a+x.qty,0);
+ $("cart-count").textContent=cartCount;
+ if($("mobile-cart-count")) $("mobile-cart-count").textContent=cartCount;
  $("cart-items").innerHTML=cart.length?cart.map(x=>`<div class="cart-row"><div><b>${escapeHtml(x.name)}</b><small>${money(x.price)} × ${x.qty}</small></div><div class="qty-controls"><button data-dec="${escapeHtml(x.id)}">−</button><b>${x.qty}</b><button data-inc="${escapeHtml(x.id)}">+</button></div></div>`).join(""):`<p class="empty-state">السلة فارغة حالياً.</p>`;
  const total=cart.reduce((a,x)=>a+(Number(x.price)||0)*x.qty,0);
  $("cart-total").textContent=money(total);
@@ -329,7 +331,7 @@ $("search-input").addEventListener("input",()=>{visibleProductCount=productsPerP
 if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
 $("search-toggle").onclick=()=>{$("search-box").scrollIntoView({behavior:"smooth"});$("search-input").focus()};
 $("search-clear").onclick=()=>{$("search-input").value="";renderProducts()};
-$("cart-open").onclick=openCart;
+$("cart-open").onclick=openCart;\nif($("mobile-cart-open")) $("mobile-cart-open").onclick=openCart;
 $("cart-close").onclick=closeCart;
 $("overlay").onclick=closeCart;
 $("checkout-open").onclick=()=>{if(!cart.length)return toast("السلة فارغة");closeCart();$("checkout-dialog").showModal()};
