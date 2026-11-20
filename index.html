@@ -34,33 +34,17 @@
   </header>
 
   <main class="store-home-redesign">
-    <section class="store-hero store-hero-no-image" id="home">
-      <div class="store-hero-copy">
-        <span class="store-kicker"><i></i> أهلاً بيك في هونر الديوانية</span>
-        <h1 class="store-arabic-title">اختار جهازك بسهولة</h1>
-        <p class="store-arabic-tagline">موبايلات، تابلت وإكسسوارات بمكان واحد</p>
-        <div class="store-hero-divider"></div>
-        <p class="store-overline">تسوّق بثقة، وإحنا نوصلك</p>
-        <div class="store-battery">
-          <h2 class="store-battery-device">HONOR X9e Pro <span>5G</span></h2>
-          <span class="store-battery-separator" aria-hidden="true"></span>
-          <span class="store-battery-icon" aria-hidden="true"><svg viewBox="0 0 24 24" role="img" focusable="false"><rect x="3" y="7" width="17" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M22 10v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m12 8.5-3 4h2.5l-.5 3 3-4h-2.5z" fill="currentColor"/></svg></span>
-          <strong>11,000mAh</strong>
-          <small>بطارية عملاقة تدوم أطول</small>
-        </div>
-        <div class="store-hero-actions">
-          <a class="store-btn-primary" href="#products">اطلبه الآن <span>←</span></a>
-          <a class="store-btn-quiet" href="#categories">تصفح الأقسام</a>
-        </div>
-        <div class="store-hero-note"><span>HONOR AL-DIWANIYAH</span></div>
+    <section class="store-search-section" aria-label="البحث عن المنتجات">
+      <div class="store-search-intro">
+        <span class="store-kicker">YOUR TECH DESTINATION</span>
+        <h1>كل اللي تدور عليه، <em>تلقاه هنا.</em></h1>
+        <p>ابحث عن جهازك أو تصفّح الأقسام واكتشف المنتجات المتوفرة.</p>
       </div>
-      <div class="store-hero-index"><b>01</b><span>NEW ARRIVAL</span></div>
-    </section>
-
-    <section class="store-trust" aria-label="مميزات المتجر">
-      <article><span class="store-trust-icon">⌂</span><div><b>توصيل لكل العراق</b><small>نوصل طلبك لمحافظتك</small></div></article>
-      <article><span class="store-trust-icon">◇</span><div><b>خيارات دفع مرنة</b><small>تفاصيل واضحة قبل تأكيد الطلب</small></div></article>
-      <article><span class="store-trust-icon">✓</span><div><b>خدمة ومتابعة</b><small>متابعة من الطلب إلى الاستلام</small></div></article>
+      <div class="search-box store-search-box" id="search-box">
+        <span class="store-search-symbol" aria-hidden="true">⌕</span>
+        <input id="search-input" placeholder="ابحث عن جهاز أو منتج..." aria-label="بحث">
+        <button id="search-clear" aria-label="مسح البحث">×</button>
+      </div>
     </section>
 
     <section class="store-section store-categories-section" id="categories">
@@ -92,7 +76,6 @@
     <section class="store-section store-products-section products-section" id="products">
       <div class="store-section-heading store-products-heading">
         <div><span class="store-kicker">THE COLLECTION</span><h2>تسوّق أحدث الأجهزة</h2><p>تصفّح الخيارات وقارن المواصفات والأسعار بسهولة.</p></div>
-        <div class="search-box" id="search-box"><input id="search-input" placeholder="ابحث عن جهاز أو منتج..." aria-label="بحث"><button id="search-clear" aria-label="مسح البحث">×</button></div>
       </div>
       <div class="store-product-tools"><span>اختار المنتج المناسب إلك</span><span>أسعار بالدينار العراقي</span></div>
       <div class="product-grid" id="product-grid"></div>
