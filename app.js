@@ -80,6 +80,12 @@ function renderProducts(){
  document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
  renderHomeCollections();
 }
+async function loadHomeBanner(){
+ const section=$("home-promo-banner");if(!section||!sb)return;
+ try{const result=await sb.from("home_banners").select("title,subtitle,image_url,button_text,link_url").eq("is_active",true).order("updated_at",{ascending:false}).limit(1).maybeSingle();if(result.error)throw result.error;const data=result.data;if(!data){section.classList.add("hidden");return}
+ $("home-promo-image").src=data.image_url;$("home-promo-image").alt=data.title||"عرض خاص";$("home-promo-title").textContent=data.title||"";$("home-promo-subtitle").textContent=data.subtitle||"";$("home-promo-button").textContent=data.button_text||"اكتشف العرض";$("home-promo-link").href=data.link_url||"#products";section.classList.remove("hidden");
+ }catch(error){console.warn("Home banner unavailable:",error);section.classList.add("hidden")}
+}
 function renderHomeCollections(){
  const marked=products.filter(p=>p.isFeatured&&p.stock>0);
  const featured=(marked.length?marked:products.filter(p=>p.stock>0&&p.deviceType!=="accessories")).slice(0,4);
