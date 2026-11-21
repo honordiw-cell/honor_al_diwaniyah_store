@@ -2562,9 +2562,9 @@ body.theme-dark #page-home .store-pick-card{border-color:#35445a}
 
 /* Homepage promotional banner controlled from admin */
 .home-promo-banner{position:relative;isolation:isolate;overflow:hidden;width:min(1160px,calc(100% - 40px));min-height:clamp(190px,28vw,330px);margin:24px auto 30px;border-radius:22px;background:#1d2b38;box-shadow:0 16px 42px rgba(18,39,52,.12)}
-.home-promo-banner>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.home-promo-banner:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(12,24,35,.05),rgba(12,24,35,.18) 35%,rgba(12,24,35,.88) 100%)}
-.home-promo-overlay{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:inherit;width:min(58%,620px);padding:clamp(22px,4vw,46px);color:#fff}
+.home-promo-banner>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.home-promo-banner:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(12,24,35,.05),rgba(12,24,35,.18) 35%,rgba(12,24,35,.88) 100%)}
+.home-promo-overlay{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:inherit;width:min(58%,620px);padding:clamp(22px,4vw,46px);color:#fff}
 .home-promo-overlay .store-kicker{color:#a8d8d3;font-size:10px;letter-spacing:2px}
 .home-promo-overlay h2{margin:7px 0;font-size:clamp(22px,3.5vw,38px);line-height:1.45;font-weight:900}
 .home-promo-overlay p{margin:0;color:#e0e9ed;font-size:clamp(11px,1.4vw,14px);line-height:1.9}
