@@ -7,7 +7,7 @@ const money=n=>new Intl.NumberFormat("en-US").format(Number(n)||0)+" د.ع";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const STATUS={new:"جديد",confirmed:"تم التأكيد",processing:"قيد التجهيز",shipped:"تم الشحن",delivered:"تم التسليم",cancelled:"ملغي"};
 const PAYMENT={pending:"بانتظار الدفع",paid:"مدفوع",failed:"فشل الدفع"};
-let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},editingImages=[],newFiles=[],previewUrls=[];
+let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},banners=[],editingImages=[],newFiles=[],previewUrls=[],bannerFile=null,bannerPreviewUrl="";
 const productFields=["name","category_id","brand","price","old_price","stock","ram","storage","color","chipset","screen","camera","battery","protection","description"];
 function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2800)}
 function setError(id,msg){$(id).textContent=msg||""}
@@ -28,7 +28,7 @@ async function checkAccess(){
 }
 async function loadAll(){
  try{
-  const [c,p,o,m,s,h]=await Promise.all([
+  const [c,p,o,m,s,h,b]=await Promise.all([
    db.from("categories").select("id,name,slug,is_active").order("name"),
    db.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,is_active,created_at,updated_at,sku,ram,storage,color,is_featured,chipset,screen,camera,battery,protection").order("created_at",{ascending:false}),
    db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(1000),
@@ -133,6 +133,31 @@ function renderOrderAudit(){
  const names={created:"إنشاء طلب",status:"تغيير حالة",payment:"تغيير حالة الدفع",deleted:"حذف طلب"};
  el.innerHTML=orderEvents.length?'<div class="admin-table-wrap"><table><thead><tr><th>رقم الطلب</th><th>العملية</th><th>التغيير</th><th>التاريخ</th></tr></thead><tbody>'+orderEvents.map(x=>'<tr><td>#'+esc(x.order_number??"—")+'</td><td>'+esc(names[x.event_type]||x.event_type)+'</td><td>'+esc(STATUS[x.from_status]||PAYMENT[x.from_status]||x.from_status||"—")+' '+(x.to_status?'← '+esc(STATUS[x.to_status]||PAYMENT[x.to_status]||x.to_status):"")+'</td><td>'+new Date(x.created_at).toLocaleString("ar-IQ")+'</td></tr>').join("")+'</tbody></table></div>':'<p class="muted">لا توجد عمليات مسجلة بعد.</p>';
 }
+function renderBanners(){
+ const el=$("banners-list");if(!el)return;
+ el.innerHTML=banners.length?banners.map(x=>'<article class="banner-admin-row"><img src="'+esc(x.image_url)+'" alt=""><div class="banner-admin-copy"><b>'+esc(x.title||"بانر بدون عنوان")+'</b><small>'+esc(x.subtitle||"")+'</small><span class="badge '+(x.is_active?"good":"off")+'">'+(x.is_active?"ظاهر بالواجهة":"غير مفعل")+'</span></div><div class="banner-admin-actions"><button class="action-btn" data-banner-edit="'+x.id+'">تعديل</button><button class="action-btn" data-banner-toggle="'+x.id+'">'+(x.is_active?"إيقاف":"تفعيل")+'</button><button class="action-btn danger" data-banner-delete="'+x.id+'">حذف</button></div></article>').join(""):'<div class="empty-row">ماكو بانرات محفوظة. أضف أول بانر من النموذج أعلاه.</div>';
+}
+function resetBannerForm(){
+ const f=$("banner-form");f.reset();f.elements.id.value="";f.elements.image_url.value="";f.elements.button_text.value="اكتشف العرض";f.elements.link_url.value="#products";f.elements.is_active.checked=true;
+ if(bannerPreviewUrl)URL.revokeObjectURL(bannerPreviewUrl);bannerPreviewUrl="";bannerFile=null;$("banner-image").value="";$("banner-form-heading").textContent="إضافة بانر جديد";$("banner-image-preview").innerHTML='<small class="muted">لم يتم اختيار صورة بعد.</small>';setError("banner-form-error","");
+}
+function openBanner(id){
+ resetBannerForm();const x=banners.find(v=>v.id===id);if(!x)return;const f=$("banner-form");
+ f.elements.id.value=x.id;f.elements.title.value=x.title||"";f.elements.subtitle.value=x.subtitle||"";f.elements.button_text.value=x.button_text||"اكتشف العرض";f.elements.link_url.value=x.link_url||"#products";f.elements.image_url.value=x.image_url;f.elements.is_active.checked=!!x.is_active;
+ $("banner-form-heading").textContent="تعديل البانر";$("banner-image-preview").innerHTML='<img src="'+esc(x.image_url)+'" alt="معاينة البانر"><small>الصورة الحالية — ارفع صورة جديدة لاستبدالها</small>';
+}
+async function saveBanner(e){
+ e.preventDefault();const f=e.currentTarget,btn=$("save-banner-btn");setError("banner-form-error","");const current=f.elements.image_url.value;
+ if(!bannerFile&&!current){setError("banner-form-error","اختار صورة للبانر أولاً.");return}
+ if(bannerFile&&(!/^image\/(jpeg|png|webp|avif)$/.test(bannerFile.type)||bannerFile.size>8*1024*1024)){setError("banner-form-error","الصورة لازم تكون JPG أو PNG أو WEBP أو AVIF وحجمها أقل من 8MB.");return}
+ btn.disabled=true;btn.textContent="جاري رفع الصورة والحفظ...";
+ try{let imageUrl=current;if(bannerFile){const ext=({"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/avif":"avif"})[bannerFile.type]||"jpg";const path="banners/"+crypto.randomUUID()+"."+ext;const up=await db.storage.from(BUCKET).upload(path,bannerFile,{cacheControl:"31536000",contentType:bannerFile.type,upsert:false});if(up.error)throw up.error;imageUrl=db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl}
+ const id=f.elements.id.value,active=f.elements.is_active.checked;if(active){const off=await db.from("home_banners").update({is_active:false}).eq("is_active",true);if(off.error)throw off.error}
+ const payload={title:f.elements.title.value.trim(),subtitle:f.elements.subtitle.value.trim(),button_text:f.elements.button_text.value.trim()||"اكتشف العرض",link_url:f.elements.link_url.value.trim()||"#products",image_url:imageUrl,is_active:active,updated_at:new Date().toISOString()};
+ const result=id?await db.from("home_banners").update(payload).eq("id",id):await db.from("home_banners").insert(payload);if(result.error)throw result.error;
+ toast(id?"تم تحديث البانر":"تمت إضافة البانر");resetBannerForm();await loadAll();
+ }catch(err){console.error(err);setError("banner-form-error","تعذر حفظ البانر: "+(err.message||"تحقق من الاتصال والصلاحيات"))}finally{btn.disabled=false;btn.textContent="حفظ البانر"}
+}
 function renderCategories(){
  $("categories-grid").innerHTML=categories.map(c=>'<article class="category-card"><div><b>'+esc(c.name)+'</b><small>'+esc(c.slug)+'</small></div><label class="check-field"><input class="switch" type="checkbox" data-category-toggle="'+c.id+'" '+(c.is_active?"checked":"")+'> '+(c.is_active?"ظاهر":"مخفي")+'</label></article>').join("");
  document.querySelectorAll("[data-category-toggle]").forEach(ch=>ch.onchange=async()=>{try{const {error}=await db.from("categories").update({is_active:ch.checked}).eq("id",ch.dataset.categoryToggle);if(error)throw error;const c=categories.find(x=>x.id===ch.dataset.categoryToggle);c.is_active=ch.checked;toast("تم تحديث القسم")}catch(e){ch.checked=!ch.checked;toast("تعذر تحديث القسم: "+e.message)}});
@@ -192,7 +217,7 @@ async function toggleProduct(id){
 function go(view){
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+view));
  document.querySelectorAll(".nav-link").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
- const titles={overview:"نظرة عامة",products:"إدارة المنتجات",orders:"إدارة الطلبات",categories:"أقسام المتجر"};
+ const titles={overview:"نظرة عامة",products:"إدارة المنتجات",orders:"إدارة الطلبات",categories:"أقسام المتجر",banners:"بانر العروض"};
  $("page-title").textContent=titles[view]||"لوحة الإدارة";$("app").classList.remove("menu-open");
 }
 async function exportOrders(){
@@ -213,6 +238,9 @@ function bind(){
  document.querySelectorAll("[data-open-product]").forEach(b=>b.onclick=()=>openProduct());
  document.querySelectorAll("[data-close-dialog]").forEach(b=>b.onclick=()=>b.closest("dialog").close());
  $("product-form").onsubmit=saveProduct;
+  $("banner-form").onsubmit=saveBanner;$("banner-reset").onclick=resetBannerForm;
+  $("banner-image").onchange=e=>{const file=e.target.files&&e.target.files[0];if(!file)return;bannerFile=file;if(bannerPreviewUrl)URL.revokeObjectURL(bannerPreviewUrl);bannerPreviewUrl=URL.createObjectURL(file);$("banner-image-preview").innerHTML='<img src="'+bannerPreviewUrl+'" alt="معاينة البانر"><small>معاينة الصورة الجديدة</small>'};
+  $("banners-list").addEventListener("click",async e=>{const edit=e.target.closest("[data-banner-edit]"),toggle=e.target.closest("[data-banner-toggle]"),del=e.target.closest("[data-banner-delete]");if(edit){openBanner(edit.dataset.bannerEdit);return}if(toggle){const x=banners.find(v=>v.id===toggle.dataset.bannerToggle);if(!x)return;try{if(!x.is_active){const off=await db.from("home_banners").update({is_active:false}).eq("is_active",true);if(off.error)throw off.error}const up=await db.from("home_banners").update({is_active:!x.is_active,updated_at:new Date().toISOString()}).eq("id",x.id);if(up.error)throw up.error;toast(x.is_active?"تم إيقاف البانر":"تم تفعيل البانر");await loadAll()}catch(err){toast("تعذر تحديث البانر: "+err.message)}return}if(del){if(!confirm("متأكد من حذف هذا البانر؟"))return;const rm=await db.from("home_banners").delete().eq("id",del.dataset.bannerDelete);if(rm.error){toast("تعذر حذف البانر: "+rm.error.message);return}toast("تم حذف البانر");await loadAll()}});
  $("product-images").onchange=e=>{const selected=[...e.target.files];newFiles.push(...selected);cleanupPreviews();renderImagePreview();e.target.value=""};
  ["product-search","product-category-filter","product-state-filter"].forEach(id=>$(id).addEventListener(id==="product-search"?"input":"change",renderProducts));
  ["order-search","order-status-filter"].forEach(id=>$(id).addEventListener(id==="order-search"?"input":"change",renderOrders));
