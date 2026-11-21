@@ -1739,8 +1739,8 @@ body{background:#f4f5f7;color:#151b25}
 }
 .store-search-box:focus-within{border-color:#3478f6;box-shadow:0 0 0 4px rgba(52,120,246,.11)}
 .store-search-symbol{font-size:27px;line-height:1;color:#3478f6}
-.store-search-box input{width:100%;min-width:0;min-height:54px;font-size:13px;color:#151b25}
-.store-search-box input::placeholder{color:#929dad}
+.store-search-box input{width:100%;min-width:0;min-height:54px;font-size:13px;color:#475569}
+.store-search-box input::placeholder{color:#64748b;opacity:1}
 .store-search-box button{color:#667386}
 .store-section{margin-top:25px;margin-bottom:28px}
 .store-section-heading h2{color:#151b25}
