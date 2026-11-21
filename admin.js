@@ -28,7 +28,7 @@ async function checkAccess(){
 }
 async function loadAll(){
  try{
-  const [c,p,o,m,s]=await Promise.all([
+  const [c,p,o,m,s,h]=await Promise.all([
    db.from("categories").select("id,name,slug,is_active").order("name"),
    db.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,is_active,created_at,updated_at,sku,ram,storage,color,is_featured,chipset,screen,camera,battery,protection").order("created_at",{ascending:false}),
    db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(1000),
