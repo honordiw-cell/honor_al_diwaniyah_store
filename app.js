@@ -263,6 +263,9 @@ async function loadProducts(){
        tag:row.is_featured?"اختيار مميز":"",isFeatured:!!row.is_featured,createdAt:row.created_at||""
      };
    });
+   cart=cart.map(item=>{const current=products.find(p=>String(p.id)===String(item.id));return current?{...item,name:current.name,price:current.price}:item;});
+   localStorage.setItem("honor-cart",JSON.stringify(cart));
+   renderCart();
    if(categoryError){
      console.error("Supabase categories load failed:",categoryError);
      renderCategories([]);
