@@ -1,33 +1,72 @@
 <!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>إدارة المتجر | HONOR AL-DIWANIYAH</title><link rel="stylesheet" href="styles.css"><script>
-window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script><script>
-window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/speed-insights/script.js"></script><style>
-.admin-wrap{max-width:1100px;margin:40px auto;padding:0 18px}.admin-top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}.admin-card{border:1px solid var(--line);border-radius:16px;padding:20px;margin:20px 0}.admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.admin-grid label{font-size:12px;font-weight:700}.admin-grid input,.admin-grid select{display:block;width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;margin-top:6px}.admin-table{width:100%;border-collapse:collapse;font-size:13px}.admin-table td,.admin-table th{padding:12px;border-bottom:1px solid var(--line);text-align:right}.admin-table button{border:0;border-radius:7px;padding:7px 10px;cursor:pointer}.muted{color:var(--muted);font-size:12px}@media(max-width:650px){.admin-grid{grid-template-columns:1fr}.admin-table{font-size:11px}}
-</style></head><body>
-<header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">H</span><span><b>HONOR</b><small>AL-DIWANIYAH</small></span></a><a href="index.html">العودة للمتجر ←</a></header>
-<main class="admin-wrap">
- <div class="admin-top"><div><span class="eyebrow">STORE MANAGEMENT</span><h1>لوحة إدارة المتجر</h1><p class="muted">إدارة المنتجات والطلبات. يتطلب تفعيل Supabase وإضافة حساب موظف.</p></div><span class="badge" id="connection">وضع تجريبي</span></div>
- <section class="admin-card"><h2>إضافة منتج</h2><form id="product-form" class="admin-grid">
- <label>اسم المنتج<input name="name" required placeholder="HONOR X9d"></label>
- <label>القسم<select name="category"><option>هواتف</option><option>تابلت</option><option>إكسسوارات</option></select></label>
- <label>السعر بالدينار<input name="price" type="number" min="0" required></label>
- <label>وصف مختصر<input name="description"></label><label>رابط الصورة<input name="image" type="url" placeholder="https://..."></label>
- <label>شارة (اختياري)<input name="tag" placeholder="جديد"></label>
- <button class="primary-btn" type="submit">إضافة المنتج</button></form></section>
- <section class="admin-card"><h2>المنتجات الحالية</h2><div style="overflow:auto"><table class="admin-table"><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>إجراء</th></tr></thead><tbody id="admin-products"></tbody></table></div></section>
- <section class="admin-card"><h2>الطلبات</h2><div style="overflow:auto"><table class="admin-table"><thead><tr><th>رقم الطلب</th><th>الزبون</th><th>الهاتف</th><th>المحافظة</th><th>المجموع</th><th>الحالة</th></tr></thead><tbody id="admin-orders"></tbody></table></div></section>
-</main><script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const cfg=window.STORE_CONFIG||{},connected=!!(cfg.supabaseUrl&&cfg.supabaseAnonKey);let sb=connected?supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey):null;
-const money=n=>new Intl.NumberFormat("en-US").format(n)+" د.ع";const demo=[{id:"p1",name:"HONOR X9d",category:"هواتف",price:493000},{id:"p2",name:"HONOR 600",category:"هواتف",price:645000}];
-async function init(){document.getElementById("connection").textContent=connected?"قاعدة البيانات مهيأة — سجّل الدخول مطلوب":"وضع تجريبي محلي";
- if(sb){const {data:{session}}=await sb.auth.getSession();if(!session){document.querySelector(".admin-wrap").insertAdjacentHTML("afterbegin",'<section class="admin-card"><h2>تسجيل دخول الموظف</h2><form id="login" class="admin-grid"><label>البريد الإلكتروني<input name="email" type="email" required></label><label>كلمة المرور<input name="password" type="password" required></label><button class="primary-btn">دخول</button></form></section>');document.getElementById("login").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.target);let r=await sb.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});if(r.error)alert("تعذر تسجيل الدخول");else location.reload()};return}}
- renderProducts();renderOrders();}
-function renderProducts(){let ps=JSON.parse(localStorage.getItem("honor-admin-products")||"null")||demo;document.getElementById("admin-products").innerHTML=ps.map(p=>`<tr><td>${p.name}</td><td>${p.category}</td><td>${money(p.price)}</td><td><button data-del="${p.id}">حذف</button></td></tr>`).join("");document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ps=ps.filter(p=>p.id!==b.dataset.del);localStorage.setItem("honor-admin-products",JSON.stringify(ps));renderProducts()})}
-function renderOrders(){let os=JSON.parse(localStorage.getItem("honor-demo-orders")||"[]");document.getElementById("admin-orders").innerHTML=os.map(o=>`<tr><td>${o.id}</td><td>${o.customer_name}</td><td>${o.phone}</td><td>${o.governorate}</td><td>${money(o.total)}</td><td>${o.status}</td></tr>`).join("")||'<tr><td colspan="6">لا توجد طلبات تجريبية.</td></tr>'}
-document.getElementById("product-form").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.target),p={id:"local-"+Date.now(),name:f.get("name"),category:f.get("category"),price:Number(f.get("price")),description:f.get("description"),image:f.get("image"),tag:f.get("tag")};let ps=JSON.parse(localStorage.getItem("honor-admin-products")||"null")||demo;ps.unshift(p);localStorage.setItem("honor-admin-products",JSON.stringify(ps));alert("تمت الإضافة في وضع العرض المحلي. الربط بقاعدة البيانات مطلوب للنشر.");e.target.reset();renderProducts()};
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f8f8">
+<title>لوحة الإدارة | HONOR AL-DIWANIYAH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--teal:#18aaa2;--teal-dark:#108d87;--ink:#273438;--muted:#778487;--line:#e7eded;--bg:#f5f8f8;--white:#fff;--soft:#eaf7f6;--shadow:0 8px 28px rgba(32,57,60,.055)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,sans-serif}button,input,select{font:inherit}button{cursor:pointer}.admin-header{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,5vw,64px);position:sticky;top:0;z-index:5}.brand{display:flex;align-items:center;gap:10px}.brand img{width:46px;height:46px;object-fit:contain}.brand b{display:block;font:800 15px Montserrat;letter-spacing:1px}.brand small{display:block;color:var(--teal-dark);font:700 8px Montserrat;letter-spacing:2px;margin-top:3px}.back-link{color:var(--muted);font-size:12px;font-weight:700}.back-link:hover{color:var(--teal-dark)}.wrap{max-width:1160px;margin:34px auto;padding:0 22px 60px}.welcome{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:26px}.eyebrow{font:700 9px Montserrat;letter-spacing:2px;color:var(--teal-dark)}h1{font-size:29px;margin:5px 0 3px;font-weight:800}.welcome p{font-size:12px;color:var(--muted);margin:0}.status{white-space:nowrap;border-radius:30px;background:var(--soft);color:var(--teal-dark);padding:8px 13px;font-size:11px;font-weight:700}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px 19px;box-shadow:var(--shadow)}.stat-label{font-size:11px;color:var(--muted)}.stat-value{font-size:25px;font-weight:800;margin-top:3px}.stat-mark{float:left;width:34px;height:34px;border-radius:11px;background:var(--soft);color:var(--teal-dark);display:grid;place-items:center;font-size:17px}.panel{background:#fff;border:1px solid var(--line);border-radius:17px;padding:22px;margin:16px 0;box-shadow:var(--shadow)}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.panel h2{font-size:17px;margin:0;font-weight:800}.panel-sub{font-size:11px;color:var(--muted);margin:3px 0 0}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field{display:block;font-size:11px;font-weight:700;color:#4b595c}.field input,.field select{width:100%;height:45px;margin-top:7px;border:1px solid #dfe7e7;border-radius:10px;padding:0 13px;background:#fff;color:var(--ink);outline:none;transition:.2s}.field input:focus,.field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px #18aaa21a}.field.full{grid-column:1/-1}.form-actions{display:flex;align-items:center;gap:12px;grid-column:1/-1}.primary{border:0;border-radius:10px;background:var(--teal);color:#fff;font-weight:800;padding:12px 22px}.primary:hover{background:var(--teal-dark)}.hint{font-size:10px;color:var(--muted)}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:600px}th{font-size:10px;color:var(--muted);font-weight:700;background:#f8fafa}td,th{padding:13px 12px;text-align:right;border-bottom:1px solid var(--line)}td{font-size:12px}tbody tr:last-child td{border-bottom:0}.delete{border:0;border-radius:8px;background:#fff0f0;color:#c34d4d;padding:7px 11px;font-size:11px;font-weight:700}.empty{text-align:center;color:var(--muted);padding:24px!important}.login-panel{max-width:480px;margin:45px auto}.login-grid{display:grid;gap:14px}.notice{background:#fff8e8;border:1px solid #f2e5c4;color:#806b36;border-radius:10px;padding:12px;font-size:11px;margin-bottom:16px}.hidden{display:none!important}
+@media(max-width:700px){.admin-header{height:66px;padding:0 15px}.brand img{width:40px;height:40px}.brand b{font-size:13px}.wrap{margin:24px auto;padding:0 14px 40px}.welcome{align-items:flex-start;flex-direction:column;margin-bottom:18px}h1{font-size:24px}.stats{gap:9px}.stat{padding:13px 11px;border-radius:13px}.stat-value{font-size:20px}.stat-label{font-size:10px}.stat-mark{width:28px;height:28px;font-size:14px}.panel{padding:16px;margin:13px 0;border-radius:14px}.panel h2{font-size:15px}.form-grid{grid-template-columns:1fr;gap:12px}.field.full,.form-actions{grid-column:auto}.form-actions{align-items:flex-start;flex-direction:column}.primary{width:100%}.hint{line-height:1.8}.table-wrap{margin:0 -3px}table{min-width:560px}}
+@media(max-width:370px){.stats{grid-template-columns:1fr}.stat{display:flex;align-items:center;justify-content:space-between}.stat-value{margin:0}}
+</style>
+</head>
+<body>
+<header class="admin-header">
+<a class="brand" href="index.html"><img src="assets/honor-al-diwaniyah-logo.png" alt="HONOR AL-DIWANIYAH"><span><b>HONOR</b><small>AL-DIWANIYAH</small></span></a>
+<a class="back-link" href="index.html">← العودة للمتجر</a>
+</header>
+<main class="wrap" id="dashboard">
+<section class="welcome"><div><span class="eyebrow">STORE MANAGEMENT</span><h1>لوحة إدارة المتجر</h1><p>إدارة المنتجات ومتابعة الطلبات من مكان واحد.</p></div><span class="status" id="connection">جاري التحقق...</span></section>
+<section class="stats">
+<article class="stat"><span class="stat-mark">▦</span><div class="stat-label">إجمالي المنتجات</div><div class="stat-value" id="products-count">—</div></article>
+<article class="stat"><span class="stat-mark">▤</span><div class="stat-label">إجمالي الطلبات</div><div class="stat-value" id="orders-count">—</div></article>
+<article class="stat"><span class="stat-mark">د.ع</span><div class="stat-label">قيمة الطلبات التجريبية</div><div class="stat-value" id="orders-total">0</div></article>
+</section>
+<section class="panel">
+<div class="panel-head"><div><h2>إضافة منتج جديد</h2><p class="panel-sub">أدخل معلومات المنتج حتى يظهر ضمن قائمة المنتجات.</p></div></div>
+<form id="product-form" class="form-grid">
+<label class="field">اسم المنتج<input name="name" required placeholder="مثال: HONOR X9d"></label>
+<label class="field">القسم<select name="category"><option>هواتف</option><option>تابلت</option><option>إكسسوارات</option></select></label>
+<label class="field">السعر بالدينار العراقي<input name="price" type="number" min="0" required placeholder="493000"></label>
+<label class="field">شارة المنتج (اختياري)<input name="tag" placeholder="جديد / عرض خاص"></label>
+<label class="field full">وصف مختصر<input name="description" placeholder="اكتب أهم مواصفات المنتج"></label>
+<label class="field full">رابط صورة المنتج<input name="image" type="url" placeholder="https://..."></label>
+<div class="form-actions"><button class="primary" type="submit">＋ إضافة المنتج</button><span class="hint">ملاحظة: الوضع الحالي تجريبي ويحفظ البيانات بهذا المتصفح فقط.</span></div>
+</form>
+</section>
+<section class="panel"><div class="panel-head"><div><h2>المنتجات الحالية</h2><p class="panel-sub">عرض وتعديل قائمة المنتجات التجريبية.</p></div></div><div class="table-wrap"><table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>إجراء</th></tr></thead><tbody id="admin-products"></tbody></table></div></section>
+<section class="panel"><div class="panel-head"><div><h2>الطلبات</h2><p class="panel-sub">آخر الطلبات المسجلة في هذا المتصفح.</p></div></div><div class="table-wrap"><table><thead><tr><th>رقم الطلب</th><th>الزبون</th><th>الهاتف</th><th>المحافظة</th><th>المجموع</th><th>الحالة</th></tr></thead><tbody id="admin-orders"></tbody></table></div></section>
+</main>
+<div class="wrap hidden" id="login-area"><section class="panel login-panel"><h2>تسجيل دخول الموظف</h2><p class="panel-sub">سجّل الدخول للوصول إلى لوحة الإدارة.</p><form id="login" class="login-grid"><label class="field">البريد الإلكتروني<input name="email" type="email" required></label><label class="field">كلمة المرور<input name="password" type="password" required></label><button class="primary" type="submit">دخول</button></form></section></div>
+<script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const cfg=window.STORE_CONFIG||{},connected=!!(cfg.supabaseUrl&&cfg.supabaseAnonKey);
+const sb=connected?supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey):null;
+const demo=[{id:"p1",name:"HONOR X9d",category:"هواتف",price:493000},{id:"p2",name:"HONOR 600",category:"هواتف",price:645000}];
+const money=n=>new Intl.NumberFormat("en-US").format(Number(n)||0)+" د.ع";
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function getProducts(){return JSON.parse(localStorage.getItem("honor-admin-products")||"null")||demo}
+function getOrders(){return JSON.parse(localStorage.getItem("honor-demo-orders")||"[]")}
+function render(){
+ const ps=getProducts(),os=getOrders();
+ document.getElementById("products-count").textContent=ps.length;
+ document.getElementById("orders-count").textContent=os.length;
+ document.getElementById("orders-total").textContent=new Intl.NumberFormat("en-US").format(os.reduce((n,o)=>n+(Number(o.total)||0),0));
+ document.getElementById("admin-products").innerHTML=ps.map(p=>'<tr><td>'+esc(p.name)+'</td><td>'+esc(p.category)+'</td><td>'+money(p.price)+'</td><td><button class="delete" data-del="'+esc(p.id)+'">حذف</button></td></tr>').join("")||'<tr><td class="empty" colspan="4">لا توجد منتجات حالياً.</td></tr>';
+ document.getElementById("admin-orders").innerHTML=os.map(o=>'<tr><td>'+esc(o.id)+'</td><td>'+esc(o.customer_name)+'</td><td>'+esc(o.phone)+'</td><td>'+esc(o.governorate)+'</td><td>'+money(o.total)+'</td><td>'+esc(o.status)+'</td></tr>').join("")||'<tr><td class="empty" colspan="6">لا توجد طلبات مسجلة حالياً.</td></tr>';
+ document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const next=getProducts().filter(p=>String(p.id)!==b.dataset.del);localStorage.setItem("honor-admin-products",JSON.stringify(next));render()});
+}
+async function init(){
+ document.getElementById("connection").textContent=connected?"قاعدة البيانات مهيأة":"وضع تجريبي محلي";
+ if(sb){const {data:{session}}=await sb.auth.getSession();if(!session){document.getElementById("dashboard").classList.add("hidden");document.getElementById("login-area").classList.remove("hidden");document.getElementById("login").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.target),r=await sb.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});if(r.error)alert("تعذر تسجيل الدخول، تأكد من البيانات.");else location.reload()};return}}
+ render();
+}
+document.getElementById("product-form").onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),p={id:"local-"+Date.now(),name:f.get("name"),category:f.get("category"),price:Number(f.get("price")),description:f.get("description"),image:f.get("image"),tag:f.get("tag")};const ps=getProducts();ps.unshift(p);localStorage.setItem("honor-admin-products",JSON.stringify(ps));e.target.reset();render();alert("تمت إضافة المنتج في الوضع التجريبي.")};
 init();
-</script></body></html>
+</script>
+</body></html>
