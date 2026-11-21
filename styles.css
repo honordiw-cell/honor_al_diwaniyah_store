@@ -2662,3 +2662,89 @@ body.theme-dark #page-home .store-pick-card{border-color:#35445a}
   .store-header .theme-toggle-label { display:none; }
   #page-home .store-search-intro h1 { font-size:25px; }
 }
+
+
+/* Product detail readability and responsive refinements */
+#page-product-detail .product-detail-back { border-color:#354052; }
+#page-product-detail .product-detail-back button { min-height:42px; }
+#page-product-detail .landing-buy-panel h1 { color:#f1f5f9; }
+#page-product-detail .landing-brand,
+#page-product-detail .landing-price-line strong { color:#78a7ff; }
+#page-product-detail .landing-memory,
+#page-product-detail .landing-description,
+#page-product-detail .landing-delivery-note { color:#c1ccda; }
+#page-product-detail .landing-section-title h2 { color:#f1f5f9; }
+#page-product-detail .landing-section-title p { color:#b3c0d2; }
+#page-product-detail .landing-section-title>span { color:#8db5ff; }
+#page-product-detail .landing-spec { background:#fff; border-color:#e2e8f0; }
+#page-product-detail .landing-spec span { color:#526174; }
+#page-product-detail .landing-spec b { color:#182333; }
+#page-product-detail .landing-benefits article { background:#222b39; border-color:#35445a; }
+#page-product-detail .landing-benefits b { color:#f1f5f9; }
+#page-product-detail .landing-benefits span { color:#c1ccda; }
+#page-product-detail .landing-faq details { border-color:#3b485b; }
+#page-product-detail .landing-faq summary { color:#f1f5f9; }
+#page-product-detail .landing-faq details p { color:#c1ccda; }
+#page-product-detail .landing-related-card { background:#fff; border-color:#e2e8f0; color:#182333; }
+#page-product-detail .landing-related-card b { color:#182333; }
+#page-product-detail .landing-related-card strong { color:#2868d8; }
+#page-product-detail .landing-bottom-cta { background:#222b39; border:1px solid #35445a; }
+#page-product-detail .landing-bottom-cta b { color:#f8fafc; }
+#page-product-detail .landing-bottom-cta span { color:#c1ccda; }
+#page-product-detail .product-detail-back span { color:#b3c0d2; }
+#page-product-detail .landing-whatsapp-btn { background:#eafaf2; color:#087443; border-color:#9ddcba; }
+body.theme-light #page-product-detail .landing-buy-panel h1,
+body.theme-light #page-product-detail .landing-section-title h2 { color:#151b25; }
+body.theme-light #page-product-detail .landing-memory,
+body.theme-light #page-product-detail .landing-description,
+body.theme-light #page-product-detail .landing-delivery-note,
+body.theme-light #page-product-detail .landing-section-title p { color:#596579; }
+body.theme-light #page-product-detail .landing-benefits article { background:#f1f6f5; border-color:#dce9e5; }
+body.theme-light #page-product-detail .landing-benefits b { color:#26383b; }
+body.theme-light #page-product-detail .landing-benefits span { color:#526174; }
+body.theme-light #page-product-detail .landing-faq summary { color:#263445; }
+body.theme-light #page-product-detail .landing-faq details p { color:#596579; }
+body.theme-light #page-product-detail .product-detail-back span { color:#8a96a7; }
+@media(max-width:700px) {
+  #page-product-detail { width:calc(100% - 20px); margin:8px auto 28px; }
+  #page-product-detail .product-detail-back { margin:7px 0 14px; padding-bottom:10px; }
+  #page-product-detail .product-landing { padding:12px 5px 22px; }
+  #page-product-detail .landing-topline { margin-bottom:11px; }
+  #page-product-detail .landing-overview { gap:12px; }
+  #page-product-detail .landing-main-image { min-height:220px; height:clamp(220px,68vw,310px); }
+  #page-product-detail .landing-buy-panel { padding:2px 4px; }
+  #page-product-detail .landing-buy-panel h1 { font-size:24px; line-height:1.4; margin:6px 0; }
+  #page-product-detail .landing-price-line { margin:11px 0 8px; }
+  #page-product-detail .landing-price-line strong { font-size:25px; }
+  #page-product-detail .landing-description { font-size:13px; line-height:1.85; margin-bottom:12px; }
+  #page-product-detail .landing-actions { grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
+  #page-product-detail .landing-actions button,
+  #page-product-detail .landing-actions a { min-height:44px; padding:10px 9px; font-size:12px; }
+  #page-product-detail .landing-delivery-note { margin-top:8px; font-size:10px; }
+  #page-product-detail .landing-section { padding:27px 4px 4px; margin-top:0; }
+  #page-product-detail .landing-section-title { margin-bottom:12px; }
+  #page-product-detail .landing-section-title h2 { font-size:20px; margin:5px 0; }
+  #page-product-detail .landing-section-title p { font-size:11px; line-height:1.8; }
+  #page-product-detail .landing-spec-grid { gap:8px; }
+  #page-product-detail .landing-spec { min-height:88px; padding:11px; gap:5px; border-radius:12px; }
+  #page-product-detail .landing-spec small { font-size:9px; }
+  #page-product-detail .landing-spec span { font-size:11px; }
+  #page-product-detail .landing-spec b { font-size:12px; line-height:1.65; }
+  #page-product-detail .landing-benefits { margin:18px 4px 0; gap:7px; }
+  #page-product-detail .landing-benefits article { padding:11px 13px; border-radius:12px; }
+  #page-product-detail .landing-benefits b { font-size:12px; }
+  #page-product-detail .landing-benefits span { font-size:10px; line-height:1.6; }
+  #page-product-detail .landing-faq details { padding:12px 2px; }
+  #page-product-detail .landing-faq summary { font-size:12px; line-height:1.7; }
+  #page-product-detail .landing-faq details p { font-size:11px; line-height:1.8; }
+  #page-product-detail .landing-related { gap:8px; }
+  #page-product-detail .landing-related-card { padding:8px; gap:6px; }
+  #page-product-detail .landing-related-card img,
+  #page-product-detail .landing-related-placeholder { height:100px; }
+  #page-product-detail .landing-related-card b { font-size:11px; }
+  #page-product-detail .landing-related-card strong { font-size:11px; }
+  #page-product-detail .landing-bottom-cta { margin:22px 4px 0; padding:14px; gap:10px; border-radius:14px; }
+  #page-product-detail .landing-bottom-cta b { font-size:13px; }
+  #page-product-detail .landing-bottom-cta span { font-size:10px; line-height:1.7; }
+  #page-product-detail .landing-bottom-cta button { min-height:44px; width:100%; }
+}
