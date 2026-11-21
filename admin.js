@@ -28,13 +28,17 @@ async function checkAccess(){
 }
 async function loadAll(){
  try{
-  const [c,p,o]=await Promise.all([
+  const [c,p,o,m,s]=await Promise.all([
    db.from("categories").select("id,name,slug,is_active").order("name"),
    db.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,is_active,created_at,updated_at,sku,ram,storage,color,is_featured,chipset,screen,camera,battery,protection").order("created_at",{ascending:false}),
-   db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(200)
+   db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(1000),
+   db.rpc("admin_dashboard_metrics"),
+   db.from("stock_movements").select("id,product_id,product_name,old_stock,new_stock,quantity_delta,reason,created_at").order("created_at",{ascending:false}).limit(50)
   ]);
   if(c.error)throw c.error;if(p.error)throw p.error;if(o.error)throw o.error;
-  categories=c.data||[];products=p.data||[];orders=o.data||[];
+  if(m.error)console.warn("Dashboard metrics unavailable:",m.error);
+  if(s.error)console.warn("Stock movement history unavailable:",s.error);
+  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];
   renderAll();
  }catch(e){console.error(e);toast("تعذر تحميل البيانات: "+(e.message||"خطأ غير معروف"))}
 }
