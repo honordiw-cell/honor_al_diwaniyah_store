@@ -224,6 +224,7 @@ async function loadProducts(){
  if(!hasBackend){
    products=[...demoProducts];
    renderProducts();
+    await loadHomeBanner();
    return;
  }
  if(!sb){
