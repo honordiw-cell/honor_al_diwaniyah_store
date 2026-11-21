@@ -103,7 +103,8 @@ async function updateOrder(id,patch){
 async function deleteOrder(id){
  const o=orders.find(x=>x.id===id);if(!o)return;
  const label="#"+(o.order_number??id.slice(0,8));
- if(!window.confirm("تأكيد حذف الطلب "+label+" للزبون "+(o.customer_name||"—")+"؟\\nسيتم حذف تفاصيل الطلب المرتبطة به أيضاً، ولا يمكن التراجع عن هذه العملية."))return;
+ if(!["owner","admin"].includes(profile?.role)){toast("حذف الطلبات متاح للمالك والمدير فقط");return}
+ if(!window.confirm("تأكيد حذف الطلب "+label+" للزبون "+(o.customer_name||"—")+"؟\\nسيتم حفظ سجل الحذف، وإرجاع الكمية للمخزون فقط إذا كان الطلب غير مشحون وغير مكتمل. لا يمكن التراجع عن حذف السجل."))return;
  try{
   const {error}=await db.rpc("admin_delete_order",{p_order_id:id});
   if(error)throw error;
