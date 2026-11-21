@@ -78,7 +78,8 @@ function renderProducts(){
  renderHomeCollections();
 }
 function renderHomeCollections(){
- const featured=products.filter(p=>p.isFeatured&&p.stock>0).slice(0,4);
+ const marked=products.filter(p=>p.isFeatured&&p.stock>0);
+ const featured=(marked.length?marked:products.filter(p=>p.stock>0)).slice(0,4);
  const latest=[...products].sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,4);
  const card=p=>'<article class="home-product-card"><button type="button" class="home-product-open" data-home-details="'+escapeHtml(p.id)+'"><div class="home-product-image">'+(p.image?'<img src="'+escapeHtml(p.image)+'" alt="'+escapeHtml(p.name)+'" loading="lazy">':'<span>HONOR AL-DIWANIYAH</span>')+'</div><small>'+escapeHtml(p.brand||p.category||"")+'</small><b>'+escapeHtml(p.name)+'</b><strong>'+money(p.price)+'</strong></button></article>';
  const f=$("home-featured-grid"),l=$("home-latest-grid");
