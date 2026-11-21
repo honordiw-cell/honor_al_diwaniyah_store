@@ -2767,3 +2767,29 @@ body.theme-light #page-product-detail .product-detail-back span { color:#8a96a7;
  .store-search-box{min-height:54px;border-radius:13px}
  .store-search-box input{min-height:50px;font-size:13px}
 }
+
+
+/* Final mobile hierarchy override for the homepage brand lockup */
+@media (max-width:760px){
+  #page-home .store-search-intro .store-search-brand{
+    display:inline-flex!important;
+    font-family:'Cairo',sans-serif!important;
+    font-size:32px!important;
+    line-height:1.35!important;
+    font-weight:900!important;
+    color:#168f89!important;
+    margin:0 0 8px!important;
+  }
+  #page-home .store-search-intro h1{
+    font-size:23px!important;
+    line-height:1.5!important;
+    letter-spacing:0!important;
+    font-weight:800!important;
+    margin:0!important;
+  }
+  #page-home .store-search-intro h1 em{color:#16aaa2!important}
+}
+@media (max-width:380px){
+  #page-home .store-search-intro .store-search-brand{font-size:29px!important}
+  #page-home .store-search-intro h1{font-size:21px!important}
+}
