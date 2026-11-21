@@ -462,7 +462,9 @@ loadProducts().then(()=>{if(location.hash.startsWith("#product/"))handleStoreLoc
  }
  $a("admin-login-form").addEventListener("submit",async e=>{e.preventDefault();const f=new FormData(e.currentTarget);$a("admin-login-error").textContent="";const {error}=await dbA.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});if(error){$a("admin-login-error").textContent="تعذر تسجيل الدخول. تأكد من البريد وكلمة المرور.";return}authA()});
  $a("admin-logout").onclick=async()=>{await dbA.auth.signOut();profA=null;loginA()};
- document.querySelectorAll("[data-admin-tab]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".admin-pane").forEach(x=>x.classList.add("hidden"));$a("admin-"+b.dataset.adminTab).classList.remove("hidden");document.querySelectorAll("[data-admin-tab]").forEach(x=>x.classList.toggle("active",x===b))});
+ function setAdminTabA(name){document.querySelectorAll(".admin-pane").forEach(x=>x.classList.add("hidden"));$a("admin-"+name).classList.remove("hidden");document.querySelectorAll("[data-admin-tab]").forEach(x=>x.classList.toggle("active",x.dataset.adminTab===name));const labels={overview:"نظرة عامة",products:"المنتجات",categories:"الأقسام",orders:"الطلبات"};$a("admin-current-section").textContent=labels[name]||"لوحة التحكم";$a("admin-welcome-title").textContent=(name==="overview"?"مرحباً بك 👋":labels[name]);}
+ document.querySelectorAll("[data-admin-tab]").forEach(b=>b.onclick=()=>setAdminTabA(b.dataset.adminTab));
+ $a("admin-refresh").onclick=()=>loadA();
  document.querySelectorAll("[data-admin-close]").forEach(b=>b.onclick=()=>$a(b.dataset.adminClose).close());
  async function loadA(){
   if(!profA)return;
@@ -474,11 +476,19 @@ loadProducts().then(()=>{if(location.hash.startsWith("#product/"))handleStoreLoc
  function statusA(s){return ({new:"جديد",confirmed:"مؤكد",processing:"قيد التجهيز",shipped:"تم الشحن",delivered:"مكتمل",cancelled:"ملغي"})[s]||s}
  function orderTableA(rows){return rows.length?'<div class="admin-table-wrap"><table><thead><tr><th>رقم</th><th>الزبون</th><th>التاريخ</th><th>المجموع</th><th>الحالة</th><th></th></tr></thead><tbody>'+rows.map(o=>'<tr><td>#'+escA(o.order_number||o.id.slice(0,8))+'</td><td>'+escA(o.customer_name)+'<br><small dir="ltr">'+escA(o.phone)+'</small></td><td>'+new Date(o.created_at).toLocaleDateString("ar-IQ")+'</td><td>'+moneyA(o.total)+'</td><td><span class="admin-pill">'+statusA(o.status)+'</span></td><td><button class="admin-mini" data-admin-order="'+o.id+'">تفاصيل</button></td></tr>').join("")+'</tbody></table></div>':'<div class="admin-empty">ماكو طلبات حالياً.</div>'}
  function renderA(){
-  $a("admin-stat-products").textContent=prodA.filter(p=>p.is_active).length;$a("admin-stat-categories").textContent=catA.filter(c=>c.is_active).length;$a("admin-stat-orders").textContent=ordA.filter(o=>o.status==="new").length;$a("admin-stat-sales").textContent=moneyA(ordA.filter(o=>o.status!=="cancelled").reduce((s,o)=>s+Number(o.total||0),0));
-  $a("admin-recent-orders").innerHTML=orderTableA(ordA.slice(0,6));renderProdA();renderCatA();renderOrdA();
+  const activeProducts=prodA.filter(p=>p.is_active),activeCats=catA.filter(c=>c.is_active),newOrders=ordA.filter(o=>o.status==="new");
+  $a("admin-stat-products").textContent=activeProducts.length;$a("admin-stat-categories").textContent=activeCats.length;$a("admin-stat-orders").textContent=newOrders.length;$a("admin-stat-sales").textContent=moneyA(ordA.filter(o=>o.status!=="cancelled").reduce((s,o)=>s+Number(o.total||0),0));
+  $a("admin-nav-new-orders").textContent=newOrders.length;$a("admin-user-name").textContent=profA?.full_name||"مدير المتجر";$a("admin-user-role").textContent=({owner:"مالك المتجر",admin:"مدير",staff:"موظف"})[profA?.role]||"إدارة المتجر";
+  const statuses=[["new","جديدة","#3478f6"],["confirmed","مؤكدة","#7c68d8"],["processing","قيد التجهيز","#d18b27"],["shipped","تم الشحن","#278f9a"],["delivered","مكتملة","#29966d"],["cancelled","ملغاة","#a0a7b2"]];
+  $a("admin-order-status-summary").innerHTML=statuses.map(([key,label,color])=>'<div class="admin-status-row"><span class="admin-status-dot" style="--status-color:'+color+'"></span><span>'+label+'</span><b>'+ordA.filter(o=>o.status===key).length+'</b></div>').join("");
+  const low=activeProducts.filter(p=>Number(p.stock)<=3).sort((a,b)=>Number(a.stock)-Number(b.stock)).slice(0,6);
+  $a("admin-stock-alerts").innerHTML=low.length?low.map(p=>'<div class="admin-stock-row"><span class="admin-stock-state '+(Number(p.stock)===0?'is-zero':'is-low')+'">'+(Number(p.stock)===0?'نفد':'قليل')+'</span><b>'+escA(p.name)+'</b><small>'+Number(p.stock)+' متبقي</small></div>').join(""):'<div class="admin-empty">المخزون جيد حالياً، ماكو تنبيهات.</div>';
+  $a("admin-recent-orders").innerHTML=orderTableA(ordA.slice(0,6));
+  renderProdA();renderCatA();renderOrdA();
  }
  function renderProdA(){
   const q=($a("admin-product-search").value||"").toLowerCase(),rows=prodA.filter(p=>(p.name+" "+(p.brand||"")+" "+(p.sku||"")).toLowerCase().includes(q));
+  $a("admin-product-count").textContent=rows.length+" منتج";
   $a("admin-products-list").innerHTML=rows.length?'<div class="admin-table-wrap"><table><thead><tr><th>المنتج</th><th>الصور</th><th>السعر</th><th>السعر السابق</th><th>المخزون</th><th>الحالة</th><th></th></tr></thead><tbody>'+rows.map(p=>'<tr><td>'+escA(p.name)+'<br><small>'+escA(p.brand||"")+' '+escA(p.ram||"")+' '+escA(p.storage||"")+'</small></td><td>'+(p.image_url?"<span class='admin-pill'>صورة مضافة</span>":"<span class='admin-pill'>بدون صورة</span>")+'</td><td>'+moneyA(p.price)+'</td><td>'+moneyA(p.old_price)+'</td><td>'+p.stock+'</td><td>'+ (p.is_active?"ظاهر":"مخفي")+'</td><td><button class="admin-mini" data-admin-edit="'+p.id+'">تعديل</button><button class="admin-mini" data-admin-toggle="'+p.id+'">'+(p.is_active?"إخفاء":"إظهار")+'</button></td></tr>').join("")+'</tbody></table></div>':'<div class="admin-empty">ماكو منتجات.</div>';
   $a("admin-product-category").innerHTML='<option value="">بدون قسم</option>'+catA.map(c=>'<option value="'+c.id+'">'+escA(c.name)+'</option>').join("");
  }
