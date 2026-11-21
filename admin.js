@@ -64,7 +64,7 @@ function renderProducts(){
  document.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleProduct(b.dataset.toggle));
 }
 function tableOrders(rows,compact=false){
- return '<table><thead><tr><th>رقم الطلب</th><th>الزبون</th><th>الهاتف</th><th>المجموع</th><th>الحالة</th>'+(compact?"":"<th>الدفع</th><th>التاريخ</th>")+'<th>التفاصيل</th></tr></thead><tbody>'+rows.map(o=>'<tr><td>#'+esc(o.order_number??o.id.slice(0,8))+'</td><td>'+esc(o.customer_name)+'</td><td>'+esc(o.phone)+'</td><td>'+money(o.total)+'</td><td><select class="inline-select" data-order-status="'+o.id+'">'+Object.entries(STATUS).map(([k,v])=>'<option value="'+k+'" '+(o.status===k?"selected":"")+'>'+v+'</option>').join("")+'</select></td>'+(compact?"":'<td><select class="inline-select" data-payment-status="'+o.id+'">'+Object.entries(PAYMENT).map(([k,v])=>'<option value="'+k+'" '+(o.payment_status===k?"selected":"")+'>'+v+'</option>').join("")+'</select></td><td>'+new Date(o.created_at).toLocaleDateString("ar-IQ")+'</td>')+'<td><button class="action-btn" data-order-detail="'+o.id+'">عرض</button></td></tr>').join("")+'</tbody></table>';
+ return '<table><thead><tr><th>رقم الطلب</th><th>الزبون</th><th>الهاتف</th><th>المجموع</th><th>الحالة</th>'+(compact?"":"<th>الدفع</th><th>التاريخ</th>")+'<th>الإجراءات</th></tr></thead><tbody>'+rows.map(o=>'<tr><td>#'+esc(o.order_number??o.id.slice(0,8))+'</td><td>'+esc(o.customer_name)+'</td><td>'+esc(o.phone)+'</td><td>'+money(o.total)+'</td><td><select class="inline-select" data-order-status="'+o.id+'">'+Object.entries(STATUS).map(([k,v])=>'<option value="'+k+'" '+(o.status===k?"selected":"")+'>'+v+'</option>').join("")+'</select></td>'+(compact?"":'<td><select class="inline-select" data-payment-status="'+o.id+'">'+Object.entries(PAYMENT).map(([k,v])=>'<option value="'+k+'" '+(o.payment_status===k?"selected":"")+'>'+v+'</option>').join("")+'</select></td><td>'+new Date(o.created_at).toLocaleDateString("ar-IQ")+'</td>')+'<td><button class="action-btn" data-order-detail="'+o.id+'">عرض</button>'+(compact?"":'<button class="action-btn danger" data-order-delete="'+o.id+'">حذف</button>')+'</td></tr>').join("")+'</tbody></table>';
 }
 function renderOrders(){
  const q=$("order-search").value.trim().toLowerCase(),st=$("order-status-filter").value;
@@ -76,10 +76,23 @@ function bindOrderActions(){
  document.querySelectorAll("[data-order-status]").forEach(s=>s.onchange=()=>updateOrder(s.dataset.orderStatus,{status:s.value,order_status:s.value}));
  document.querySelectorAll("[data-payment-status]").forEach(s=>s.onchange=()=>updateOrder(s.dataset.paymentStatus,{payment_status:s.value}));
  document.querySelectorAll("[data-order-detail]").forEach(b=>b.onclick=()=>showOrder(b.dataset.orderDetail));
+ document.querySelectorAll("[data-order-delete]").forEach(b=>b.onclick=()=>deleteOrder(b.dataset.orderDelete));
 }
 async function updateOrder(id,patch){
  try{const {error}=await db.from("orders").update({...patch,updated_at:new Date().toISOString()}).eq("id",id);if(error)throw error;const o=orders.find(x=>x.id===id);Object.assign(o,patch);renderStats();renderOrders();toast("تم تحديث الطلب بنجاح")}
  catch(e){toast("تعذر تحديث الطلب: "+e.message);loadAll()}
+}
+async function deleteOrder(id){
+ const o=orders.find(x=>x.id===id);if(!o)return;
+ const label="#"+(o.order_number??id.slice(0,8));
+ if(!window.confirm("تأكيد حذف الطلب "+label+" للزبون "+(o.customer_name||"—")+"؟\\nسيتم حذف تفاصيل الطلب المرتبطة به أيضاً، ولا يمكن التراجع عن هذه العملية."))return;
+ try{
+  const {error}=await db.from("orders").delete().eq("id",id);
+  if(error)throw error;
+  orders=orders.filter(x=>x.id!==id);
+  renderAll();toast("تم حذف الطلب "+label+" بنجاح");
+  if($("order-dialog").open)$("order-dialog").close();
+ }catch(e){console.error(e);toast("تعذر حذف الطلب: "+(e.message||"حدث خطأ"));}
 }
 function showOrder(id){
  const o=orders.find(x=>x.id===id);if(!o)return;
