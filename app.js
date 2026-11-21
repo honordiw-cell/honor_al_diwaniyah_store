@@ -324,6 +324,27 @@ async function submitOrder(e){
  setTimeout(()=>$("checkout-dialog").close(),3000);
 }
 
+// Theme preference: light by default, with a user-controlled dark mode.
+const savedTheme=localStorage.getItem("honor-store-theme");
+document.body.classList.toggle("theme-dark",savedTheme==="dark");
+document.body.classList.toggle("theme-light",savedTheme!=="dark");
+function updateThemeToggle(){
+ const dark=document.body.classList.contains("theme-dark");
+ const btn=$("theme-toggle");
+ if(!btn)return;
+ btn.querySelector(".theme-toggle-icon").textContent=dark?"☀":"☾";
+ btn.querySelector(".theme-toggle-label").textContent=dark?"الوضع الساطع":"الوضع الداكن";
+ btn.setAttribute("aria-label",dark?"تفعيل الوضع الساطع":"تفعيل الوضع الداكن");
+}
+updateThemeToggle();
+$("theme-toggle").addEventListener("click",()=>{
+ const dark=!document.body.classList.contains("theme-dark");
+ document.body.classList.toggle("theme-dark",dark);
+ document.body.classList.toggle("theme-light",!dark);
+ localStorage.setItem("honor-store-theme",dark?"dark":"light");
+ updateThemeToggle();
+});
+
 // Category buttons are rendered dynamically from Supabase categories.
 $("search-input").addEventListener("input",()=>{visibleProductCount=productsPerPage;renderProducts()});
 $("brand-filter").addEventListener("change",e=>{selectedBrand=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
