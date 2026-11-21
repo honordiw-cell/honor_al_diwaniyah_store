@@ -75,6 +75,7 @@ function renderProducts(){
  }
  document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>addToCart(b.dataset.add)));
  document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
+ renderHomeCollections();
 }
 function renderHomeCollections(){
  const featured=products.filter(p=>p.isFeatured&&p.stock>0).slice(0,4);
@@ -332,6 +333,7 @@ async function submitOrder(e){
  }
  cart=[];
  persistCart();
+ await loadProducts();
  e.currentTarget.reset();
  setTimeout(()=>$("checkout-dialog").close(),3000);
 }
