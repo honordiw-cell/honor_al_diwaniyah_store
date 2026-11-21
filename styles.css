@@ -2035,3 +2035,65 @@ body{background:#f1f2f4;color:#111318;font-family:"Cairo",sans-serif}
  .category-filter{gap:5px;font-size:10px}
  .category-filter select{min-height:44px;border-radius:11px;font-size:11px}
 }
+
+
+/* FINAL COLOR & CONTRAST FIXES — storefront light presentation */
+.store-home-redesign,
+.store-home-redesign *{
+ color-scheme:light;
+}
+.store-home-redesign .store-header{
+ background:rgba(255,255,255,.97);
+}
+.store-home-redesign .store-header .brand-wordmark b{
+ color:#151b25!important;
+}
+.store-home-redesign .store-header .brand-wordmark small{
+ color:#3478f6!important;
+}
+.store-home-redesign .store-search-box{
+ background:#fff!important;
+}
+.store-home-redesign .store-search-box input,
+.store-home-redesign .store-search-box input:focus,
+.store-home-redesign .store-search-box input:-webkit-autofill,
+.store-home-redesign .store-search-box input:-webkit-autofill:hover,
+.store-home-redesign .store-search-box input:-webkit-autofill:focus{
+ background:#fff!important;
+ background-color:#fff!important;
+ color:#263445!important;
+ -webkit-text-fill-color:#263445!important;
+ caret-color:#245fce;
+ box-shadow:0 0 0 1000px #fff inset!important;
+}
+.store-home-redesign .store-search-box input::placeholder{
+ color:#64748b!important;
+ opacity:1;
+}
+.store-home-redesign .store-search-box button{
+ color:#526174!important;
+}
+.store-home-redesign .store-search-intro p,
+.store-home-redesign .store-section-heading p,
+.store-home-redesign .store-product-tools,
+.store-home-redesign .store-products-section .store-products-heading p{
+ color:#596579!important;
+}
+.store-home-redesign .store-search-intro h1 em{
+ color:#245fce!important;
+}
+.store-home-redesign .category-filter{
+ color:#263445!important;
+}
+.store-home-redesign .category-filter select{
+ background:#fff!important;
+ color:#202b3b!important;
+ border-color:#d7dee8!important;
+}
+.store-home-redesign .store-text-link{
+ color:#245fce!important;
+}
+.store-home-redesign .store-kicker,
+.store-home-redesign .store-products-heading .store-kicker{
+ color:#245fce!important;
+}
