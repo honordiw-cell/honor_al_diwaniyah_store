@@ -27,4 +27,6 @@ function renderProducts(){let ps=JSON.parse(localStorage.getItem("honor-admin-pr
 function renderOrders(){let os=JSON.parse(localStorage.getItem("honor-demo-orders")||"[]");document.getElementById("admin-orders").innerHTML=os.map(o=>`<tr><td>${o.id}</td><td>${o.customer_name}</td><td>${o.phone}</td><td>${o.governorate}</td><td>${money(o.total)}</td><td>${o.status}</td></tr>`).join("")||'<tr><td colspan="6">لا توجد طلبات تجريبية.</td></tr>'}
 document.getElementById("product-form").onsubmit=async e=>{e.preventDefault();let f=new FormData(e.target),p={id:"local-"+Date.now(),name:f.get("name"),category:f.get("category"),price:Number(f.get("price")),description:f.get("description"),image:f.get("image"),tag:f.get("tag")};let ps=JSON.parse(localStorage.getItem("honor-admin-products")||"null")||demo;ps.unshift(p);localStorage.setItem("honor-admin-products",JSON.stringify(ps));alert("تمت الإضافة في وضع العرض المحلي. الربط بقاعدة البيانات مطلوب للنشر.");e.target.reset();renderProducts()};
 init();
-</script></body></html>
+</script>
+<script type="module" src="analytics.js"></script>
+</body></html>
