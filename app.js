@@ -48,6 +48,7 @@ function renderProducts(){
    const brand=String(p.brand||"").trim()||"بدون ماركة";
    return (selectedBrand==="الكل"||brand.toLowerCase()===selectedBrand.toLowerCase()) &&
      (selectedDeviceType==="الكل"||type===selectedDeviceType) &&
+     (selectedAvailability==="all"||(selectedAvailability==="available"&&Number(p.stock)>0)||(selectedAvailability==="unavailable"&&Number(p.stock)<=0)) &&
      (`${p.name} ${p.description||""} ${p.brand||""}`).toLowerCase().includes(q);
  });
  // المتوفر أولاً، ثم نفذت الكمية مع الحفاظ على ترتيب المنتجات داخل كل مجموعة.
