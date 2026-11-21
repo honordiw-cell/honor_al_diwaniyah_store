@@ -20,7 +20,7 @@ let selectedDeviceType = "الكل";
 let visibleProductCount = 8;
 const productsPerPage = 8;
 let selectedAvailability = "all";
-const WHATSAPP_NUMBER = "9647839516687";
+const WHATSAPP_NUMBER = "9647874400300";
 let storeCategories = [];
 let productLoadMessage = "";
 
