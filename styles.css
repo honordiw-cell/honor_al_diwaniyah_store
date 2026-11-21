@@ -2097,3 +2097,115 @@ body{background:#f1f2f4;color:#111318;font-family:"Cairo",sans-serif}
 .store-home-redesign .store-products-heading .store-kicker{
  color:#245fce!important;
 }
+
+
+/* Header brand clarity, preserved original blue accent, readable native selects */
+.store-header .brand-wordmark b{color:#202b35!important;opacity:1!important;text-shadow:none!important}
+.store-header .brand-wordmark small{color:#3478f6!important;opacity:1!important}
+.store-home-redesign .store-kicker,
+.store-home-redesign .store-products-heading .store-kicker,
+.store-home-redesign .store-search-intro h1 em{color:#3478f6!important}
+.category-filter select,
+.category-filter select option{
+ color:#202b35!important;
+ background-color:#fff!important;
+ -webkit-text-fill-color:#202b35!important;
+ opacity:1!important;
+}
+.category-filter select{font-weight:800!important;border:1px solid #d7dee8!important}
+.category-filter select:focus{border-color:#3478f6!important;box-shadow:0 0 0 3px rgba(52,120,246,.14)!important}
+
+/* Theme toggle in the store header */
+.theme-toggle{
+ display:inline-flex;align-items:center;justify-content:center;gap:7px;
+ min-height:38px;padding:0 11px;border:1px solid #dce3ec;border-radius:22px;
+ background:#f4f6f9;color:#263445;font:700 10px "Cairo",sans-serif;
+ white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s;
+}
+.theme-toggle-icon{font-size:17px;line-height:1;color:#3478f6}
+.theme-toggle-label{font-size:10px}
+.theme-toggle:hover{border-color:#3478f6;background:#edf3ff}
+@media(max-width:480px){
+ .store-header .header-actions{gap:6px}
+ .theme-toggle{min-height:34px;padding:0 9px;gap:4px}
+ .theme-toggle-icon{font-size:16px}
+ .theme-toggle-label{font-size:9px}
+}
+
+/* Explicit light theme overrides system dark appearance */
+body.theme-light{color-scheme:light;background:#f4f5f7;color:#151b25}
+body.theme-light .store-header{background:rgba(255,255,255,.97)!important}
+body.theme-light .store-header .brand-wordmark b{color:#202b35!important}
+body.theme-light .store-header .brand-wordmark small{color:#3478f6!important}
+body.theme-light .store-search-section,
+body.theme-light .store-products-section,
+body.theme-light .store-maintenance-section{background:#fff!important;color:#151b25!important}
+body.theme-light .store-search-intro h1,
+body.theme-light .store-section-heading h2,
+body.theme-light .store-products-heading h2,
+body.theme-light .store-maintenance-heading h2{color:#151b25!important}
+body.theme-light .store-search-intro p,
+body.theme-light .store-section-heading p,
+body.theme-light .store-product-tools{color:#596579!important}
+body.theme-light .store-search-box,
+body.theme-light .store-search-box input{background:#fff!important;color:#263445!important;-webkit-text-fill-color:#263445!important}
+body.theme-light .category-filter,
+body.theme-light .category-filter select,
+body.theme-light .category-filter select option{color:#202b35!important;background:#fff!important;-webkit-text-fill-color:#202b35!important}
+body.theme-light .product-card{background:#fff!important;color:#202b35!important;border-color:#e3e8ef!important}
+body.theme-light .product-card h3{color:#151b25!important}
+body.theme-light .product-meta{color:#64748b!important}
+body.theme-light .theme-toggle{background:#f4f6f9;color:#263445;border-color:#dce3ec}
+
+/* User-selected dark theme */
+body.theme-dark{color-scheme:dark;background:#171c24;color:#e8edf5}
+body.theme-dark .store-announcement{background:#10151d;color:#e8edf5}
+body.theme-dark .store-header{background:rgba(28,35,46,.97)!important;border-color:#354052!important}
+body.theme-dark .store-header .brand-wordmark b{color:#f1f5f9!important}
+body.theme-dark .store-header .brand-wordmark small{color:#78a7ff!important}
+body.theme-dark .store-header .desktop-nav a{color:#dbe4f2!important}
+body.theme-dark .store-header .icon-btn{color:#e8edf5!important;background:#263244!important}
+body.theme-dark .store-header .cart-btn{background:#263244!important;color:#fff!important;border-color:#43516a!important}
+body.theme-dark .store-home-redesign{color:#e8edf5}
+body.theme-dark .store-search-section,
+body.theme-dark .store-products-section,
+body.theme-dark .store-maintenance-section{
+ background:#222b39!important;border-color:#35445a!important;color:#e8edf5!important;
+ box-shadow:0 12px 30px rgba(0,0,0,.2)!important
+}
+body.theme-dark .store-search-intro h1,
+body.theme-dark .store-section-heading h2,
+body.theme-dark .store-products-heading h2,
+body.theme-dark .store-maintenance-heading h2{color:#f1f5f9!important}
+body.theme-dark .store-search-intro p,
+body.theme-dark .store-section-heading p,
+body.theme-dark .store-product-tools,
+body.theme-dark .store-maintenance-section p{color:#b3c0d2!important}
+body.theme-dark .store-kicker,
+body.theme-dark .store-products-heading .store-kicker,
+body.theme-dark .store-search-intro h1 em{color:#78a7ff!important}
+body.theme-dark .store-search-box{background:#151d29!important;border-color:#465570!important}
+body.theme-dark .store-search-box input,
+body.theme-dark .store-search-box input:focus,
+body.theme-dark .store-search-box input:-webkit-autofill{
+ background:#151d29!important;background-color:#151d29!important;
+ color:#f1f5f9!important;-webkit-text-fill-color:#f1f5f9!important;
+ box-shadow:0 0 0 1000px #151d29 inset!important;caret-color:#78a7ff
+}
+body.theme-dark .store-search-box input::placeholder{color:#a7b4c7!important}
+body.theme-dark .category-filter{color:#e8edf5!important}
+body.theme-dark .category-filter select,
+body.theme-dark .category-filter select option{
+ background:#151d29!important;color:#f1f5f9!important;
+ -webkit-text-fill-color:#f1f5f9!important;border-color:#465570!important
+}
+body.theme-dark .product-card{background:#151d29!important;color:#e8edf5!important;border-color:#35445a!important}
+body.theme-dark .product-card h3{color:#f1f5f9!important}
+body.theme-dark .product-meta{color:#a7b4c7!important}
+body.theme-dark .store-text-link{color:#8db5ff!important}
+body.theme-dark .theme-toggle{background:#263244;color:#f1f5f9;border-color:#465570}
+body.theme-dark .theme-toggle-icon{color:#ffd166}
+body.theme-dark .mobile-bottom-nav{background:rgba(28,35,46,.97)!important;border-color:#35445a!important}
+body.theme-dark .mobile-nav-item{color:#a7b4c7!important}
+body.theme-dark .mobile-nav-item.active{color:#f1f5f9!important}
+body.theme-dark .site-footer{background:#10151d!important;color:#e8edf5!important}
