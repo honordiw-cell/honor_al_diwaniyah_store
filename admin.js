@@ -35,6 +35,7 @@ async function loadAll(){
    db.rpc("admin_dashboard_metrics"),
    db.from("stock_movements").select("id,product_id,product_name,old_stock,new_stock,quantity_delta,reason,created_at").order("created_at",{ascending:false}).limit(50),
    db.from("order_status_history").select("id,order_id,order_number,event_type,from_status,to_status,details,created_at").order("created_at",{ascending:false}).limit(50)
+    db.from("home_banners").select("*").order("updated_at",{ascending:false})
   ]);
   if(c.error)throw c.error;if(p.error)throw p.error;if(o.error)throw o.error;
   if(m.error)console.warn("Dashboard metrics unavailable:",m.error);
