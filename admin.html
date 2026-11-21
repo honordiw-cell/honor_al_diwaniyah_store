@@ -40,7 +40,10 @@
     <article class="stat-card"><span class="stat-icon">▤</span><small>الطلبات الكلية</small><strong id="stat-orders">—</strong><em>جميع الطلبات المسجلة</em></article>
     <article class="stat-card"><span class="stat-icon">◷</span><small>طلبات تحتاج متابعة</small><strong id="stat-pending">—</strong><em>جديدة أو قيد المعالجة</em></article>
     <article class="stat-card"><span class="stat-icon">د.ع</span><small>مبيعات الطلبات المكتملة</small><strong id="stat-sales">—</strong><em>حسب الطلبات المسلّمة</em></article>
+    <article class="stat-card"><span class="stat-icon">↗</span><small>مبيعات هذا الشهر</small><strong id="stat-month-sales">—</strong><em>الطلبات المسلّمة خلال الشهر</em></article>
+    <article class="stat-card"><span class="stat-icon">◷</span><small>طلبات اليوم</small><strong id="stat-today-orders">—</strong><em>طلبات تم تسجيلها اليوم</em></article>
    </div>
+   <section class="panel admin-report-card"><div class="panel-heading"><div><h3>المبيعات خلال آخر 7 أيام</h3><p>قيمة الطلبات التي تم تسليمها</p></div></div><div id="weekly-sales" class="admin-weekly-sales"></div><div class="admin-top-products"><h3>الأكثر مبيعاً</h3><div id="top-products"></div></div></section>
    <div class="content-grid"><section class="panel"><div class="panel-heading"><div><h3>أحدث الطلبات</h3><p>آخر الطلبات الواردة للمتجر</p></div><button class="text-btn" data-go="orders">كل الطلبات ←</button></div><div id="recent-orders" class="table-holder"></div></section>
    <section class="panel quick-panel"><div class="panel-heading"><div><h3>اختصارات سريعة</h3><p>إدارة المتجر بخطوة واحدة</p></div></div><button class="quick-action" data-open-product><span>＋</span><div><b>إضافة منتج جديد</b><small>أضف جهازاً مع الصور والمواصفات</small></div>›</button><button class="quick-action" data-go="products"><span>▣</span><div><b>إدارة المنتجات</b><small>تعديل الأسعار والمخزون والظهور</small></div>›</button><button class="quick-action" data-go="orders"><span>▤</span><div><b>متابعة الطلبات</b><small>حدّث حالة الطلب والدفع</small></div>›</button></section></div>
   </section>
@@ -48,9 +51,10 @@
    <div class="section-toolbar"><div><h2>إدارة المنتجات</h2><p>أضف الأجهزة وعدّل الأسعار والصور والمخزون.</p></div><button class="btn primary" data-open-product>＋ إضافة منتج</button></div>
    <div class="filter-bar"><input id="product-search" type="search" placeholder="ابحث عن اسم المنتج أو الماركة..."><select id="product-category-filter"><option value="">كل الأقسام</option></select><select id="product-state-filter"><option value="">كل الحالات</option><option value="true">منشور</option><option value="false">مخفي</option></select></div>
    <div class="panel"><div id="products-table" class="table-holder"></div></div>
+   <section class="panel admin-stock-history"><div class="panel-heading"><div><h3>سجل حركة المخزون</h3><p>كل زيادة أو نقصان في الكميات مع سبب التغيير.</p></div></div><div id="stock-movements"></div></section>
   </section>
   <section class="view" id="view-orders">
-   <div class="section-toolbar"><div><h2>إدارة الطلبات</h2><p>راجع بيانات الزبائن وحدّث حالة الطلب والدفع.</p></div><button class="btn secondary" id="refresh-orders">↻ تحديث</button></div>
+   <div class="section-toolbar"><div><h2>إدارة الطلبات</h2><p>راجع بيانات الزبائن وحدّث حالة الطلب والدفع.</p></div><div class="admin-order-toolbar"><button class="btn secondary" id="admin-export-orders">تصدير CSV</button><button class="btn secondary" id="refresh-orders">↻ تحديث</button></div></div>
    <div class="filter-bar"><input id="order-search" type="search" placeholder="ابحث برقم الطلب أو اسم الزبون أو الهاتف..."><select id="order-status-filter"><option value="">كل حالات الطلب</option><option value="new">جديد</option><option value="confirmed">تم التأكيد</option><option value="processing">قيد التجهيز</option><option value="shipped">تم الشحن</option><option value="delivered">تم التسليم</option><option value="cancelled">ملغي</option></select></div>
    <div class="panel"><div id="orders-table" class="table-holder"></div></div>
   </section>
