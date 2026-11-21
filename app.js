@@ -79,8 +79,8 @@ function renderProducts(){
 function showProductDetails(id){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
- const dialog=$("product-details-dialog");
- if(!dialog)return;
+ const content=$("product-details-content");
+ if(!content)return;
  const images=[...new Set([p.image,...(Array.isArray(p.images)?p.images:[])].filter(Boolean))];
  const specs=[
   ["الرام",p.ram],["الذاكرة الداخلية",p.storage],["المعالج",p.chipset],
@@ -89,7 +89,7 @@ function showProductDetails(id){
  ].filter(x=>x[1]);
  const related=products.filter(x=>String(x.id)!==String(p.id)&&((p.brand&&x.brand===p.brand)||(p.categoryId&&String(x.categoryId)===String(p.categoryId)))).slice(0,4);
  const gallery=images.length?'<div class="landing-gallery"><div class="landing-main-image"><img id="landing-main-image" src="'+escapeHtml(images[0])+'" alt="'+escapeHtml(p.name)+'"></div>'+(images.length>1?'<div class="landing-thumbs">'+images.map((src,i)=>'<button type="button" class="landing-thumb '+(i===0?'active':'')+'" data-gallery-image="'+i+'" aria-label="الصورة '+(i+1)+'"><img src="'+escapeHtml(src)+'" alt=""></button>').join('')+'</div>':'')+'</div>':'<div class="landing-gallery"><div class="landing-main-image landing-no-image">صورة المنتج غير متوفرة حالياً</div></div>';
- $("product-details-content").innerHTML=
+ content.innerHTML=
  '<div class="product-landing">'+
   '<div class="landing-topline"><span class="eyebrow">HONOR AL-DIWANIYAH</span><span class="landing-stock '+(p.stock>0?'available':'unavailable')+'">'+(p.stock>0?'متوفر حالياً':'غير متوفر حالياً')+'</span></div>'+
   '<div class="landing-overview">'+gallery+
@@ -120,12 +120,14 @@ function showProductDetails(id){
   if(mainImage&&images[index])mainImage.src=images[index];
   document.querySelectorAll(".landing-thumb").forEach(x=>x.classList.toggle("active",x===b));
  }));
- const orderNow=()=>{if(p.stock<=0)return;addToCart(p.id);dialog.close();$("checkout-dialog").showModal()};
+ const orderNow=()=>{if(p.stock<=0)return;addToCart(p.id);$("checkout-dialog").showModal()};
  ["detail-order-now","detail-order-bottom"].forEach(id=>$(id)?.addEventListener("click",orderNow));
- $("detail-add-cart")?.addEventListener("click",()=>{addToCart(p.id);dialog.close()});
+ $("detail-add-cart")?.addEventListener("click",()=>addToCart(p.id));
  document.querySelectorAll("[data-related-product]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.relatedProduct)));
- if(!dialog.open)dialog.showModal();
+ showStorePage("product-detail",{push:false});
+ if(!location.hash.startsWith("#product/"))history.pushState({productId:id},"","#product/"+encodeURIComponent(id));
 }
+
 function addToCart(id){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
@@ -360,11 +362,11 @@ $("cart-close").onclick=closeCart;
 $("overlay").onclick=closeCart;
 $("checkout-open").onclick=()=>{if(!cart.length)return toast("السلة فارغة");closeCart();$("checkout-dialog").showModal()};
 $("checkout-close").onclick=()=>$("checkout-dialog").close();
-$("product-details-close").onclick=()=>$("product-details-dialog").close();
+$("product-details-back").onclick=()=>{history.pushState({storePage:"products"},"","#products");showStorePage("products",{push:false})};
 $("checkout-form").addEventListener("submit",submitOrder);
 $("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
 function showStorePage(page,{push=true}={}){
- const allowed=["home","departments","products","accessories","maintenance"];
+ const allowed=["home","departments","products","accessories","maintenance","product-detail"];
  if(!allowed.includes(page))page="home";
  document.querySelectorAll("[data-page-view]").forEach(view=>view.classList.toggle("active",view.dataset.pageView===page));
  document.querySelectorAll("[data-page]").forEach(link=>{
@@ -399,17 +401,24 @@ document.querySelectorAll("[data-shop-accessories]").forEach(btn=>btn.addEventLi
  selectedBrand="الكل";$("brand-filter").value="الكل";
  visibleProductCount=productsPerPage;renderProducts();showStorePage("products");
 }));
-window.addEventListener("popstate",()=>{
- const page=location.hash.replace("#","")||"home";
+function handleStoreLocationA(){
+ const hash=location.hash.replace(/^#/,"");
+ if(hash.startsWith("product/")){
+  const id=decodeURIComponent(hash.slice(8));
+  showProductDetails(id);
+  return;
+ }
+ const page=hash||"home";
  showStorePage(page,{push:false});
-});
-const initialPage=location.hash.replace("#","")||"home";
-showStorePage(initialPage,{push:false});
+}
+window.addEventListener("popstate",handleStoreLocationA);
+const initialHash=location.hash.replace(/^#/,"");
+if(!initialHash.startsWith("product/"))showStorePage(initialHash||"home",{push:false});
 $("year").textContent=new Date().getFullYear();
 initGovernors();
 renderProducts();
 renderCart();
-loadProducts();
+loadProducts().then(()=>{if(location.hash.startsWith("#product/"))handleStoreLocationA()});
 
 
 /* Admin dashboard: open with ?admin=1 */
