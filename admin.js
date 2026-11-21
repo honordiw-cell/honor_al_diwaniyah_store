@@ -108,7 +108,7 @@ async function deleteOrder(id){
   const {error}=await db.rpc("admin_delete_order",{p_order_id:id});
   if(error)throw error;
   orders=orders.filter(x=>x.id!==id);
-  renderAll();toast("تم حذف الطلب "+label+" بنجاح");
+  toast("تم حذف الطلب "+label+" مع معالجة المخزون وسجل الحذف");await loadAll();
   if($("order-dialog").open)$("order-dialog").close();
  }catch(e){console.error(e);toast("تعذر حذف الطلب: "+(e.message||"حدث خطأ"));}
 }
@@ -193,7 +193,7 @@ async function exportOrders(){
   while(true){const {data,error}=await db.from("orders").select("order_number,customer_name,phone,province,district,address,payment_method,payment_status,status,total,created_at,notes").order("created_at",{ascending:false}).range(from,from+batch-1);if(error)throw error;all.push(...(data||[]));if(!data||data.length<batch)break;from+=batch}
   const headers=["رقم الطلب","اسم الزبون","الهاتف","المحافظة","المنطقة","العنوان","طريقة الدفع","حالة الدفع","حالة الطلب","المجموع","التاريخ","ملاحظات"];
   const rows=all.map(o=>[o.order_number,o.customer_name,o.phone,o.province,o.district,o.address,o.payment_method,o.payment_status,STATUS[o.status]||o.status,o.total,new Date(o.created_at).toLocaleString("ar-IQ"),o.notes]);
-  const csv="\\uFEFF"+[headers,...rows].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\\r\\n");
+  const csv="\uFEFF"+[headers,...rows].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="honor-orders-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);toast("تم تصدير "+all.length+" طلب");
  }catch(e){toast("تعذر تصدير الطلبات: "+e.message)}
 }
@@ -209,7 +209,7 @@ function bind(){
  ["product-search","product-category-filter","product-state-filter"].forEach(id=>$(id).addEventListener(id==="product-search"?"input":"change",renderProducts));
  ["order-search","order-status-filter"].forEach(id=>$(id).addEventListener(id==="order-search"?"input":"change",renderOrders));
  $("refresh-orders").onclick=loadAll;$("menu-toggle").onclick=()=>$("app").classList.toggle("menu-open");
- $("admin-order-search")?.addEventListener("input",()=>{const q=$("admin-order-search").value.trim().toLowerCase(),f=$("admin-order-filter").value;const rows=orders.filter(o=>(f==="all"||o.status===f)&&(!q||[o.order_number,o.customer_name,o.phone,o.province,o.district].join(" ").toLowerCase().includes(q)));$("admin-orders-list").innerHTML=rows.length?orderTableA(rows):'<div class="admin-empty">ماكو طلبات مطابقة.</div>'});
+
  $("admin-export-orders")?.addEventListener("click",exportOrders);
 }
 async function init(){
