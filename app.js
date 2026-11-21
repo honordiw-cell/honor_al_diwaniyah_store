@@ -80,11 +80,13 @@ function renderProducts(){
 function renderHomeCollections(){
  const marked=products.filter(p=>p.isFeatured&&p.stock>0);
  const featured=(marked.length?marked:products.filter(p=>p.stock>0&&p.deviceType!=="accessories")).slice(0,4);
+ const deals=products.filter(p=>p.oldPrice>p.price&&p.stock>0).slice(0,4);
  const latest=[...products].sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,4);
  const card=p=>'<article class="home-product-card"><button type="button" class="home-product-open" data-home-details="'+escapeHtml(p.id)+'"><div class="home-product-image">'+(p.image?'<img src="'+escapeHtml(p.image)+'" alt="'+escapeHtml(p.name)+'" loading="lazy">':'<span>HONOR AL-DIWANIYAH</span>')+'</div><small>'+escapeHtml(p.brand||p.category||"")+'</small><b>'+escapeHtml(p.name)+'</b><strong>'+money(p.price)+'</strong></button></article>';
- const f=$("home-featured-grid"),l=$("home-latest-grid");
+ const f=$("home-featured-grid"),l=$("home-latest-grid"),d=$("home-deals-grid");
  if(f)f.innerHTML=featured.length?featured.map(card).join(""):'<p class="home-no-products">قريباً نضيف اختياراتنا المميزة.</p>';
  if(l)l.innerHTML=latest.length?latest.map(card).join(""):'<p class="home-no-products">المنتجات الجديدة تظهر هنا قريباً.</p>';
+ if(d)d.innerHTML=deals.length?deals.map(p=>card(p).replace('<strong>'+money(p.price)+'</strong>','<strong>'+money(p.price)+' <del>'+money(p.oldPrice)+'</del></strong>')).join(""):'<p class="home-no-products">ماكو عروض محددة حالياً.</p>';
  document.querySelectorAll("[data-home-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.homeDetails)));
 }
 function showProductDetails(id){
