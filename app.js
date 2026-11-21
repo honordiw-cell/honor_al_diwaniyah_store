@@ -15,7 +15,8 @@ const hasBackend = !!(cfg.supabaseUrl && cfg.supabaseAnonKey);
 let sb = null;
 let products = hasBackend ? [] : [...demoProducts];
 let cart = JSON.parse(localStorage.getItem("honor-cart")||"[]");
-let activeCategory = "الكل";
+let selectedBrand = "الكل";
+let selectedDeviceType = "الكل";
 let visibleProductCount = 8;
 const productsPerPage = 8;
 let storeCategories = [];
@@ -40,10 +41,13 @@ function escapeHtml(s=""){
 }
 function renderProducts(){
  const q=$("search-input").value.trim().toLowerCase();
- const filtered=products.filter(p=>
-   (activeCategory==="الكل"||String(p.categoryId)===String(activeCategory)) &&
-   (`${p.name} ${p.description||""} ${p.brand||""}`).toLowerCase().includes(q)
- );
+ const filtered=products.filter(p=>{
+   const type=p.deviceType||"phone";
+   const brand=String(p.brand||"").trim()||"بدون ماركة";
+   return (selectedBrand==="الكل"||brand.toLowerCase()===selectedBrand.toLowerCase()) &&
+     (selectedDeviceType==="الكل"||type===selectedDeviceType) &&
+     (`${p.name} ${p.description||""} ${p.brand||""}`).toLowerCase().includes(q);
+ });
  // المتوفر أولاً، ثم نفذت الكمية مع الحفاظ على ترتيب المنتجات داخل كل مجموعة.
   const sortedProducts=[...filtered].sort((a,b)=>(Number(b.stock)>0?1:0)-(Number(a.stock)>0?1:0));
   const visibleProducts=sortedProducts.slice(0,visibleProductCount);
@@ -182,22 +186,14 @@ function categoryIcon(category){
 }
 function renderCategories(categories){
  storeCategories=categories||[];
- const grid=$("category-grid");
- const categoryOrder=["tablets","honor","redmi","apple","samsung","xiaomi","infinix","tecno","realme","poco","motorola"];
- storeCategories.sort((a,b)=>{
-   const ai=categoryOrder.indexOf(a.slug), bi=categoryOrder.indexOf(b.slug);
-   return (ai<0?999:ai)-(bi<0?999:bi);
- });
- const phoneCategories=storeCategories.filter(c=>!["accessories","maintenance"].includes(c.slug));
- const items=[{id:"الكل",name:"كل المنتجات",slug:"all"},...phoneCategories];
- grid.innerHTML=items.map((c,i)=>`<button class="category-card ${i===0?"active":""}" data-category="${escapeHtml(c.id)}"><span class="category-icon">${i===0?'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>':categoryIcon(c)}</span><b>${escapeHtml(c.name)}</b></button>`).join("");
- grid.querySelectorAll("[data-category]").forEach(b=>b.addEventListener("click",()=>{
-   grid.querySelectorAll(".category-card").forEach(x=>x.classList.remove("active"));
-   b.classList.add("active");
-   activeCategory=b.dataset.category;
-   visibleProductCount=productsPerPage;
-   renderProducts();
- }));
+ const brandSelect=$("brand-filter");
+ if(!brandSelect)return;
+ const brands=[...new Set(products.map(p=>String(p.brand||"").trim()).filter(Boolean))]
+   .sort((a,b)=>a.localeCompare(b,"ar"));
+ const previous=selectedBrand;
+ brandSelect.innerHTML='<option value="الكل">كل البراندات</option>'+brands.map(b=>'<option value="'+escapeHtml(b)+'">'+escapeHtml(b)+'</option>').join("");
+ selectedBrand=brands.includes(previous)?previous:"الكل";
+ brandSelect.value=selectedBrand;
 }
 async function loadProducts(){
  if(!hasBackend){
@@ -233,13 +229,15 @@ async function loadProducts(){
        name:row.name,
        categoryId:row.category_id||"",
        category:category?.name||"غير مصنف",
+       categorySlug:category?.slug||"",
+       deviceType:category?.slug==="tablets"?"tablet":category?.slug==="accessories"?"accessories":category?.slug==="maintenance"?"maintenance":"phone",
        description:row.description||row.brand||category?.name||"",
        price:Number(row.price)||0,
        oldPrice:Number(row.old_price)||0,
        stock:Number(row.stock)||0,
        image:row.image_url||"",
        images:Array.isArray(row.images)?row.images:[],
-       brand:row.brand||"",
+       brand:row.brand||(category&&!["tablets","accessories","maintenance"].includes(category.slug)?category.name:""),
        ram:row.ram||(isX9d?"12GB":""),
        storage:row.storage||(isX9d?"256GB":""),
        color:row.color||"",
@@ -328,6 +326,8 @@ async function submitOrder(e){
 
 // Category buttons are rendered dynamically from Supabase categories.
 $("search-input").addEventListener("input",()=>{visibleProductCount=productsPerPage;renderProducts()});
+$("brand-filter").addEventListener("change",e=>{selectedBrand=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
+$("device-type-filter").addEventListener("change",e=>{selectedDeviceType=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
 $("search-toggle").onclick=()=>{$("search-box").scrollIntoView({behavior:"smooth"});$("search-input").focus()};
 $("search-clear").onclick=()=>{$("search-input").value="";renderProducts()};
@@ -340,7 +340,15 @@ $("checkout-close").onclick=()=>$("checkout-dialog").close();
 $("product-details-close").onclick=()=>$("product-details-dialog").close();
 $("checkout-form").addEventListener("submit",submitOrder);
 $("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
-document.querySelectorAll("[data-nav-category]").forEach(link=>link.addEventListener("click",()=>{ const category=storeCategories.find(c=>c.slug===link.dataset.navCategory); if(category){ activeCategory=category.id; visibleProductCount=productsPerPage; renderProducts(); document.querySelectorAll("#category-grid .category-card").forEach(b=>b.classList.toggle("active",b.dataset.category===String(category.id))); } document.querySelector(".desktop-nav")?.classList.remove("mobile-open"); }));
+document.querySelectorAll("[data-nav-category]").forEach(link=>link.addEventListener("click",()=>{
+ if(link.dataset.navCategory==="accessories"){
+   selectedDeviceType="accessories";
+   $("device-type-filter").value="accessories";
+   visibleProductCount=productsPerPage;
+   renderProducts();
+ }
+ document.querySelector(".desktop-nav")?.classList.remove("mobile-open");
+}));
 $("year").textContent=new Date().getFullYear();
 initGovernors();
 renderProducts();
