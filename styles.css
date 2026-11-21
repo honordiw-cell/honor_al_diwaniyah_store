@@ -2302,3 +2302,5 @@ body.theme-dark .accessory-shop-cta p{color:#f1f5f9}
 .eyebrow,.product-brand,.price,.details-hint{color:#3478f6}
 .product-tag{color:#2863cc;background:#eaf1ff;border-color:#d7e5ff}
 .cart-btn span{background:#3478f6}
+
+.home-deals-section{padding:34px clamp(16px,5vw,72px);background:#eaf0fa}.home-deals-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.home-deals-grid del{color:#9aa5ab;font-size:10px;font-weight:500;margin-right:5px}@media(max-width:700px){.home-deals-section{padding:25px 13px}.home-deals-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}}
