@@ -76,6 +76,15 @@ function renderProducts(){
  document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>addToCart(b.dataset.add)));
  document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
 }
+function renderHomeCollections(){
+ const featured=products.filter(p=>p.isFeatured&&p.stock>0).slice(0,4);
+ const latest=[...products].sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,4);
+ const card=p=>'<article class="home-product-card"><button type="button" class="home-product-open" data-home-details="'+escapeHtml(p.id)+'"><div class="home-product-image">'+(p.image?'<img src="'+escapeHtml(p.image)+'" alt="'+escapeHtml(p.name)+'" loading="lazy">':'<span>HONOR AL-DIWANIYAH</span>')+'</div><small>'+escapeHtml(p.brand||p.category||"")+'</small><b>'+escapeHtml(p.name)+'</b><strong>'+money(p.price)+'</strong></button></article>';
+ const f=$("home-featured-grid"),l=$("home-latest-grid");
+ if(f)f.innerHTML=featured.length?featured.map(card).join(""):'<p class="home-no-products">قريباً نضيف اختياراتنا المميزة.</p>';
+ if(l)l.innerHTML=latest.length?latest.map(card).join(""):'<p class="home-no-products">المنتجات الجديدة تظهر هنا قريباً.</p>';
+ document.querySelectorAll("[data-home-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.homeDetails)));
+}
 function showProductDetails(id){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
@@ -98,7 +107,7 @@ function showProductDetails(id){
     '<div class="landing-memory">'+[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(' · ')+'</div>'+
     '<div class="landing-price-line"><strong>'+money(p.price)+'</strong>'+(p.oldPrice>p.price?'<del>'+money(p.oldPrice)+'</del>':'')+'</div>'+
     (p.description?'<p class="landing-description">'+escapeHtml(p.description)+'</p>':'')+
-    '<div class="landing-actions"><button type="button" class="primary-btn" id="detail-order-now" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(p.stock<=0?'disabled':'')+'>أضف للسلة</button></div>'+
+    '<div class="landing-actions"><button type="button" class="landing-share-btn" id="detail-share">مشاركة المنتج</button><button type="button" class="primary-btn" id="detail-order-now" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(p.stock<=0?'disabled':'')+'>أضف للسلة</button></div>'+
     '<p class="landing-delivery-note">توصيل لجميع محافظات العراق · تواصل ويانه لأي استفسار</p>'+
    '</div>'+
   '</div>'+
@@ -120,6 +129,7 @@ function showProductDetails(id){
   if(mainImage&&images[index])mainImage.src=images[index];
   document.querySelectorAll(".landing-thumb").forEach(x=>x.classList.toggle("active",x===b));
  }));
+ $("detail-share")?.addEventListener("click",async()=>{const url=location.origin+"/#product/"+encodeURIComponent(p.id);try{if(navigator.share)await navigator.share({title:p.name,text:"شوف "+p.name+" من HONOR AL-DIWANIYAH",url});else{await navigator.clipboard.writeText(url);toast("تم نسخ رابط المنتج")}}catch(err){if(err?.name!=="AbortError"){try{await navigator.clipboard.writeText(url);toast("تم نسخ رابط المنتج")}catch{toast("ما قدرنا نشارك الرابط")}}}});
  const orderNow=()=>{if(p.stock<=0)return;addToCart(p.id);$("checkout-dialog").showModal()};
  ["detail-order-now","detail-order-bottom"].forEach(id=>$(id)?.addEventListener("click",orderNow));
  $("detail-add-cart")?.addEventListener("click",()=>addToCart(p.id));
@@ -217,7 +227,7 @@ async function loadProducts(){
  try{
    const [{data:categories,error:categoryError},{data:rows,error:productError}]=await Promise.all([
      sb.from("categories").select("id,name,slug").eq("is_active",true),
-     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_active,created_at").eq("is_active",true).order("created_at",{ascending:false})
+     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_featured,is_active,created_at").eq("is_active",true).order("created_at",{ascending:false})
    ]);
 
    if(productError) throw productError;
@@ -248,7 +258,7 @@ async function loadProducts(){
        camera:row.camera||"",
        battery:row.battery||"",
        protection:row.protection||"",
-       tag:row.tag||""
+       tag:row.is_featured?"اختيار مميز":"",isFeatured:!!row.is_featured,createdAt:row.created_at||""
      };
    });
    if(categoryError){
@@ -470,9 +480,9 @@ loadProducts().then(()=>{if(location.hash.startsWith("#product/"))handleStoreLoc
  function renderProductImagePreviewA(){const box=$a("admin-product-image-preview");if(!box)return;box.innerHTML=productImageItemsA.map((item,i)=>'<div class="admin-image-thumb"><img src="'+escA(item.url||item.preview)+'" alt="صورة المنتج"><button type="button" data-remove-product-image="'+i+'" aria-label="حذف الصورة">×</button>'+(i===0?'<small>رئيسية</small>':'')+'</div>').join("")||'<div class="admin-image-empty">لم تتم إضافة صور بعد</div>'}
 $a("admin-product-image-files").addEventListener("change",e=>{const files=Array.from(e.target.files||[]);for(const file of files){if(!/^image\/(jpeg|png|webp|avif)$/.test(file.type)){toastA("صيغة الصورة غير مدعومة");continue}if(file.size>8*1024*1024){toastA("حجم الصورة يتجاوز 8MB");continue}if(productImageItemsA.length>=8){toastA("الحد الأقصى 8 صور للمنتج");break}productImageItemsA.push({file,preview:URL.createObjectURL(file)})}e.target.value="";renderProductImagePreviewA()});
 $a("admin-product-image-preview").addEventListener("click",e=>{const b=e.target.closest("[data-remove-product-image]");if(!b)return;const item=productImageItemsA.splice(Number(b.dataset.removeProductImage),1)[0];if(item?.preview)URL.revokeObjectURL(item.preview);renderProductImagePreviewA()});
-$a("admin-add-product").onclick=()=>openProdA();function openProdA(id){const f=$a("admin-product-form");f.reset();f.elements.id.value="";f.elements.is_active.checked=true;productImageItemsA=[];if(id){const p=prodA.find(x=>x.id===id);Object.keys(p).forEach(k=>{if(f.elements[k]&&k!=="images")f.elements[k].value=p[k]??""});const urls=[p.image_url,...(Array.isArray(p.images)?p.images:[])].filter(Boolean);productImageItemsA=urls.map(url=>({url}));f.elements.is_active.checked=!!p.is_active}renderProductImagePreviewA();$a("admin-product-dialog").showModal()}
+$a("admin-add-product").onclick=()=>openProdA();function openProdA(id){const f=$a("admin-product-form");f.reset();f.elements.id.value="";f.elements.is_active.checked=true;if(f.elements.is_featured)f.elements.is_featured.checked=false;productImageItemsA=[];if(id){const p=prodA.find(x=>x.id===id);Object.keys(p).forEach(k=>{if(f.elements[k]&&k!=="images")f.elements[k].value=p[k]??""});const urls=[p.image_url,...(Array.isArray(p.images)?p.images:[])].filter(Boolean);productImageItemsA=urls.map(url=>({url}));f.elements.is_active.checked=!!p.is_active;if(f.elements.is_featured)f.elements.is_featured.checked=!!p.is_featured}renderProductImagePreviewA();$a("admin-product-dialog").showModal()}
  $a("admin-products-list").addEventListener("click",async e=>{const edit=e.target.closest("[data-admin-edit]"),toggle=e.target.closest("[data-admin-toggle]");if(edit)openProdA(edit.dataset.adminEdit);if(toggle){const p=prodA.find(x=>x.id===toggle.dataset.adminToggle);const {error}=await dbA.from("products").update({is_active:!p.is_active}).eq("id",p.id);if(error){toastA(error.message);return}await loadA()}});
- $a("admin-product-form").onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,d=Object.fromEntries(new FormData(f)),submit=f.querySelector('button[type="submit"],button:not([type])');if(submit){submit.disabled=true;submit.textContent="جارٍ رفع الصور والحفظ..."}const uploadedPaths=[];try{const finalUrls=[];for(let i=0;i<productImageItemsA.length;i++){const item=productImageItemsA[i];if(item.url){finalUrls.push(item.url);continue}const ext=({"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/avif":"avif"})[item.file.type]||"jpg";const path="products/"+Date.now()+"-"+Math.random().toString(36).slice(2,10)+"-"+i+"."+ext;const {error:uploadError}=await dbA.storage.from("product-images").upload(path,item.file,{contentType:item.file.type,cacheControl:"31536000",upsert:false});if(uploadError)throw uploadError;uploadedPaths.push(path);finalUrls.push(dbA.storage.from("product-images").getPublicUrl(path).data.publicUrl)}const payload={name:d.name,brand:d.brand||null,category_id:d.category_id||null,price:Number(d.price),old_price:d.old_price?Number(d.old_price):null,stock:Number(d.stock||0),ram:d.ram||null,storage:d.storage||null,color:d.color||null,sku:d.sku||null,image_url:finalUrls[0]||null,images:finalUrls.slice(1),chipset:d.chipset||null,screen:d.screen||null,camera:d.camera||null,battery:d.battery||null,protection:d.protection||null,description:d.description||null,is_active:f.elements.is_active.checked};const q=d.id?dbA.from("products").update(payload).eq("id",d.id):dbA.from("products").insert(payload);const {error}=await q;if(error)throw error;$a("admin-product-dialog").close();toastA("تم حفظ المنتج وصوره بنجاح");productImageItemsA=[];await loadA()}catch(error){if(uploadedPaths.length)await dbA.storage.from("product-images").remove(uploadedPaths);toastA("تعذر الحفظ: "+(error.message||"تحقق من الاتصال والصلاحيات"))}finally{if(submit){submit.disabled=false;submit.textContent="حفظ"}}};
+ $a("admin-product-form").onsubmit=async e=>{e.preventDefault();const f=e.currentTarget,d=Object.fromEntries(new FormData(f)),submit=f.querySelector('button[type="submit"],button:not([type])');if(submit){submit.disabled=true;submit.textContent="جارٍ رفع الصور والحفظ..."}const uploadedPaths=[];try{const finalUrls=[];for(let i=0;i<productImageItemsA.length;i++){const item=productImageItemsA[i];if(item.url){finalUrls.push(item.url);continue}const ext=({"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/avif":"avif"})[item.file.type]||"jpg";const path="products/"+Date.now()+"-"+Math.random().toString(36).slice(2,10)+"-"+i+"."+ext;const {error:uploadError}=await dbA.storage.from("product-images").upload(path,item.file,{contentType:item.file.type,cacheControl:"31536000",upsert:false});if(uploadError)throw uploadError;uploadedPaths.push(path);finalUrls.push(dbA.storage.from("product-images").getPublicUrl(path).data.publicUrl)}const payload={name:d.name,brand:d.brand||null,category_id:d.category_id||null,price:Number(d.price),old_price:d.old_price?Number(d.old_price):null,stock:Number(d.stock||0),ram:d.ram||null,storage:d.storage||null,color:d.color||null,sku:d.sku||null,image_url:finalUrls[0]||null,images:finalUrls.slice(1),chipset:d.chipset||null,screen:d.screen||null,camera:d.camera||null,battery:d.battery||null,protection:d.protection||null,description:d.description||null,is_active:f.elements.is_active.checked,is_featured:!!f.elements.is_featured?.checked};const q=d.id?dbA.from("products").update(payload).eq("id",d.id):dbA.from("products").insert(payload);const {error}=await q;if(error)throw error;$a("admin-product-dialog").close();toastA("تم حفظ المنتج وصوره بنجاح");productImageItemsA=[];await loadA()}catch(error){if(uploadedPaths.length)await dbA.storage.from("product-images").remove(uploadedPaths);toastA("تعذر الحفظ: "+(error.message||"تحقق من الاتصال والصلاحيات"))}finally{if(submit){submit.disabled=false;submit.textContent="حفظ"}}};
  $a("admin-add-category").onclick=()=>$a("admin-category-dialog").showModal();
  $a("admin-category-form").onsubmit=async e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.currentTarget));const {error}=await dbA.from("categories").insert({name:d.name.trim(),slug:d.slug.trim().toLowerCase(),is_active:true});if(error){toastA("تعذرت إضافة القسم: "+error.message);return}$a("admin-category-dialog").close();toastA("تمت إضافة القسم");await loadA()};
  $a("admin-categories-list").addEventListener("click",async e=>{const b=e.target.closest("[data-admin-cat-toggle]");if(!b)return;const c=catA.find(x=>x.id===b.dataset.adminCatToggle);const {error}=await dbA.from("categories").update({is_active:!c.is_active}).eq("id",c.id);if(error){toastA(error.message);return}await loadA()});
