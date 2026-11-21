@@ -331,7 +331,8 @@ $("search-input").addEventListener("input",()=>{visibleProductCount=productsPerP
 if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
 $("search-toggle").onclick=()=>{$("search-box").scrollIntoView({behavior:"smooth"});$("search-input").focus()};
 $("search-clear").onclick=()=>{$("search-input").value="";renderProducts()};
-$("cart-open").onclick=openCart;\nif($("mobile-cart-open")) $("mobile-cart-open").onclick=openCart;
+$("cart-open").onclick=openCart;
+if($("mobile-cart-open")) $("mobile-cart-open").onclick=openCart;
 $("cart-close").onclick=closeCart;
 $("overlay").onclick=closeCart;
 $("checkout-open").onclick=()=>{if(!cart.length)return toast("السلة فارغة");closeCart();$("checkout-dialog").showModal()};
