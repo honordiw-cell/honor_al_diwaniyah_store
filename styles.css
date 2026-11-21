@@ -2748,3 +2748,20 @@ body.theme-light #page-product-detail .product-detail-back span { color:#8a96a7;
   #page-product-detail .landing-bottom-cta span { font-size:10px; line-height:1.7; }
   #page-product-detail .landing-bottom-cta button { min-height:44px; width:100%; }
 }
+
+
+/* Brand line and search hero slogan */
+.store-search-intro .store-search-brand{display:inline-flex;align-items:center;color:#168f89;font-family:'Cairo',sans-serif;font-size:clamp(15px,1.8vw,18px);font-weight:800;letter-spacing:0;margin:0 0 8px}
+.store-search-intro h1{margin:0 0 10px;line-height:1.45}
+.store-search-intro h1 em{color:#16aaa2}
+.store-search-intro p{font-family:'Cairo',sans-serif}
+.store-search-box:focus-within{border-color:#16aaa2;box-shadow:0 0 0 4px rgba(22,170,162,.12)}
+.store-search-symbol{color:#16aaa2}
+@media(max-width:700px){
+ .store-search-section{grid-template-columns:1fr;gap:16px;margin:14px auto 16px;padding:20px 17px;border-radius:18px}
+ .store-search-intro .store-search-brand{font-size:15px;margin-bottom:5px}
+ .store-search-intro h1{font-size:clamp(23px,6.2vw,30px);line-height:1.5;margin-bottom:6px}
+ .store-search-intro p{font-size:12px;line-height:1.8}
+ .store-search-box{min-height:54px;border-radius:13px}
+ .store-search-box input{min-height:50px;font-size:13px}
+}
