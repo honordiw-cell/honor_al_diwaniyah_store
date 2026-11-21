@@ -377,7 +377,16 @@ function showStorePage(page,{push=true}={}){
  window.scrollTo({top:0,behavior:"instant"});
 }
 document.querySelectorAll("[data-page]").forEach(link=>link.addEventListener("click",e=>{
- e.preventDefault();showStorePage(link.dataset.page);
+ e.preventDefault();
+ if(link.dataset.deviceType){
+   selectedDeviceType=link.dataset.deviceType;
+   $("device-type-filter").value=selectedDeviceType;
+   selectedBrand="الكل";
+   $("brand-filter").value="الكل";
+   visibleProductCount=productsPerPage;
+   renderProducts();
+ }
+ showStorePage(link.dataset.page);
 }));
 document.querySelectorAll("[data-device-type]").forEach(card=>card.addEventListener("click",()=>{
  selectedDeviceType=card.dataset.deviceType;
