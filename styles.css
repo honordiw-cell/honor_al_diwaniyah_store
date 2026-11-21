@@ -2209,3 +2209,80 @@ body.theme-dark .mobile-bottom-nav{background:rgba(28,35,46,.97)!important;borde
 body.theme-dark .mobile-nav-item{color:#a7b4c7!important}
 body.theme-dark .mobile-nav-item.active{color:#f1f5f9!important}
 body.theme-dark .site-footer{background:#10151d!important;color:#e8edf5!important}
+
+
+/* Premium multi-view storefront navigation */
+.store-page{display:none;min-height:48vh;animation:storePageIn .28s ease both}
+.store-page.active{display:block}
+@keyframes storePageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.desktop-nav a.active{color:#3478f6!important}
+.mobile-nav-item.active{color:#3478f6!important}
+.home-quick-section{width:min(1160px,calc(100% - 32px));margin:26px auto 30px}
+.home-quick-heading{margin-bottom:17px}
+.home-quick-heading h2{margin:7px 0;color:#151b25;font-size:clamp(20px,3vw,28px)}
+.home-quick-heading p{margin:0;color:#667386;font-size:13px}
+.home-quick-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.home-quick-card{position:relative;display:flex;flex-direction:column;min-height:176px;padding:18px;border:1px solid #e1e7ef;border-radius:18px;background:#fff;color:#202b3b;box-shadow:0 8px 25px rgba(21,27,37,.04);transition:.2s}
+.home-quick-card:hover{transform:translateY(-4px);border-color:#3478f6;box-shadow:0 14px 30px rgba(52,120,246,.1)}
+.home-quick-number{font:800 9px Montserrat;letter-spacing:1.6px;color:#8b96a7}
+.home-quick-icon{display:grid;place-items:center;width:42px;height:42px;margin:15px 0 11px;border-radius:13px;background:#edf3ff;color:#3478f6;font-size:24px}
+.home-quick-card b{font-size:14px}
+.home-quick-card small{margin-top:5px;color:#667386;font-size:10px;line-height:1.8}
+.home-quick-card i{position:absolute;left:17px;bottom:17px;color:#3478f6;font-style:normal;font-size:17px}
+.inner-page-hero{width:min(1160px,calc(100% - 32px));margin:30px auto 24px;padding:30px 34px;border:1px solid #e1e7ef;border-radius:22px;background:linear-gradient(125deg,#fff,#f2f6fc);box-shadow:0 10px 30px rgba(21,27,37,.04)}
+.inner-page-hero h1{margin:9px 0 5px;color:#151b25;font-size:clamp(25px,4vw,38px);font-weight:900}
+.inner-page-hero p{margin:0;color:#667386;font-size:13px}
+.inner-page-hero-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.page-back-link{border:1px solid #dce3ec;background:#fff;color:#3478f6;border-radius:12px;padding:11px 15px;font:700 11px Cairo,sans-serif;cursor:pointer}
+.department-grid{width:min(1160px,calc(100% - 32px));margin:0 auto 30px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.department-card{position:relative;min-height:245px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;overflow:hidden;padding:24px;border:1px solid #e0e6ef;border-radius:20px;background:linear-gradient(140deg,#fff,#f1f5fb);color:#182333;text-align:right;cursor:pointer;transition:.22s}
+.department-card:hover{transform:translateY(-4px);border-color:#3478f6;box-shadow:0 16px 36px rgba(52,120,246,.12)}
+.department-index{position:absolute;top:20px;right:22px;font:800 9px Montserrat;letter-spacing:1.6px;color:#7c8ba0}
+.department-art{position:absolute;left:24px;top:18px;font-size:86px;line-height:1;color:#3478f6;opacity:.16;font-weight:300}
+.department-card b{font-size:21px;font-weight:900}
+.department-card small{margin-top:6px;color:#667386;font-size:12px}
+.department-card i{margin-top:17px;color:#3478f6;font-size:11px;font-style:normal;font-weight:800}
+.department-phone{background:radial-gradient(circle at 15% 15%,#e5efff,transparent 44%),#fff}
+.department-tablet{background:radial-gradient(circle at 15% 15%,#e9f5f5,transparent 44%),#fff}
+.department-accessories{background:radial-gradient(circle at 15% 15%,#f0edff,transparent 44%),#fff}
+.department-service{background:radial-gradient(circle at 15% 15%,#f3f4f6,transparent 44%),#fff}
+.department-footnote{width:min(1160px,calc(100% - 32px));margin:0 auto 34px;padding:16px 0;border-top:1px solid #dfe5ed;display:flex;justify-content:space-between;gap:12px}
+.department-footnote span{font:800 9px Montserrat;letter-spacing:1.5px;color:#3478f6}
+.department-footnote p{margin:0;color:#667386;font-size:11px}
+.product-page-filters{width:min(1160px,calc(100% - 32px));margin:0 auto 18px}
+#page-products .store-products-section{margin-top:0}
+#page-accessories .store-service-section,#page-maintenance .store-maintenance-section{margin-top:0}
+.accessory-shop-cta{width:min(1160px,calc(100% - 32px));margin:22px auto 34px;padding:18px 22px;border-radius:16px;background:#edf3ff;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.accessory-shop-cta p{margin:0;color:#263445;font-weight:800;font-size:13px}
+.accessory-shop-cta button{border:0;cursor:pointer}
+body.theme-dark .home-quick-heading h2{color:#f1f5f9}
+body.theme-dark .home-quick-heading p{color:#b3c0d2}
+body.theme-dark .home-quick-card{background:#222b39;border-color:#35445a;color:#f1f5f9}
+body.theme-dark .home-quick-card small{color:#b3c0d2}
+body.theme-dark .home-quick-icon{background:#263a55;color:#78a7ff}
+body.theme-dark .inner-page-hero{background:linear-gradient(125deg,#222b39,#1b2431);border-color:#35445a}
+body.theme-dark .inner-page-hero h1{color:#f1f5f9}
+body.theme-dark .inner-page-hero p{color:#b3c0d2}
+body.theme-dark .page-back-link{background:#263244;border-color:#465570;color:#8db5ff}
+body.theme-dark .department-card{background:linear-gradient(140deg,#222b39,#1b2431);border-color:#35445a;color:#f1f5f9}
+body.theme-dark .department-index{color:#a8b7cb}
+body.theme-dark .department-card small,body.theme-dark .department-footnote p{color:#b3c0d2}
+body.theme-dark .department-footnote{border-color:#35445a}
+body.theme-dark .department-footnote span{color:#78a7ff}
+body.theme-dark .accessory-shop-cta{background:#263a55}
+body.theme-dark .accessory-shop-cta p{color:#f1f5f9}
+@media(max-width:760px){
+ .home-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .home-quick-card{min-height:154px;padding:14px;border-radius:15px}
+ .home-quick-icon{width:36px;height:36px;margin:11px 0 8px}
+ .home-quick-card b{font-size:12px}
+ .home-quick-card small{font-size:9px}
+ .inner-page-hero{margin:16px auto;padding:22px 19px;border-radius:17px}
+ .department-grid{grid-template-columns:1fr;gap:10px}
+ .department-card{min-height:190px;padding:19px;border-radius:16px}
+ .department-card b{font-size:18px}
+ .department-art{font-size:68px}
+ .department-footnote{flex-direction:column}
+ .inner-page-hero-row{align-items:flex-start;flex-direction:column}
+ .accessory-shop-cta{align-items:flex-start;flex-direction:column;padding:16px}
+}
