@@ -32,7 +32,7 @@
       <span class="brand-wordmark"><b>HONOR</b><small>AL-DIWANIYAH</small></span>
     </a>
     <nav class="desktop-nav">
-      <a href="#home" data-page="home">الرئيسية</a><a href="#departments" data-page="departments">الأقسام</a><a href="#products" data-page="products">المنتجات</a><a href="#accessories" data-page="accessories">الإكسسوارات</a><a href="#maintenance" data-page="maintenance">الصيانة</a>
+      <a href="#home" data-page="home">الرئيسية</a><a href="#departments" data-page="departments">الأقسام</a><a href="#products" data-page="products">المنتجات</a><a href="#accessories" data-page="accessories">الإكسسوارات</a><a href="#maintenance" data-page="maintenance">الصيانة</a><a href="#tracking" data-page="tracking">تتبع الطلب</a>
     </nav>
     <div class="header-actions">
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="تفعيل الوضع الداكن" title="تبديل الوضع الداكن والساطع"><span class="theme-toggle-icon" aria-hidden="true">☾</span><span class="theme-toggle-label">الوضع الداكن</span></button>
@@ -108,6 +108,8 @@
     <div class="category-filters product-page-filters">
       <label class="category-filter"><span>البراند</span><select id="brand-filter" aria-label="اختار البراند"><option value="الكل">كل البراندات</option></select></label>
       <label class="category-filter"><span>نوع الجهاز</span><select id="device-type-filter" aria-label="اختار نوع الجهاز"><option value="الكل">كل الأجهزة</option><option value="phone">هواتف</option><option value="tablet">تابلت</option><option value="accessories">إكسسوارات</option></select></label>
+       <label class="category-filter"><span>التوفر</span><select id="availability-filter" aria-label="حالة التوفر"><option value="all">كل المنتجات</option><option value="available">المتوفر فقط</option><option value="unavailable">غير المتوفر</option></select></label>
+       <label class="products-search-inline"><span>بحث سريع</span><input id="products-search-input" type="search" placeholder="ابحث عن جهاز أو منتج..."></label>
     </div>
     <section class="store-section store-products-section products-section" id="products">
       <div class="store-section-heading store-products-heading">
@@ -166,7 +168,7 @@
         <h3>تواصل ويانه</h3>
         <a href="tel:07874400300"><span>الهاتف</span><b dir="ltr">0787 440 0300</b></a>
         <a href="https://www.instagram.com/honor.diw/" target="_blank" rel="noopener"><span>إنستغرام</span><b dir="ltr">@honor.diw</b></a>
-        <p><span>العنوان</span><b>الديوانية – شارع المصورين مقابل المصرف العقاري</b></p>
+        <p><span>العنوان</span><b>الديوانية – شارع المصورين مقابل المصرف العقاري</b></p><a href="#tracking" data-page="tracking"><span>خدمة الزبائن</span><b>تتبع طلبك</b></a>
       </div>
       <div class="footer-service">
         <h3>خدمات المتجر</h3>
@@ -182,7 +184,7 @@
     <a class="mobile-nav-item active" href="#home" data-page="home"><span aria-hidden="true">⌂</span><small>الرئيسية</small></a>
     <a class="mobile-nav-item" href="#departments" data-page="departments"><span aria-hidden="true">▦</span><small>الأقسام</small></a>
     <button class="mobile-nav-item" type="button" id="mobile-cart-open"><span aria-hidden="true">🛒</span><small>السلة</small><b id="mobile-cart-count">0</b></button>
-    <a class="mobile-nav-item" href="#contact"><span aria-hidden="true">♙</span><small>تواصل</small></a>
+    <a class="mobile-nav-item" href="#tracking" data-page="tracking"><span aria-hidden="true">⌕</span><small>تتبع</small></a>
   </nav>
   <div class="overlay" id="overlay"></div>
   <aside class="cart-drawer" id="cart-drawer" aria-label="سلة التسوق">
