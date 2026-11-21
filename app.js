@@ -347,6 +347,8 @@ $("theme-toggle").addEventListener("click",()=>{
 
 // Category buttons are rendered dynamically from Supabase categories.
 $("search-input").addEventListener("input",()=>{visibleProductCount=productsPerPage;renderProducts()});
+$("search-input").addEventListener("keydown",e=>{if(e.key==="Enter"){visibleProductCount=productsPerPage;renderProducts();showStorePage("products")}});
+
 $("brand-filter").addEventListener("change",e=>{selectedBrand=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 $("device-type-filter").addEventListener("change",e=>{selectedDeviceType=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
@@ -361,15 +363,39 @@ $("checkout-close").onclick=()=>$("checkout-dialog").close();
 $("product-details-close").onclick=()=>$("product-details-dialog").close();
 $("checkout-form").addEventListener("submit",submitOrder);
 $("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
-document.querySelectorAll("[data-nav-category]").forEach(link=>link.addEventListener("click",()=>{
- if(link.dataset.navCategory==="accessories"){
-   selectedDeviceType="accessories";
-   $("device-type-filter").value="accessories";
-   visibleProductCount=productsPerPage;
-   renderProducts();
- }
+function showStorePage(page,{push=true}={}){
+ const allowed=["home","departments","products","accessories","maintenance"];
+ if(!allowed.includes(page))page="home";
+ document.querySelectorAll("[data-page-view]").forEach(view=>view.classList.toggle("active",view.dataset.pageView===page));
+ document.querySelectorAll("[data-page]").forEach(link=>{
+   const active=link.dataset.page===page;
+   link.classList.toggle("active",active);
+   if(link.classList.contains("mobile-nav-item"))link.setAttribute("aria-current",active?"page":"false");
+ });
  document.querySelector(".desktop-nav")?.classList.remove("mobile-open");
+ if(push)history.pushState({storePage:page},"","#"+page);
+ window.scrollTo({top:0,behavior:"instant"});
+}
+document.querySelectorAll("[data-page]").forEach(link=>link.addEventListener("click",e=>{
+ e.preventDefault();showStorePage(link.dataset.page);
 }));
+document.querySelectorAll("[data-device-type]").forEach(card=>card.addEventListener("click",()=>{
+ selectedDeviceType=card.dataset.deviceType;
+ $("device-type-filter").value=selectedDeviceType;
+ selectedBrand="الكل";$("brand-filter").value="الكل";
+ visibleProductCount=productsPerPage;renderProducts();showStorePage("products");
+}));
+document.querySelectorAll("[data-shop-accessories]").forEach(btn=>btn.addEventListener("click",()=>{
+ selectedDeviceType="accessories";$("device-type-filter").value="accessories";
+ selectedBrand="الكل";$("brand-filter").value="الكل";
+ visibleProductCount=productsPerPage;renderProducts();showStorePage("products");
+}));
+window.addEventListener("popstate",()=>{
+ const page=location.hash.replace("#","")||"home";
+ showStorePage(page,{push:false});
+});
+const initialPage=location.hash.replace("#","")||"home";
+showStorePage(initialPage,{push:false});
 $("year").textContent=new Date().getFullYear();
 initGovernors();
 renderProducts();
