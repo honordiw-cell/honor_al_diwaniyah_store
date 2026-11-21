@@ -32,7 +32,7 @@
       <span class="brand-wordmark"><b>HONOR</b><small>AL-DIWANIYAH</small></span>
     </a>
     <nav class="desktop-nav">
-      <a href="#home">الرئيسية</a><a href="#categories">الأقسام</a><a href="#products">المنتجات</a><a href="#accessories" data-nav-category="accessories">الإكسسوارات</a><a href="#maintenance">الصيانة</a>
+      <a href="#home" data-page="home">الرئيسية</a><a href="#departments" data-page="departments">الأقسام</a><a href="#products" data-page="products">المنتجات</a><a href="#accessories" data-page="accessories">الإكسسوارات</a><a href="#maintenance" data-page="maintenance">الصيانة</a>
     </nav>
     <div class="header-actions">
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="تفعيل الوضع الداكن" title="تبديل الوضع الداكن والساطع"><span class="theme-toggle-icon" aria-hidden="true">☾</span><span class="theme-toggle-label">الوضع الداكن</span></button>
@@ -43,6 +43,7 @@
   </header>
 
   <main class="store-home-redesign">
+  <div class="store-page active" id="page-home" data-page-view="home">
     <section class="store-search-section" aria-label="البحث عن المنتجات">
       <div class="store-search-intro">
         <span class="store-kicker">YOUR TECH DESTINATION</span>
@@ -55,31 +56,15 @@
         <button id="search-clear" aria-label="مسح البحث">×</button>
       </div>
     </section>
-
-    <section class="store-section store-categories-section" id="categories">
-      <div class="store-section-heading">
-        <div><span class="store-kicker">SHOP BY BRAND & TYPE</span><h2>اختار البراند أو نوع الجهاز</h2><p>حدد الماركة ونوع الجهاز حتى توصل للمنتج اللي تريده بسرعة.</p></div>
-        <a href="#products" class="store-text-link">كل المنتجات <span>←</span></a>
-      </div>
-      <div class="category-filters">
-        <label class="category-filter">
-          <span>البراند</span>
-          <select id="brand-filter" aria-label="اختار البراند">
-            <option value="الكل">كل البراندات</option>
-          </select>
-        </label>
-        <label class="category-filter">
-          <span>نوع الجهاز</span>
-          <select id="device-type-filter" aria-label="اختار نوع الجهاز">
-            <option value="الكل">كل الأجهزة</option>
-            <option value="phone">هواتف</option>
-            <option value="tablet">تابلت</option>
-            <option value="accessories">إكسسوارات</option>
-          </select>
-        </label>
+    <section class="home-quick-section">
+      <div class="home-quick-heading"><span class="store-kicker">EXPLORE THE STORE</span><h2>تجربة تسوّق أسهل، من مكان واحد</h2><p>اختار وجهتك وتصفّح اللي تحتاجه بكل سهولة.</p></div>
+      <div class="home-quick-grid">
+        <a class="home-quick-card home-quick-main" href="#departments" data-page="departments"><span class="home-quick-number">01</span><span class="home-quick-icon">▦</span><b>تصفّح الأقسام</b><small>اكتشف الأجهزة والملحقات حسب احتياجك</small><i>←</i></a>
+        <a class="home-quick-card" href="#products" data-page="products"><span class="home-quick-number">02</span><span class="home-quick-icon">⌕</span><b>كل المنتجات</b><small>شوف أحدث الأجهزة والعروض</small><i>←</i></a>
+        <a class="home-quick-card" href="#accessories" data-page="accessories"><span class="home-quick-number">03</span><span class="home-quick-icon">✧</span><b>الإكسسوارات</b><small>كل التفاصيل اللي تكمل جهازك</small><i>←</i></a>
+        <a class="home-quick-card" href="#maintenance" data-page="maintenance"><span class="home-quick-number">04</span><span class="home-quick-icon">⚙</span><b>الصيانة والدعم</b><small>خدمات العناية بجهازك</small><i>←</i></a>
       </div>
     </section>
-
     <section class="store-pickup-row">
       <article class="store-pick-card store-pick-dark">
         <span class="store-pick-index">01 / DEVICES</span>
@@ -92,7 +77,37 @@
         <strong class="store-pick-ghost">HELP</strong>
       </article>
     </section>
+    <section class="store-about-section hidden" id="about">
+      <div class="store-about-mark">H<span>+</span></div>
+      <div><span class="store-kicker">HONOR AL-DIWANIYAH</span><h2>مو بس تشتري جهاز.<br>تلقى شريكك بالتقنية.</h2><p>من اختيار الجهاز والإكسسوارات إلى خدمات الصيانة، هدفنا نخلي تجربتك أسهل وأوضح.</p></div>
+      <a href="#contact" class="store-about-link">تعرف علينا أكثر <span>←</span></a>
+    </section>
+  </div>
 
+  <div class="store-page" id="page-departments" data-page-view="departments">
+    <section class="inner-page-hero">
+      <span class="store-kicker">DISCOVER YOUR TECH</span>
+      <h1>تصفّح الأقسام</h1>
+      <p>اختار القسم المناسب إلك، وخلي الباقي علينا.</p>
+    </section>
+    <section class="department-grid">
+      <button class="department-card department-phone" type="button" data-device-type="phone"><span class="department-index">01 / MOBILE</span><span class="department-art">▯</span><b>الهواتف الذكية</b><small>أجهزة للاستخدام اليومي، الأداء والتصوير</small><i>تصفّح الهواتف ←</i></button>
+      <button class="department-card department-tablet" type="button" data-device-type="tablet"><span class="department-index">02 / TABLETS</span><span class="department-art">▤</span><b>الأجهزة اللوحية</b><small>مساحة أكبر للدراسة والعمل والترفيه</small><i>تصفّح التابلت ←</i></button>
+      <button class="department-card department-accessories" type="button" data-device-type="accessories"><span class="department-index">03 / ACCESSORIES</span><span class="department-art">✧</span><b>الإكسسوارات والملحقات</b><small>شواحن، سماعات، حمايات وكل ما يكمل جهازك</small><i>تصفّح الملحقات ←</i></button>
+      <button class="department-card department-service" type="button" data-page="maintenance"><span class="department-index">04 / CARE</span><span class="department-art">⚙</span><b>الصيانة وخدمات الأجهزة</b><small>فحص، تبديل شاشات، بطاريات وبرمجة</small><i>تفاصيل الخدمات ←</i></button>
+    </section>
+    <div class="department-footnote"><span>HONOR AL-DIWANIYAH</span><p>نرتّب لك خياراتك حسب نوع المنتج، مو حسب اسم الشركة.</p></div>
+  </div>
+
+  <div class="store-page" id="page-products" data-page-view="products">
+    <section class="inner-page-hero inner-page-hero-row">
+      <div><span class="store-kicker">THE COLLECTION</span><h1>كل المنتجات</h1><p>اكتشف الأجهزة المتوفرة وقارن الخيارات بسهولة.</p></div>
+      <button type="button" class="page-back-link" data-page="departments">← رجوع للأقسام</button>
+    </section>
+    <div class="category-filters product-page-filters">
+      <label class="category-filter"><span>البراند</span><select id="brand-filter" aria-label="اختار البراند"><option value="الكل">كل البراندات</option></select></label>
+      <label class="category-filter"><span>نوع الجهاز</span><select id="device-type-filter" aria-label="اختار نوع الجهاز"><option value="الكل">كل الأجهزة</option><option value="phone">هواتف</option><option value="tablet">تابلت</option><option value="accessories">إكسسوارات</option></select></label>
+    </div>
     <section class="store-section store-products-section products-section" id="products">
       <div class="store-section-heading store-products-heading">
         <div><span class="store-kicker">THE COLLECTION</span><h2>تسوّق أحدث الأجهزة</h2><p>تصفّح الخيارات وقارن المواصفات والأسعار بسهولة.</p></div>
@@ -102,7 +117,10 @@
       <div class="products-more-wrap"><button type="button" class="products-more-btn hidden" id="load-more-products">عرض المزيد</button></div>
       <p class="empty-state hidden" id="empty-state">ماكو منتجات تطابق بحثك حالياً.</p>
     </section>
+  </div>
 
+  <div class="store-page" id="page-accessories" data-page-view="accessories">
+    <section class="inner-page-hero"><span class="store-kicker">ACCESSORIES & ESSENTIALS</span><h1>كل التفاصيل اللي تكمل جهازك</h1><p>اختار الملحقات اللي تحتاجها من مكان واحد.</p></section>
     <section class="store-service-section" id="accessories">
       <div class="store-service-copy">
         <span class="store-kicker">ACCESSORIES</span>
@@ -117,7 +135,11 @@
         <div><span>04</span><b>ملحقات متنوعة</b><i>↗</i></div>
       </div>
     </section>
+    <div class="accessory-shop-cta"><p>تريد تشوف كل الإكسسوارات المتوفرة؟</p><button type="button" class="store-btn-primary" data-shop-accessories>تصفّح الإكسسوارات <span>←</span></button></div>
+  </div>
 
+  <div class="store-page" id="page-maintenance" data-page-view="maintenance">
+    <section class="inner-page-hero"><span class="store-kicker">MOBILE CARE & REPAIR</span><h1>العناية بجهازك تبدأ من هنا</h1><p>خدمات صيانة ومتابعة باهتمام وخبرة.</p></section>
     <section class="store-maintenance-section" id="maintenance">
       <div class="store-maintenance-heading">
         <span class="store-kicker">MOBILE CARE & REPAIR</span>
@@ -131,13 +153,8 @@
         <article><span>03</span><b>البرمجة والفحص</b><small>تشخيص ومتابعة أعطال الجهاز</small></article>
       </div>
     </section>
-
-    <section class="store-about-section hidden" id="about">
-      <div class="store-about-mark">H<span>+</span></div>
-      <div><span class="store-kicker">HONOR AL-DIWANIYAH</span><h2>مو بس تشتري جهاز.<br>تلقى شريكك بالتقنية.</h2><p>من اختيار الجهاز والإكسسوارات إلى خدمات الصيانة، هدفنا نخلي تجربتك أسهل وأوضح.</p></div>
-      <a href="#contact" class="store-about-link">تعرف علينا أكثر <span>←</span></a>
-    </section>
-  </main>
+  </div>
+</main>
   <footer class="site-footer" id="contact">
     <div class="footer-main">
       <div class="footer-contact">
@@ -157,8 +174,8 @@
   </footer>
 
   <nav class="mobile-bottom-nav" aria-label="التنقل السريع">
-    <a class="mobile-nav-item active" href="#products"><span aria-hidden="true">⌂</span><small>المتجر</small></a>
-    <a class="mobile-nav-item" href="#categories"><span aria-hidden="true">▦</span><small>الأقسام</small></a>
+    <a class="mobile-nav-item active" href="#home" data-page="home"><span aria-hidden="true">⌂</span><small>الرئيسية</small></a>
+    <a class="mobile-nav-item" href="#departments" data-page="departments"><span aria-hidden="true">▦</span><small>الأقسام</small></a>
     <button class="mobile-nav-item" type="button" id="mobile-cart-open"><span aria-hidden="true">🛒</span><small>السلة</small><b id="mobile-cart-count">0</b></button>
     <a class="mobile-nav-item" href="#contact"><span aria-hidden="true">♙</span><small>تواصل</small></a>
   </nav>
