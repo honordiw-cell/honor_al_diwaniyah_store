@@ -19,6 +19,8 @@ let selectedBrand = "الكل";
 let selectedDeviceType = "الكل";
 let visibleProductCount = 8;
 const productsPerPage = 8;
+let selectedAvailability = "all";
+const WHATSAPP_NUMBER = "9647839516687";
 let storeCategories = [];
 let productLoadMessage = "";
 
@@ -40,7 +42,7 @@ function escapeHtml(s=""){
  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 function renderProducts(){
- const q=$("search-input").value.trim().toLowerCase();
+ const q=($("products-search-input")?.value||$("search-input").value).trim().toLowerCase();
  const filtered=products.filter(p=>{
    const type=p.deviceType||"phone";
    const brand=String(p.brand||"").trim()||"بدون ماركة";
@@ -59,10 +61,10 @@ function renderProducts(){
        <span class="product-brand">${escapeHtml(p.brand||p.category||"")}</span>
        <h3>${escapeHtml(p.name)}</h3>
        <div class="product-meta">${[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(" · ")||escapeHtml(p.description||p.category||"")}</div>
-       <div class="product-price-row"><b class="price">${money(p.price)}</b>${p.oldPrice>p.price?`<del class="old-price">${money(p.oldPrice)}</del>`:""}</div>
+       <div class="product-price-row"><b class="price">${money(p.price)}</b>${p.oldPrice>p.price?`<del class="old-price">${money(p.oldPrice)}</del>`:""}</div><small class="product-stock-note ${p.stock>0?"in-stock":"out-stock"}">${p.stock>0?"متوفر · الكمية: "+Number(p.stock):"نفذت الكمية حالياً"}</small>
      </div>
    </button>
-   <div class="product-bottom"><button class="add-btn" data-add="${escapeHtml(p.id)}" ${p.stock<=0?"disabled":""}>${p.stock>0?"أضف للسلة":"غير متوفر حالياً"}</button><span class="details-hint">التفاصيل ←</span></div>
+   <div class="product-bottom">${p.stock>0?`<button class="add-btn" data-add="${escapeHtml(p.id)}">أضف للسلة</button>`:`<a class="add-btn stock-inquiry" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد الاستفسار عن توفر "+p.name)}" target="_blank" rel="noopener">اسأل عن التوفر</a>`}<span class="details-hint">التفاصيل ←</span></div>
  </article>`).join("");
  const empty=$("empty-state");
  empty.classList.toggle("hidden",filtered.length>0);
@@ -111,7 +113,7 @@ function showProductDetails(id){
     '<div class="landing-memory">'+[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(' · ')+'</div>'+
     '<div class="landing-price-line"><strong>'+money(p.price)+'</strong>'+(p.oldPrice>p.price?'<del>'+money(p.oldPrice)+'</del>':'')+'</div>'+
     (p.description?'<p class="landing-description">'+escapeHtml(p.description)+'</p>':'')+
-    '<div class="landing-actions"><button type="button" class="landing-share-btn" id="detail-share">مشاركة المنتج</button><button type="button" class="primary-btn" id="detail-order-now" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(p.stock<=0?'disabled':'')+'>أضف للسلة</button></div>'+
+    '<div class="landing-actions"><button type="button" class="landing-share-btn" id="detail-share">مشاركة المنتج</button><button type="button" class="primary-btn" id="detail-order-now" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(p.stock<=0?'disabled':'')+'>أضف للسلة</button><a class="landing-whatsapp-btn" href="https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent("أريد الاستفسار عن "+p.name+" بسعر "+money(p.price))+'" target="_blank" rel="noopener">استفسر عبر واتساب ↗</a></div>'+
     '<p class="landing-delivery-note">توصيل لجميع محافظات العراق · تواصل ويانه لأي استفسار</p>'+
    '</div>'+
   '</div>'+
@@ -366,14 +368,16 @@ $("theme-toggle").addEventListener("click",()=>{
 });
 
 // Category buttons are rendered dynamically from Supabase categories.
-$("search-input").addEventListener("input",()=>{visibleProductCount=productsPerPage;renderProducts()});
+$("search-input").addEventListener("input",()=>{if($("products-search-input"))$("products-search-input").value=$("search-input").value;visibleProductCount=productsPerPage;renderProducts()});
+if($("products-search-input"))$("products-search-input").addEventListener("input",()=>{$("search-input").value=$("products-search-input").value;visibleProductCount=productsPerPage;renderProducts()});
+if($("availability-filter"))$("availability-filter").addEventListener("change",e=>{selectedAvailability=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 $("search-input").addEventListener("keydown",e=>{if(e.key==="Enter"){visibleProductCount=productsPerPage;renderProducts();showStorePage("products")}});
 
 $("brand-filter").addEventListener("change",e=>{selectedBrand=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 $("device-type-filter").addEventListener("change",e=>{selectedDeviceType=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
-$("search-toggle").onclick=()=>{$("search-box").scrollIntoView({behavior:"smooth"});$("search-input").focus()};
-$("search-clear").onclick=()=>{$("search-input").value="";renderProducts()};
+$("search-toggle").onclick=()=>{showStorePage("products");setTimeout(()=>$("products-search-input")?.focus(),80)};
+$("search-clear").onclick=()=>{$("search-input").value="";if($("products-search-input"))$("products-search-input").value="";renderProducts()};
 $("cart-open").onclick=openCart;
 if($("mobile-cart-open")) $("mobile-cart-open").onclick=openCart;
 $("cart-close").onclick=closeCart;
@@ -382,9 +386,26 @@ $("checkout-open").onclick=()=>{if(!cart.length)return toast("السلة فار�
 $("checkout-close").onclick=()=>$("checkout-dialog").close();
 $("product-details-back").onclick=()=>{history.pushState({storePage:"products"},"","#products");showStorePage("products",{push:false})};
 $("checkout-form").addEventListener("submit",submitOrder);
+
+$("order-tracking-form")?.addEventListener("submit",async e=>{
+ e.preventDefault();
+ const form=new FormData(e.currentTarget),number=Number(form.get("order_number")),phone=String(form.get("phone")||"").trim(),box=$("order-tracking-result");
+ box.innerHTML='<p class="tracking-loading">جارٍ البحث عن طلبك...</p>';
+ if(!sb){box.textContent="خدمة تتبع الطلب غير متاحة حالياً.";return}
+ try{
+  const {data,error}=await sb.rpc("track_store_order",{p_order_number:number,p_phone:phone});
+  if(error)throw error;
+  if(!data){box.innerHTML='<div class="tracking-not-found"><b>ما لكينا طلب مطابق.</b><span>تأكد من رقم الطلب ورقم الهاتف المسجل عند الشراء.</span></div>';return}
+  const labels={new:"تم استلام الطلب",confirmed:"تم تأكيد الطلب",processing:"قيد التجهيز",shipped:"تم شحن الطلب",delivered:"تم تسليم الطلب",cancelled:"الطلب ملغي"};
+  const orderSteps=["new","confirmed","processing","shipped","delivered"],idx=orderSteps.indexOf(data.status);
+  const steps=orderSteps.map((s,i)=>'<div class="tracking-step '+(i<=idx&&data.status!=="cancelled"?"done":"")+'"><i></i><span>'+({new:"استلام الطلب",confirmed:"تأكيد الطلب",processing:"التجهيز",shipped:"الشحن",delivered:"التسليم"}[s])+'</span></div>').join("");
+  box.innerHTML='<article class="tracking-card"><div class="tracking-card-head"><span>الطلب #'+data.order_number+'</span><b class="'+(data.status==="cancelled"?"cancelled":"")+'">'+(labels[data.status]||data.status)+'</b></div>'+(data.status==="cancelled"?'<p>تم إلغاء هذا الطلب.</p>':'<div class="tracking-steps">'+steps+'</div>')+'<div class="tracking-meta"><span>تاريخ الطلب <b>'+new Date(data.created_at).toLocaleString("ar-IQ")+'</b></span><span>آخر تحديث <b>'+new Date(data.updated_at).toLocaleString("ar-IQ")+'</b></span><span>المجموع <b>'+money(data.total)+'</b></span></div><div class="tracking-items"><b>محتويات الطلب</b>'+(data.items||[]).map(x=>'<p>'+escapeHtml(x.product_name)+' × '+Number(x.quantity)+'</p>').join("")+'</div></article>';
+ }catch(err){console.error(err);box.textContent="تعذر جلب حالة الطلب حالياً. حاول مرة ثانية."}
+});
+
 $("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
 function showStorePage(page,{push=true}={}){
- const allowed=["home","departments","products","accessories","maintenance","product-detail"];
+ const allowed=["home","departments","products","accessories","maintenance","product-detail","tracking"];
  if(!allowed.includes(page))page="home";
  document.querySelectorAll("[data-page-view]").forEach(view=>view.classList.toggle("active",view.dataset.pageView===page));
  document.querySelectorAll("[data-page]").forEach(link=>{
