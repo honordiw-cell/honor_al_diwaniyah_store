@@ -57,14 +57,25 @@
 
     <section class="store-section store-categories-section" id="categories">
       <div class="store-section-heading">
-        <div><span class="store-kicker">SHOP BY CATEGORY</span><h2>اختار عالمك التقني</h2><p>كل الماركات والأجهزة بمكان واحد.</p></div>
+        <div><span class="store-kicker">SHOP BY BRAND & TYPE</span><h2>اختار البراند أو نوع الجهاز</h2><p>حدد الماركة ونوع الجهاز حتى توصل للمنتج اللي تريده بسرعة.</p></div>
         <a href="#products" class="store-text-link">كل المنتجات <span>←</span></a>
       </div>
-      <div id="category-grid" class="category-grid">
-        <button class="category-card active" data-category="الكل"><span>▣</span><b>كل المنتجات</b></button>
-        <button class="category-card" data-category="هواتف"><span>▯</span><b>الهواتف</b></button>
-        <button class="category-card" data-category="تابلت"><span>▤</span><b>التابلت</b></button>
-        <button class="category-card" data-category="إكسسوارات"><span>♬</span><b>الإكسسوارات</b></button>
+      <div class="category-filters">
+        <label class="category-filter">
+          <span>البراند</span>
+          <select id="brand-filter" aria-label="اختار البراند">
+            <option value="الكل">كل البراندات</option>
+          </select>
+        </label>
+        <label class="category-filter">
+          <span>نوع الجهاز</span>
+          <select id="device-type-filter" aria-label="اختار نوع الجهاز">
+            <option value="الكل">كل الأجهزة</option>
+            <option value="phone">هواتف</option>
+            <option value="tablet">تابلت</option>
+            <option value="accessories">إكسسوارات</option>
+          </select>
+        </label>
       </div>
     </section>
 
