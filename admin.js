@@ -7,7 +7,7 @@ const money=n=>new Intl.NumberFormat("en-US").format(Number(n)||0)+" د.ع";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const STATUS={new:"جديد",confirmed:"تم التأكيد",processing:"قيد التجهيز",shipped:"تم الشحن",delivered:"تم التسليم",cancelled:"ملغي"};
 const PAYMENT={pending:"بانتظار الدفع",paid:"مدفوع",failed:"فشل الدفع"};
-let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],dashboardMetrics={},editingImages=[],newFiles=[],previewUrls=[];
+let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},editingImages=[],newFiles=[],previewUrls=[];
 const productFields=["name","category_id","brand","price","old_price","stock","ram","storage","color","chipset","screen","camera","battery","protection","description"];
 function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2800)}
 function setError(id,msg){$(id).textContent=msg||""}
@@ -33,16 +33,18 @@ async function loadAll(){
    db.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,is_active,created_at,updated_at,sku,ram,storage,color,is_featured,chipset,screen,camera,battery,protection").order("created_at",{ascending:false}),
    db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(1000),
    db.rpc("admin_dashboard_metrics"),
-   db.from("stock_movements").select("id,product_id,product_name,old_stock,new_stock,quantity_delta,reason,created_at").order("created_at",{ascending:false}).limit(50)
+   db.from("stock_movements").select("id,product_id,product_name,old_stock,new_stock,quantity_delta,reason,created_at").order("created_at",{ascending:false}).limit(50),
+   db.from("order_status_history").select("id,order_id,order_number,event_type,from_status,to_status,details,created_at").order("created_at",{ascending:false}).limit(50)
   ]);
   if(c.error)throw c.error;if(p.error)throw p.error;if(o.error)throw o.error;
   if(m.error)console.warn("Dashboard metrics unavailable:",m.error);
   if(s.error)console.warn("Stock movement history unavailable:",s.error);
-  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];
+  if(h.error)console.warn("Order audit history unavailable:",h.error);
+  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];
   renderAll();
  }catch(e){console.error(e);toast("تعذر تحميل البيانات: "+(e.message||"خطأ غير معروف"))}
 }
-function renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements()}
+function renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements();renderOrderAudit()}
 function renderStats(){
  const active=products.filter(p=>p.is_active).length,pending=Number(dashboardMetrics.pending_orders??orders.filter(o=>["new","confirmed","processing"].includes(o.status)).length),sales=Number(dashboardMetrics.delivered_sales??0);
  $("stat-products").textContent=active;$("stat-orders").textContent=Number(dashboardMetrics.total_orders??orders.length);$("stat-pending").textContent=pending;$("stat-sales").textContent=money(sales);
@@ -125,6 +127,11 @@ async function showOrder(id){
 function renderStockMovements(){
  const el=$("stock-movements");if(!el)return;
  el.innerHTML=stockMovements.length?'<div class="admin-table-wrap"><table><thead><tr><th>المنتج</th><th>قبل</th><th>بعد</th><th>التغيير</th><th>السبب</th><th>التاريخ</th></tr></thead><tbody>'+stockMovements.map(x=>'<tr><td>'+esc(x.product_name)+'</td><td>'+x.old_stock+'</td><td>'+x.new_stock+'</td><td class="'+(x.quantity_delta>0?'stock-up':'stock-down')+'">'+(x.quantity_delta>0?'+':'')+x.quantity_delta+'</td><td>'+esc(x.reason)+'</td><td>'+new Date(x.created_at).toLocaleString("ar-IQ")+'</td></tr>').join("")+'</tbody></table></div>':'<p class="muted">سجل حركة المخزون يبدأ بتسجيل التعديلات من الآن فصاعداً.</p>';
+}
+function renderOrderAudit(){
+ const el=$("order-audit-log");if(!el)return;
+ const names={created:"إنشاء طلب",status:"تغيير حالة",payment:"تغيير حالة الدفع",deleted:"حذف طلب"};
+ el.innerHTML=orderEvents.length?'<div class="admin-table-wrap"><table><thead><tr><th>رقم الطلب</th><th>العملية</th><th>التغيير</th><th>التاريخ</th></tr></thead><tbody>'+orderEvents.map(x=>'<tr><td>#'+esc(x.order_number??"—")+'</td><td>'+esc(names[x.event_type]||x.event_type)+'</td><td>'+esc(STATUS[x.from_status]||PAYMENT[x.from_status]||x.from_status||"—")+' '+(x.to_status?'← '+esc(STATUS[x.to_status]||PAYMENT[x.to_status]||x.to_status):"")+'</td><td>'+new Date(x.created_at).toLocaleString("ar-IQ")+'</td></tr>').join("")+'</tbody></table></div>':'<p class="muted">لا توجد عمليات مسجلة بعد.</p>';
 }
 function renderCategories(){
  $("categories-grid").innerHTML=categories.map(c=>'<article class="category-card"><div><b>'+esc(c.name)+'</b><small>'+esc(c.slug)+'</small></div><label class="check-field"><input class="switch" type="checkbox" data-category-toggle="'+c.id+'" '+(c.is_active?"checked":"")+'> '+(c.is_active?"ظاهر":"مخفي")+'</label></article>').join("");
