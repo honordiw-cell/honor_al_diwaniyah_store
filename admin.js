@@ -40,8 +40,9 @@ async function loadAll(){
   if(m.error)console.warn("Dashboard metrics unavailable:",m.error);
   if(s.error)console.warn("Stock movement history unavailable:",s.error);
   if(h.error)console.warn("Order audit history unavailable:",h.error);
-  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];
+  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];banners=b.data||[];
   renderAll();
+   renderBanners();
  }catch(e){console.error(e);toast("تعذر تحميل البيانات: "+(e.message||"خطأ غير معروف"))}
 }
 function renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements();renderOrderAudit()}
