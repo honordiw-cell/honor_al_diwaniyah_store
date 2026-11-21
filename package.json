@@ -1,0 +1,20 @@
+{
+  "name": "honor-al-diwaniyah-store",
+  "version": "1.0.0",
+  "description": "HONOR AL-DIWANIYAH - Online Store for smartphones and accessories",
+  "main": "app.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["ecommerce", "honor", "mobile-store"],
+  "author": "HONOR AL-DIWANIYAH",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^1.1.1"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
