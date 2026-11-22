@@ -155,7 +155,7 @@ function showProductDetails(id){
     '<div class="landing-price-line"><strong>'+money(p.price)+'</strong>'+(p.oldPrice>p.price?'<del>'+money(p.oldPrice)+'</del>':'')+'</div><div class="landing-stock-detail">'+(p.stock>0?'<span class="stock-dot"></span> متوفر الآن · '+Number(p.stock)+' قطعة بالمخزون':'<span class="stock-dot unavailable-dot"></span> غير متوفر حالياً')+'</div>'+
     ((p.deviceType==="phone"||p.deviceType==="tablet")?'<div class="product-color-picker"><div class="product-color-heading"><b>اختار لون الجهاز</b><span>'+(productColors.length?'اللون المختار: <strong id="selected-product-color">'+escapeHtml(selectedProductColor||"لم يتم الاختيار")+'</strong>':'الألوان غير محددة حالياً')+'</span></div>'+(productColors.length?'<div class="product-color-options">'+productColors.map((color,i)=>'<button type="button" class="product-color-option '+(color===selectedProductColor?'active':'')+'" data-product-color="'+escapeHtml(color)+'"><span class="color-dot"></span>'+escapeHtml(color)+'</button>').join('')+'</div>':'<small class="product-color-hint">تواصل ويانه لتأكيد اللون المتوفر قبل إكمال الطلب.</small>')+'</div>':'')+
     (p.description?'<p class="landing-description">'+escapeHtml(p.description)+'</p>':'')+
-    '<div class="landing-actions"><button type="button" class="primary-btn" id="detail-order-now" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(p.stock<=0?'disabled':'')+'>أضف للسلة</button><a class="landing-whatsapp-btn" href="https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent("أريد الاستفسار عن "+p.name+" بسعر "+money(p.price))+'" target="_blank" rel="noopener">استفسر عبر واتساب ↗</a></div>'+
+    '<div class="landing-actions"><button type="button" class="primary-btn" id="detail-order-now" '+(variantStock(selectedVariant)<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(variantStock(selectedVariant)<=0?'disabled':'')+'>أضف للسلة</button><a class="landing-whatsapp-btn" href="https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent("أريد الاستفسار عن "+p.name+" بسعر "+money(p.price))+'" target="_blank" rel="noopener">استفسر عبر واتساب ↗</a></div>'+
     ''+
    '</div>'+
   '</div>'+
@@ -166,7 +166,7 @@ function showProductDetails(id){
 
   (related.length?'<section class="landing-section"><div class="landing-section-title"><span>03 / YOU MAY ALSO LIKE</span><h2>منتجات مشابهة</h2></div><div class="landing-related">'+related.map(x=>'<button type="button" class="landing-related-card" data-related-product="'+escapeHtml(x.id)+'">'+(x.image?'<img src="'+escapeHtml(x.image)+'" alt="'+escapeHtml(x.name)+'">':'<span class="landing-related-placeholder">HONOR AL-DIWANIYAH</span>')+'<b>'+escapeHtml(x.name)+'</b><strong>'+money(x.price)+'</strong></button>').join('')+'</div></section>':'')+
 
-  '<div class="product-mobile-buybar"><div><small>السعر</small><b>'+money(p.price)+'</b></div><button type="button" id="detail-mobile-buy" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button></div>'+
+  '<div class="product-mobile-buybar"><div><small>السعر</small><b id="detail-mobile-price">'+money(selectedVariant.price)+'</b></div><button type="button" id="detail-mobile-buy" '+(variantStock(selectedVariant)<=0?'disabled':'')+'>اطلب الآن</button></div>'+
  '</div>';
  loadProductReviews(p.id);
  const mainImage=$("landing-main-image");
