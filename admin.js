@@ -271,7 +271,8 @@ function bind(){
  $("refresh-orders").onclick=loadAll;$("menu-toggle").onclick=()=>$("app").classList.toggle("menu-open");
 
  $("admin-export-orders")?.addEventListener("click",exportOrders);
- $("save-delivery-rates")?.addEventListener("click",saveDeliveryRates);\n $("refresh-service-requests")?.addEventListener("click",loadAll);\n
+ $("save-delivery-rates")?.addEventListener("click",saveDeliveryRates);
+ $("refresh-service-requests")?.addEventListener("click",loadAll);\n
  $("bundle-admin-form")?.addEventListener("submit",async e=>{
   e.preventDefault();const f=e.currentTarget,d=new FormData(f),btn=f.querySelector('button[type="submit"]');btn.disabled=true;
   try{
