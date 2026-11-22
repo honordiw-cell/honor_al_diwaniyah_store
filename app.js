@@ -23,7 +23,19 @@ let selectedDeviceType = "الكل";
 let visibleProductCount = 8;
 const productsPerPage = 8;
 let selectedAvailability = "all";
-const WHATSAPP_NUMBER = "9647874400300";
+const WHATSAPP_NUMBER = "9647874400300";\n
+let storeBundles=[];
+async function loadStoreBundles(){
+ if(!sb)return;
+ try{
+  const {data,error}=await sb.from("store_bundles").select("id,title,description,image_url,bundle_price,store_bundle_items(quantity,products(name))").eq("is_active",true).order("created_at",{ascending:false}).limit(8);
+  if(error)throw error;storeBundles=data||[];
+  const box=$("home-bundles-grid");if(!box)return;
+  box.innerHTML=storeBundles.length?storeBundles.map(b=>'<article class="home-product-card bundle-card">'+(b.image_url?'<div class="home-product-image"><img src="'+escapeHtml(b.image_url)+'" alt="'+escapeHtml(b.title)+'"></div>':'<div class="home-product-image"><span>HONOR AL-DIWANIYAH</span></div>')+'<small>باقة متكاملة</small><b>'+escapeHtml(b.title)+'</b><p>'+escapeHtml(b.description||"")+'</p><strong>'+money(b.bundle_price)+'</strong><button type="button" class="add-btn" data-bundle-inquiry="'+escapeHtml(b.id)+'">استفسر عن الباقة</button></article>').join(""):'<p class="home-no-products">نجهزلكم باقات المتجر قريباً.</p>';
+ }catch(e){console.warn("Bundles unavailable",e)}
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-bundle-inquiry]");if(!b)return;const x=storeBundles.find(v=>String(v.id)===b.dataset.bundleInquiry);if(!x)return;const msg="أريد الاستفسار عن باقة "+x.title+" بسعر "+money(x.bundle_price);window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(msg),"_blank","noopener")});
+
 let storeCategories = [];
 let productLoadMessage = "";
 
