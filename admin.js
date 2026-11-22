@@ -84,13 +84,40 @@ function renderCategoryOptions(selected=""){
  filter.innerHTML='<option value="">كل الأقسام</option>'+opts;
  filter.value=categories.some(c=>String(c.id)===String(prev))?prev:"";
 }
+async function saveQuickProduct(id,button){
+ const p=products.find(x=>String(x.id)===String(id));if(!p)return;
+ const row=$("quick-product-"+id),input=row.querySelector('[data-quick-file="'+id+'"]'),colorInput=row.querySelector('[data-quick-color="'+id+'"]'),files=[...(input?.files||[])];
+ if(files.some(f=>!/^image\/(jpeg|png|webp|avif)$/.test(f.type)||f.size>8*1024*1024)){toast("الصور يجب أن تكون JPG أو PNG أو WEBP أو AVIF وأقل من 8MB");return}
+ button.disabled=true;button.textContent="جارٍ الحفظ...";
+ try{
+  const uploaded=[];
+  for(const file of files){
+   const ext=(file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"");
+   const path="products/"+crypto.randomUUID()+"."+ext;
+   const {error}=await db.storage.from(BUCKET).upload(path,file,{cacheControl:"31536000",contentType:file.type,upsert:false});
+   if(error)throw error;
+   uploaded.push(db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
+  }
+  const allImages=[...(p.images||[])];if(p.image_url&&!allImages.includes(p.image_url))allImages.unshift(p.image_url);
+  allImages.push(...uploaded);
+  const color=String(colorInput?.value||"").trim()||null;
+  const {error}=await db.from("products").update({images:allImages,image_url:allImages[0]||null,color,updated_at:new Date().toISOString()}).eq("id",id);
+  if(error)throw error;
+  toast("تم تحديث صور وألوان المنتج");await loadAll();
+ }catch(e){console.error(e);toast("تعذر الحفظ: "+e.message)}
+ finally{button.disabled=false;button.textContent="حفظ الصور والألوان"}
+}
 function renderProducts(){
  const q=$("product-search").value.trim().toLowerCase(),cat=$("product-category-filter").value,state=$("product-state-filter").value;
  const rows=products.filter(p=>(!cat||String(p.category_id)===cat)&&(state===""||String(p.is_active)===state)&&(!q||[p.name,p.brand,p.sku].join(" ").toLowerCase().includes(q)));
  $("products-table").innerHTML=rows.length?'<table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الظهور</th><th>إجراءات</th></tr></thead><tbody>'+rows.map(p=>{
  const catName=categories.find(c=>c.id===p.category_id)?.name||"غير مصنف",img=p.image_url||p.images?.[0];
- return '<tr><td><div class="product-cell">'+(img?'<img src="'+esc(img)+'" alt="">':'<span class="product-thumb"></span>')+'<div><b>'+esc(p.name)+'</b><small>'+esc(p.brand||catName)+'</small></div></div></td><td>'+esc(catName)+'</td><td>'+money(p.price)+(p.old_price>p.price?'<small class="muted"> <del>'+money(p.old_price)+'</del></small>':'')+'</td><td>'+Number(p.stock||0)+'</td><td><span class="badge '+(p.is_active?"good":"off")+'">'+(p.is_active?"منشور":"مخفي")+'</span></td><td><button class="action-btn" data-edit="'+p.id+'">تعديل</button><button class="action-btn '+(p.is_active?"danger":"")+'" data-toggle="'+p.id+'">'+(p.is_active?"إخفاء":"نشر")+'</button></td></tr>';
+ return '<tr><td><div class="product-cell">'+(img?'<img src="'+esc(img)+'" alt="">':'<span class="product-thumb"></span>')+'<div><b>'+esc(p.name)+'</b><small>'+esc(p.brand||catName)+'</small></div></div></td><td>'+esc(catName)+'</td><td>'+money(p.price)+(p.old_price>p.price?'<small class="muted"> <del>'+money(p.old_price)+'</del></small>':'')+'</td><td>'+Number(p.stock||0)+'</td><td><span class="badge '+(p.is_active?"good":"off")+'">'+(p.is_active?"منشور":"مخفي")+'</span></td><td><button class="action-btn" data-quick-images="'+p.id+'">الصور</button><button class="action-btn" data-quick-colors="'+p.id+'">الألوان</button><button class="action-btn" data-edit="'+p.id+'">تعديل</button><button class="action-btn '+(p.is_active?"danger":"")+'" data-toggle="'+p.id+'">'+(p.is_active?"إخفاء":"نشر")+'</button></td></tr><tr class="quick-product-row" id="quick-product-'+p.id+'" hidden><td colspan="6"><div class="quick-product-editor"><div class="quick-image-editor"><b>صور المنتج</b><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple data-quick-file="'+p.id+'"><div class="quick-image-current">'+(p.images||[]).map(u=>'<img src="'+esc(u)+'" alt="">').join("")+'</div><small>تُضاف الصور الجديدة مع الاحتفاظ بالصور الحالية.</small></div><div class="quick-color-editor"><b>ألوان الجهاز</b><input type="text" value="'+esc(p.color||"")+'" placeholder="أسود، أزرق، فضي" data-quick-color="'+p.id+'"><small>افصل بين الألوان بفاصلة.</small></div><button type="button" class="btn primary" data-quick-save="'+p.id+'">حفظ الصور والألوان</button><button type="button" class="btn secondary" data-quick-cancel="'+p.id+'">إغلاق</button></div></td></tr>';
  }).join("")+'</tbody></table>':'<div class="empty-row">ماكو منتجات تطابق البحث.</div>';
+ const table=$("products-table");
+ table.querySelectorAll("[data-quick-images],[data-quick-colors]").forEach(b=>b.onclick=()=>{const row=$("quick-product-"+(b.dataset.quickImages||b.dataset.quickColors));if(row)row.hidden=!row.hidden});
+ table.querySelectorAll("[data-quick-cancel]").forEach(b=>b.onclick=()=>{$("quick-product-"+b.dataset.quickCancel).hidden=true});
+ table.querySelectorAll("[data-quick-save]").forEach(b=>b.onclick=()=>saveQuickProduct(b.dataset.quickSave,b));
  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openProduct(b.dataset.edit));
  document.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleProduct(b.dataset.toggle));
 }
