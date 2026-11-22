@@ -238,7 +238,8 @@ function renderCategories(categories){
  storeCategories=categories||[];
  const brandSelect=$("brand-filter");
  if(!brandSelect)return;
- const brands=[...new Set(products.map(p=>String(p.brand||"").trim()).filter(Boolean))]
+ const scopedProducts=selectedDeviceType==="الكل"?products:products.filter(p=>(p.deviceType||"phone")===selectedDeviceType);
+ const brands=[...new Set(scopedProducts.map(p=>String(p.brand||"").trim()).filter(Boolean))]
    .sort((a,b)=>a.localeCompare(b,"ar"));
  const previous=selectedBrand;
  brandSelect.innerHTML='<option value="الكل">كل البراندات</option>'+brands.map(b=>'<option value="'+escapeHtml(b)+'">'+escapeHtml(b)+'</option>').join("");
@@ -416,7 +417,7 @@ $("brand-filter").addEventListener("change",e=>{selectedBrand=e.target.value;vis
 $("brand-picker-open")?.addEventListener("click",()=>$("brand-picker-dialog")?.showModal());
 $("brand-picker-close")?.addEventListener("click",()=>$("brand-picker-dialog")?.close());
 $("brand-block-grid")?.addEventListener("click",e=>{const choice=e.target.closest("[data-brand-choice]");if(!choice)return;selectedBrand=choice.dataset.brandChoice;$("brand-filter").value=selectedBrand;visibleProductCount=productsPerPage;renderProducts();renderCategories(storeCategories);$("brand-picker-dialog").close()});
-$("device-type-filter").addEventListener("change",e=>{selectedDeviceType=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
+$("device-type-filter").addEventListener("change",e=>{selectedDeviceType=e.target.value;visibleProductCount=productsPerPage;renderCategories(storeCategories);renderProducts()});
 if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
 $("search-toggle").onclick=()=>{showStorePage("products");setTimeout(()=>$("products-search-input")?.focus(),80)};
 $("search-clear").onclick=()=>{$("search-input").value="";if($("products-search-input"))$("products-search-input").value="";renderProducts()};
