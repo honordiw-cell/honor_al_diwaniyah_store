@@ -123,7 +123,7 @@ async function deleteOrder(id){
 }
 async function showOrder(id){
  const o=orders.find(x=>x.id===id);if(!o)return;
- const fields=[["رقم الطلب","#"+(o.order_number??"")],["الزبون",o.customer_name],["الهاتف",o.phone],["المحافظة",o.province],["المنطقة",o.district||o.city||"—"],["العنوان",o.address],["طريقة الدفع",o.payment_method==="cod"?"عند الاستلام":o.payment_method],["حالة الدفع",PAYMENT[o.payment_status]||o.payment_status],["المجموع",money(o.total)],["ملاحظات",o.notes||"—"]];
+ const fields=[["رقم الطلب","#"+(o.order_number??"")],["الزبون",o.customer_name],["الهاتف",o.phone],["المحافظة",o.province],["المنطقة",o.district||o.city||"—"],["العنوان",o.address],["طريقة الدفع",o.payment_method==="cod"?"عند الاستلام":o.payment_method],["حالة الدفع",PAYMENT[o.payment_status]||o.payment_status],["قيمة المنتجات",money(o.subtotal??o.total)],["أجور التوصيل",money(o.delivery_fee||0)],["المجموع النهائي",money(o.total)],["ملاحظات",o.notes||"—"]];
  $("order-details").innerHTML='<div class="order-detail-grid">'+fields.map(x=>'<div class="detail-box"><small>'+esc(x[0])+'</small><b>'+esc(x[1])+'</b></div>').join("")+'</div><table class="order-items"><thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th><th>المجموع</th></tr></thead><tbody>'+(o.order_items||[]).map(i=>'<tr><td>'+esc(i.product_name)+'</td><td>'+i.quantity+'</td><td>'+money(i.unit_price)+'</td><td>'+money(i.line_total)+'</td></tr>').join("")+'</tbody></table>';
  $("order-dialog").showModal();
  $("order-history-list").textContent="جارٍ تحميل سجل التغييرات...";
