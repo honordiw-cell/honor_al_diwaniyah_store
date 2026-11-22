@@ -335,6 +335,8 @@ async function loadProducts(){
 }
 async function submitOrder(e){
  e.preventDefault();
+ const formEl=e.currentTarget;
+ if(formEl.dataset.submitting==="true")return;
  if(!cart.length){toast("السلة فارغة");return}
  for(const item of cart){
    const p=products.find(p=>String(p.id)===String(item.id));
@@ -348,50 +350,46 @@ async function submitOrder(e){
    $("form-message").textContent="الاتصال بقاعدة البيانات غير جاهز. حاول لاحقاً.";
    return;
  }
- const form=new FormData(e.currentTarget);
+ const submitButton=formEl.querySelector('button[type="submit"]');
+ const originalButtonText=submitButton?.textContent||"تأكيد الطلب";
+ formEl.dataset.submitting="true";
+ if(submitButton){submitButton.disabled=true;submitButton.textContent="جارٍ إرسال الطلب..."}
+ const form=new FormData(formEl);
  const order={
-   customer_name:form.get("customer_name"),
-   phone:form.get("phone"),
-   governorate:form.get("governorate"),
-   district:form.get("district"),
-   address:form.get("address"),
-   payment_method:form.get("payment_method"),
+   customer_name:form.get("customer_name"),phone:form.get("phone"),
+   governorate:form.get("governorate"),district:form.get("district"),
+   address:form.get("address"),payment_method:form.get("payment_method"),
    notes:form.get("notes"),
    items:cart.map(x=>({product_id:x.id,name:x.name,price:x.price,quantity:x.qty,color:x.color||null})),
-   total:cart.reduce((a,x)=>a+x.price*x.qty,0),
-   status:"new"
+   total:cart.reduce((a,x)=>a+x.price*x.qty,0),status:"new"
  };
- if(sb){
-   $("form-message").textContent="جارٍ إرسال طلبك...";
-   const {data:orderNumber,error}=await sb.rpc("submit_store_order",{
-     p_customer_name:form.get("customer_name"),
-     p_phone:form.get("phone"),
-     p_province:form.get("governorate"),
-     p_district:form.get("district"),
-     p_address:form.get("address"),
-     p_payment_method:form.get("payment_method"),
-     p_notes:form.get("notes"),
-     p_items:cart.map(x=>({product_id:x.id,quantity:x.qty,color:x.color||null}))
-   });
-   if(error){
-     console.error("Order submission failed:",error);
-     $("form-message").textContent=error.message||"تعذر إرسال الطلب حالياً. حاول مرة ثانية.";
-     return;
+ try{
+   if(sb){
+     $("form-message").textContent="جارٍ إرسال طلبك...";
+     const {data:orderNumber,error}=await sb.rpc("submit_store_order",{
+       p_customer_name:form.get("customer_name"),p_phone:form.get("phone"),
+       p_province:form.get("governorate"),p_district:form.get("district"),
+       p_address:form.get("address"),p_payment_method:form.get("payment_method"),
+       p_notes:form.get("notes"),
+       p_items:cart.map(x=>({product_id:x.id,quantity:x.qty,color:x.color||null}))
+     });
+     if(error)throw error;
+     $("form-message").textContent="تم استلام طلبك بنجاح. رقم طلبك: "+orderNumber;
+   }else{
+     const localOrders=JSON.parse(localStorage.getItem("honor-demo-orders")||"[]");
+     order.id="DEMO-"+Date.now();localOrders.push(order);
+     localStorage.setItem("honor-demo-orders",JSON.stringify(localOrders));
+     $("form-message").textContent="تم تسجيل طلب تجريبي على هذا الجهاز. اربط قاعدة البيانات لاستقبال طلبات حقيقية.";
    }
-   $("form-message").textContent="تم استلام طلبك بنجاح. رقم طلبك: "+orderNumber;
- }else{
-   const localOrders=JSON.parse(localStorage.getItem("honor-demo-orders")||"[]");
-   order.id="DEMO-"+Date.now();
-   localOrders.push(order);
-   localStorage.setItem("honor-demo-orders",JSON.stringify(localOrders));
-   $("form-message").textContent="تم تسجيل طلب تجريبي على هذا الجهاز. اربط قاعدة البيانات لاستقبال طلبات حقيقية.";
+   cart=[];persistCart();await loadProducts();formEl.reset();updateCheckoutTotals();
+   setTimeout(()=>$("checkout-dialog").close(),3000);
+ }catch(error){
+   console.error("Order submission failed:",error);
+   $("form-message").textContent=error?.message||"تعذر إرسال الطلب حالياً. حاول مرة ثانية.";
+ }finally{
+   formEl.dataset.submitting="false";
+   if(submitButton){submitButton.disabled=false;submitButton.textContent=originalButtonText}
  }
- cart=[];
- persistCart();
- await loadProducts();
- e.currentTarget.reset();
- updateCheckoutTotals();
- setTimeout(()=>$("checkout-dialog").close(),3000);
 }
 
 // Theme preference: light by default, with a user-controlled dark mode.
