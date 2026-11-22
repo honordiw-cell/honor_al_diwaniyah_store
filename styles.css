@@ -3177,3 +3177,10 @@ body.theme-light #page-product-detail .product-detail-back span { color:#8a96a7;
 body.theme-dark .product-color-picker{background:#202b34;border-color:#3a5052}
 body.theme-dark .product-color-heading>b{color:#edf5f4}
 body.theme-dark .product-color-option{background:#27343d;border-color:#405153;color:#edf5f4}
+
+/* Shopping cart as a standalone centered window */
+.cart-drawer{top:50%;bottom:auto;left:50%;width:min(520px,calc(100% - 28px));height:min(720px,calc(100dvh - 36px));max-height:calc(100dvh - 36px);border-radius:22px;padding:24px;transform:translate(-50%,-46%) scale(.96);opacity:0;visibility:hidden;box-shadow:0 24px 80px #101d2050;transition:opacity .22s,transform .22s,visibility .22s;}
+.cart-drawer.open{transform:translate(-50%,-50%) scale(1);opacity:1;visibility:visible}
+.quick-primary-choice{display:flex;flex-direction:column;align-items:center;gap:5px}
+.quick-primary-choice .action-btn{margin:0;font-size:9px;padding:5px 7px}
+.quick-primary-choice .primary-image{background:#18aaa2;color:#fff}
