@@ -3461,3 +3461,20 @@ body.theme-dark #page-home .home-collection-section .home-product-image span{col
 
 /* Keep cart drawer heading readable on mobile */
 #cart-drawer .drawer-head h3{color:#30383d!important;opacity:1!important;font-weight:800}
+
+/* Premium RAM / storage variant cards */
+.product-variant-picker{display:grid;gap:12px;margin:16px 0;padding:16px;border:1px solid #e2e9e9;border-radius:18px;background:#fbfdfd}
+.variant-picker-head{display:grid;gap:3px}
+.variant-picker-head b{font-size:15px;color:#263438}
+.variant-picker-head small{font-size:12px;color:#849093}
+.variant-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.variant-option{position:relative;display:grid;gap:8px;min-width:0;padding:13px 12px;border:1.5px solid #dce4e4;border-radius:14px;background:#fff;color:#30383d;text-align:right;cursor:pointer;transition:border-color .18s,background .18s,box-shadow .18s}
+.variant-option-top{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.variant-option-top b{font-size:14px;font-weight:800}
+.variant-option-top span{font-size:13px;color:#6e7b7e}
+.variant-option>strong{font-size:15px;color:#26383b;font-weight:800}
+.variant-option.active{border-color:#18aaa2;background:#effaf9;box-shadow:0 0 0 2px rgba(24,170,162,.12)}
+.variant-option.active:after{content:"✓";position:absolute;top:8px;left:9px;display:grid;place-items:center;width:19px;height:19px;border-radius:50%;background:#18aaa2;color:#fff;font-size:12px;font-weight:900}
+.variant-option:disabled{opacity:.48;cursor:not-allowed;background:#f2f3f3}
+.variant-soldout{font-size:11px;color:#b42318}
+@media(max-width:420px){.product-variant-picker{padding:13px}.variant-options{gap:8px}.variant-option{padding:11px 9px}.variant-option-top b{font-size:13px}.variant-option>strong{font-size:13px}}
