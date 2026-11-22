@@ -425,6 +425,7 @@ $("compare-open")?.addEventListener("click",()=>{renderCompare();$("compare-dial
 $("compare-close")?.addEventListener("click",()=>$("compare-dialog").close());
 $("compare-clear")?.addEventListener("click",()=>{compareIds=[];localStorage.setItem("honor-compare","[]");renderCompareDock();});
 
+$("home-deals-more")?.addEventListener("click",()=>{selectedDeviceType="الكل";$("device-type-filter").value="الكل";selectedBrand="الكل";$("brand-filter").value="الكل";selectedAvailability="available";$("availability-filter").value="available";$("products-search-input").value="";visibleProductCount=productsPerPage;renderProducts();showStorePage("products");});
 function showStorePage(page,{push=true}={}){
  const allowed=["home","departments","products","accessories","maintenance","product-detail","tracking"];
  if(!allowed.includes(page))page="home";
