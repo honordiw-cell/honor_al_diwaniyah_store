@@ -29,6 +29,7 @@
   <button class="nav-link" data-view="orders"><span>▤</span> الطلبات <b id="nav-orders-count">0</b></button>
   <button class="nav-link" data-view="categories"><span>▧</span> الأقسام</button>
    <button class="nav-link" data-view="banners"><span>▧</span> بانر العروض</button>
+  <button class="nav-link" data-view="delivery"><span>د.ع</span> التوصيل والتقييمات</button>
   <div class="sidebar-bottom"><div class="user-chip"><span class="avatar">H</span><div><b id="user-name">الإدارة</b><small id="user-role">مالك المتجر</small></div></div><button id="logout-btn" class="logout-btn">تسجيل الخروج ↗</button></div>
  </aside>
  <main class="main-area">
@@ -64,6 +65,11 @@
    <div class="section-toolbar"><div><h2>أقسام المتجر</h2><p>تحكم بالأقسام الظاهرة للزبائن.</p></div></div>
    <div class="category-grid" id="categories-grid"></div>
   </section>
+    <section class="view" id="view-delivery">
+     <div class="section-toolbar"><div><h2>التوصيل والتقييمات</h2><p>حدد أجور كل محافظة وراجع تقييمات الزبائن قبل نشرها.</p></div></div>
+     <div class="panel"><div class="panel-heading"><div><h3>أجور التوصيل حسب المحافظة</h3><p>القيمة بالدينار العراقي. الأجور تبدأ بصفر إلى أن تدخل أسعار شركتك.</p></div><button class="btn primary" id="save-delivery-rates">حفظ أجور التوصيل</button></div><div id="delivery-rates-list" class="delivery-rates-grid"></div><p id="delivery-rates-message" class="muted"></p></div>
+     <div class="panel"><div class="panel-heading"><div><h3>تقييمات الزبائن</h3><p>التقييمات لا تظهر بالمتجر إلا بعد موافقة الإدارة، ويُسمح بالتقييم للطلبات المستلمة فقط.</p></div></div><div id="reviews-moderation-list"></div></div>
+    </section>
     <section class="view" id="view-banners">
     <div class="section-toolbar"><div><h2>بانر العروض</h2><p>أضف بانر للواجهة الرئيسية وبدّله أو فعّله متى ما تريد.</p></div></div>
     <div class="panel banner-editor-panel"><div class="panel-heading"><div><h3 id="banner-form-heading">إضافة بانر جديد</h3><p>ارفع صورة العرض وحدد النص والرابط الذي يفتحه الزبون.</p></div></div>
