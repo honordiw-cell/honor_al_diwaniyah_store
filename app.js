@@ -17,6 +17,7 @@ let products = hasBackend ? [] : [...demoProducts];
 let cart = JSON.parse(localStorage.getItem("honor-cart")||"[]");
 let favoriteIds = JSON.parse(localStorage.getItem("honor-favorites")||"[]");
 let compareIds = JSON.parse(localStorage.getItem("honor-compare")||"[]");
+let deliveryRates = [];
 let selectedBrand = "الكل";
 let selectedDeviceType = "الكل";
 let visibleProductCount = 8;
@@ -101,6 +102,13 @@ function renderHomeCollections(){
  if(d)d.innerHTML=deals.length?deals.map(p=>card(p).replace('<strong>'+money(p.price)+'</strong>','<strong>'+money(p.price)+' <del>'+money(p.oldPrice)+'</del></strong>')).join(""):'<p class="home-no-products">ماكو عروض محددة حالياً.</p>';
  document.querySelectorAll("[data-home-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.homeDetails)));
 }
+
+async function loadDeliveryRates(){if(!sb)return;try{const {data,error}=await sb.from("delivery_rates").select("governorate,fee,is_active").eq("is_active",true);if(error)throw error;deliveryRates=data||[];updateCheckoutTotals()}catch(e){console.warn("Delivery rates unavailable",e)}}
+function currentDeliveryFee(){const province=$('checkout-form')?.elements.governorate.value||"";return Number(deliveryRates.find(x=>x.governorate===province)?.fee)||0}
+function updateCheckoutTotals(){const subtotal=cart.reduce((sum,x)=>sum+(Number(x.price)||0)*Number(x.qty||0),0),fee=currentDeliveryFee();const feeEl=$("checkout-delivery-fee"),totalEl=$("checkout-total"),subEl=$("checkout-subtotal");if(feeEl)feeEl.textContent=money(fee);if(subEl)subEl.textContent=money(subtotal);if(totalEl)totalEl.textContent=money(subtotal+fee);const note=$("checkout-delivery-note");if(note){const province=$("checkout-form")?.elements.governorate.value||"";note.textContent=province?(deliveryRates.some(x=>x.governorate===province)?"أجور التوصيل حسب المحافظة":"أجور التوصيل غير محددة لهذه المحافظة، سيتم تأكيدها قبل الشحن"):"اختار المحافظة حتى نحسب أجور التوصيل"}}
+async function loadProductReviews(productId){const box=$("product-reviews-list");if(!box||!sb)return;box.innerHTML='<p class="muted">جارٍ تحميل التقييمات...</p>';try{const {data,error}=await sb.from("product_reviews").select("customer_name,rating,review_text,created_at").eq("product_id",productId).eq("is_approved",true).order("created_at",{ascending:false}).limit(30);if(error)throw error;const rows=data||[];if(!rows.length){box.innerHTML='<p class="landing-empty-specs">ماكو تقييمات منشورة لهذا المنتج حالياً. إذا استلمت طلبك، شاركنا تجربتك.</p>';return}const avg=rows.reduce((s,x)=>s+Number(x.rating),0)/rows.length;box.innerHTML='<div class="review-summary"><b>★ '+avg.toFixed(1)+'/5</b><span>'+rows.length+' تقييم منشور</span></div>'+rows.map(x=>'<article class="customer-review"><div><b>'+escapeHtml(x.customer_name)+'</b><span>'+('★'.repeat(x.rating))+'<i>'+('☆'.repeat(5-x.rating))+'</i></span></div><p>'+escapeHtml(x.review_text)+'</p><small>'+new Date(x.created_at).toLocaleDateString("ar-IQ")+'</small></article>').join("")}catch(e){console.warn("Product reviews unavailable",e);box.innerHTML='<p class="muted">تعذر تحميل التقييمات حالياً.</p>'}}
+function bindReviewForm(productId){const form=$("product-review-form");if(!form)return;form.onsubmit=async e=>{e.preventDefault();const btn=form.querySelector('button[type="submit"]'),msg=$("review-form-message"),d=new FormData(form);btn.disabled=true;msg.textContent="جارٍ إرسال التقييم...";try{const {error}=await sb.rpc("submit_product_review",{p_order_number:Number(d.get("order_number")),p_phone:String(d.get("phone")).trim(),p_product_id:productId,p_rating:Number(d.get("rating")),p_review_text:String(d.get("review_text")).trim()});if(error)throw error;msg.textContent="وصل تقييمك، وينتظر موافقة الإدارة قبل نشره.";form.reset();await loadProductReviews(productId)}catch(err){msg.textContent=err.message||"تعذر إرسال التقييم. تحقق من رقم الطلب والهاتف وأن الطلب مستلم."}finally{btn.disabled=false}}}
+
 function showProductDetails(id){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
@@ -130,7 +138,7 @@ function showProductDetails(id){
   '<section class="landing-section"><div class="landing-section-title"><span>01 / SPECIFICATIONS</span><h2>المواصفات التقنية</h2><p>المعلومات المعروضة هي المواصفات المسجلة لهذا المنتج في المتجر.</p></div>'+
    (specs.length?'<div class="landing-spec-grid">'+specs.map((s,i)=>'<article class="landing-spec"><small>'+String(i+1).padStart(2,'0')+'</small><span>'+escapeHtml(s[0])+'</span><b>'+escapeHtml(s[1])+'</b></article>').join('')+'</div>':'<p class="landing-empty-specs">المواصفات التفصيلية غير مضافة لهذا المنتج حالياً.</p>')+
   '</section>'+
-  '<section class="landing-benefits"><article><b>توصيل لكل العراق</b><span>نوصل طلبك إلى محافظتك</span></article><article><b>متابعة الطلب</b><span>نتابع وياك من الطلب للاستلام</span></article><article><b>خدمة ما بعد البيع</b><span>متواجدين للمساعدة والاستفسار</span></article></section>'+
+  '<section class="landing-section product-reviews-section" id="product-reviews-section"><div class="landing-section-title"><span>04 / CUSTOMER REVIEWS</span><h2>تقييمات الزبائن</h2><p>التقييم متاح للزبون بعد استلام طلبه.</p></div><div id="product-reviews-list"><p class="muted">جارٍ تحميل التقييمات...</p></div><form id="product-review-form" class="product-review-form"><h3>قيّم تجربتك</h3><div class="review-form-grid"><label>رقم الطلب<input name="order_number" type="number" min="1" required placeholder="رقم الطلب"></label><label>رقم الهاتف<input name="phone" inputmode="tel" required placeholder="07xxxxxxxxx"></label><label>التقييم<select name="rating" required><option value="5">★★★★★ ممتاز</option><option value="4">★★★★ جيد جداً</option><option value="3">★★★ جيد</option><option value="2">★★ يحتاج تحسين</option><option value="1">★ ضعيف</option></select></label><label class="review-wide">رأيك بالمنتج<textarea name="review_text" minlength="5" maxlength="500" required placeholder="شاركنا تجربتك بعد استلام الجهاز..."></textarea></label></div><button type="submit" class="primary-btn">إرسال التقييم</button><p id="review-form-message" class="form-message"></p></form></section><section class="landing-benefits"><article><b>توصيل لكل العراق</b><span>نوصل طلبك إلى محافظتك</span></article><article><b>متابعة الطلب</b><span>نتابع وياك من الطلب للاستلام</span></article><article><b>خدمة ما بعد البيع</b><span>متواجدين للمساعدة والاستفسار</span></article></section>'+
   '<section class="landing-section landing-faq"><div class="landing-section-title"><span>02 / BEFORE YOU ORDER</span><h2>قبل لا تطلب</h2></div>'+
    '<details><summary>شلون أطلب الجهاز؟</summary><p>اضغط «اطلب الآن» وكمل معلومات التوصيل حتى يوصلنا طلبك.</p></details>'+
    '<details><summary>هل التوصيل متوفر خارج الديوانية؟</summary><p>نوفّر التوصيل لجميع محافظات العراق.</p></details>'+
@@ -139,6 +147,7 @@ function showProductDetails(id){
   (related.length?'<section class="landing-section"><div class="landing-section-title"><span>03 / YOU MAY ALSO LIKE</span><h2>منتجات مشابهة</h2></div><div class="landing-related">'+related.map(x=>'<button type="button" class="landing-related-card" data-related-product="'+escapeHtml(x.id)+'">'+(x.image?'<img src="'+escapeHtml(x.image)+'" alt="'+escapeHtml(x.name)+'">':'<span class="landing-related-placeholder">HONOR AL-DIWANIYAH</span>')+'<b>'+escapeHtml(x.name)+'</b><strong>'+money(x.price)+'</strong></button>').join('')+'</div></section>':'')+
   '<div class="landing-bottom-cta"><div><b>جاهز تطلب '+escapeHtml(p.name)+'؟</b><span>اختار اطلب الآن حتى نكمل طلبك.</span></div><button type="button" class="primary-btn" id="detail-order-bottom" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button></div>'+
  '</div>';
+ loadProductReviews(p.id);bindReviewForm(p.id);
  const mainImage=$("landing-main-image");
  document.querySelectorAll("[data-gallery-image]").forEach(b=>b.addEventListener("click",()=>{
   const index=Number(b.dataset.galleryImage);
@@ -173,7 +182,7 @@ function renderCart(){
  $("cart-items").innerHTML=cart.length?cart.map(x=>`<div class="cart-row"><div><b>${escapeHtml(x.name)}</b><small>${money(x.price)} × ${x.qty}</small></div><div class="qty-controls"><button data-dec="${escapeHtml(x.id)}">−</button><b>${x.qty}</b><button data-inc="${escapeHtml(x.id)}">+</button></div></div>`).join(""):`<p class="empty-state">السلة فارغة حالياً.</p>`;
  const total=cart.reduce((a,x)=>a+(Number(x.price)||0)*x.qty,0);
  $("cart-total").textContent=money(total);
- $("checkout-total").textContent=money(total);
+ updateCheckoutTotals();
  document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>changeQty(b.dataset.inc,1));
  document.querySelectorAll("[data-dec]").forEach(b=>b.onclick=()=>changeQty(b.dataset.dec,-1));
 }
@@ -486,6 +495,8 @@ const initialHash=location.hash.replace(/^#/,"");
 if(!initialHash.startsWith("product/"))showStorePage(initialHash||"home",{push:false});
 $("year").textContent=new Date().getFullYear();
 initGovernors();
+$("checkout-form")?.elements.governorate.addEventListener("change",updateCheckoutTotals);
+loadDeliveryRates();
 renderProducts();
 renderCart();
 loadProducts().then(()=>{renderFavorites();renderCompareDock();if(location.hash.startsWith("#product/"))handleStoreLocationA()});
