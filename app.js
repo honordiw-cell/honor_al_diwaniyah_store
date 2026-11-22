@@ -290,7 +290,7 @@ async function loadProducts(){
  try{
    const [{data:categories,error:categoryError},{data:rows,error:productError}]=await Promise.all([
      sb.from("categories").select("id,name,slug").eq("is_active",true),
-     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_featured,is_active,created_at,variants,low_stock_threshold").eq("is_active",true).gt("stock",0).order("created_at",{ascending:false})
+     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_featured,is_active,created_at,variants,low_stock_threshold").eq("is_active",true).order("created_at",{ascending:false})
    ]);
 
    if(productError) throw productError;
