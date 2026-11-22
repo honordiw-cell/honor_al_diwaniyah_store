@@ -241,14 +241,16 @@ function renderCategories(categories){
  const scopedProducts=selectedDeviceType==="الكل"?products:products.filter(p=>(p.deviceType||"phone")===selectedDeviceType);
  const brands=[...new Set(scopedProducts.map(p=>String(p.brand||"").trim()).filter(Boolean))]
    .sort((a,b)=>a.localeCompare(b,"ar"));
- const previous=selectedBrand;
+ if(!brands.includes(selectedBrand))selectedBrand="الكل";
  brandSelect.innerHTML='<option value="الكل">كل البراندات</option>'+brands.map(b=>'<option value="'+escapeHtml(b)+'">'+escapeHtml(b)+'</option>').join("");
- selectedBrand=brands.includes(previous)?previous:"الكل";
  brandSelect.value=selectedBrand;
- const grid=$("brand-block-grid"),current=$("brand-picker-current");
- if(current)current.textContent=selectedBrand==="الكل"?"كل البراندات":selectedBrand;
- if(grid)grid.innerHTML='<button type="button" class="brand-block '+(selectedBrand==="الكل"?"active":"")+'" data-brand-choice="الكل"><span class="brand-block-mark">ALL</span><b>كل البراندات</b></button>'+brands.map(b=>'<button type="button" class="brand-block '+(selectedBrand===b?"active":"")+'" data-brand-choice="'+escapeHtml(b)+'"><span class="brand-block-mark">'+escapeHtml(b.slice(0,2).toUpperCase())+'</span><b>'+escapeHtml(b)+'</b></button>').join("");
+ const grid=$("brand-block-grid"),scope=$("brand-scope-label");
+ const typeNames={"الكل":"كل الأجهزة","phone":"الهواتف","tablet":"التابلت","accessories":"الإكسسوارات"};
+ if(scope)scope.textContent=selectedDeviceType==="الكل"?"كل الشركات": "شركات "+(typeNames[selectedDeviceType]||"الأجهزة");
+ document.querySelectorAll("[data-device-choice]").forEach(btn=>btn.classList.toggle("active",btn.dataset.deviceChoice===selectedDeviceType));
+ if(grid)grid.innerHTML='<button type="button" class="brand-block '+(selectedBrand==="الكل"?"active":"")+'" data-brand-choice="الكل"><span class="brand-block-mark">ALL</span><b>كل الشركات</b></button>'+brands.map(b=>'<button type="button" class="brand-block '+(selectedBrand===b?"active":"")+'" data-brand-choice="'+escapeHtml(b)+'"><span class="brand-block-mark">'+escapeHtml(b.slice(0,2).toUpperCase())+'</span><b>'+escapeHtml(b)+'</b></button>').join("");
 }
+
 async function loadProducts(){
  if(!hasBackend){
    products=[...demoProducts];
@@ -414,10 +416,9 @@ if($("availability-filter"))$("availability-filter").addEventListener("change",e
 $("search-input").addEventListener("keydown",e=>{if(e.key==="Enter"){visibleProductCount=productsPerPage;renderProducts();showStorePage("products")}});
 
 $("brand-filter").addEventListener("change",e=>{selectedBrand=e.target.value;visibleProductCount=productsPerPage;renderProducts();renderCategories(storeCategories)});
-$("brand-picker-open")?.addEventListener("click",()=>$("brand-picker-dialog")?.showModal());
-$("brand-picker-close")?.addEventListener("click",()=>$("brand-picker-dialog")?.close());
-$("brand-block-grid")?.addEventListener("click",e=>{const choice=e.target.closest("[data-brand-choice]");if(!choice)return;selectedBrand=choice.dataset.brandChoice;$("brand-filter").value=selectedBrand;visibleProductCount=productsPerPage;renderProducts();renderCategories(storeCategories);$("brand-picker-dialog").close()});
-$("device-type-filter").addEventListener("change",e=>{selectedDeviceType=e.target.value;visibleProductCount=productsPerPage;renderCategories(storeCategories);renderProducts()});
+$("brand-block-grid")?.addEventListener("click",e=>{const choice=e.target.closest("[data-brand-choice]");if(!choice)return;selectedBrand=choice.dataset.brandChoice;$("brand-filter").value=selectedBrand;visibleProductCount=productsPerPage;renderProducts();renderCategories(storeCategories)});
+$("device-type-options")?.addEventListener("click",e=>{const choice=e.target.closest("[data-device-choice]");if(!choice)return;selectedDeviceType=choice.dataset.deviceChoice;$("device-type-filter").value=selectedDeviceType;selectedBrand="الكل";$("brand-filter").value="الكل";visibleProductCount=productsPerPage;renderCategories(storeCategories);renderProducts()});
+$("device-type-filter").addEventListener("change",e=>{selectedDeviceType=e.target.value;selectedBrand="الكل";visibleProductCount=productsPerPage;renderCategories(storeCategories);renderProducts()});
 if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
 $("search-toggle").onclick=()=>{showStorePage("products");setTimeout(()=>$("products-search-input")?.focus(),80)};
 $("search-clear").onclick=()=>{$("search-input").value="";if($("products-search-input"))$("products-search-input").value="";renderProducts()};
