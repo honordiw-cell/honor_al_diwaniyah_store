@@ -88,7 +88,7 @@ async function loadHomeBanner(){
 }
 function renderHomeCollections(){
  const available=products.filter(p=>p.stock>0);
- const phones=available.filter(p=>p.isFeatured&&p.deviceType==="phone").sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,6);
+ const phones=available.filter(p=>p.isFeatured&&(p.deviceType==="phone"||p.deviceType==="tablet")).sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,6);
  const accessories=available.filter(p=>p.deviceType==="accessories").sort((a,b)=>(b.isFeatured?1:0)-(a.isFeatured?1:0)||new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,6);
  const deals=products.filter(p=>p.oldPrice>p.price&&p.stock>0).slice(0,4);
  const card=p=>'<article class="home-product-card"><button type="button" class="home-product-open" data-home-details="'+escapeHtml(p.id)+'"><div class="home-product-image">'+(p.image?'<img src="'+escapeHtml(p.image)+'" alt="'+escapeHtml(p.name)+'" loading="lazy">':'<span>HONOR AL-DIWANIYAH</span>')+'</div><small>'+escapeHtml(p.brand||p.category||"")+'</small><b>'+escapeHtml(p.name)+'</b><strong>'+money(p.price)+'</strong></button></article>';
