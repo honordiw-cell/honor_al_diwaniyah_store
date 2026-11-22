@@ -7,7 +7,7 @@ const money=n=>new Intl.NumberFormat("en-US").format(Number(n)||0)+" د.ع";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const STATUS={new:"جديد",confirmed:"تم التأكيد",processing:"قيد التجهيز",shipped:"تم الشحن",delivered:"تم التسليم",cancelled:"ملغي"};
 const PAYMENT={pending:"بانتظار الدفع",paid:"مدفوع",failed:"فشل الدفع"};
-let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},banners=[],editingImages=[],newFiles=[],previewUrls=[],bannerFile=null,bannerPreviewUrl="";
+let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},banners=[],productReviews=[],deliveryRatesAdmin=[],editingImages=[],newFiles=[],previewUrls=[],bannerFile=null,bannerPreviewUrl="";
 const productFields=["name","category_id","brand","price","old_price","stock","ram","storage","color","chipset","screen","camera","battery","protection","description"];
 function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2800)}
 function setError(id,msg){$(id).textContent=msg||""}
@@ -28,22 +28,26 @@ async function checkAccess(){
 }
 async function loadAll(){
  try{
-  const [c,p,o,m,s,h,b]=await Promise.all([
+  const [c,p,o,m,s,h,b,r,v]=await Promise.all([
    db.from("categories").select("id,name,slug,is_active").order("name"),
    db.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,is_active,created_at,updated_at,sku,ram,storage,color,is_featured,chipset,screen,camera,battery,protection").order("created_at",{ascending:false}),
    db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(1000),
    db.rpc("admin_dashboard_metrics"),
    db.from("stock_movements").select("id,product_id,product_name,old_stock,new_stock,quantity_delta,reason,created_at").order("created_at",{ascending:false}).limit(50),
    db.from("order_status_history").select("id,order_id,order_number,event_type,from_status,to_status,details,created_at").order("created_at",{ascending:false}).limit(50),
-    db.from("home_banners").select("*").order("updated_at",{ascending:false})
+   db.from("home_banners").select("*").order("updated_at",{ascending:false}),
+   db.from("product_reviews").select("id,product_id,order_id,customer_name,rating,review_text,is_approved,created_at,products(name)").order("created_at",{ascending:false}).limit(200),
+   db.from("delivery_rates").select("governorate,fee,is_active").order("governorate")
   ]);
   if(c.error)throw c.error;if(p.error)throw p.error;if(o.error)throw o.error;
   if(m.error)console.warn("Dashboard metrics unavailable:",m.error);
   if(s.error)console.warn("Stock movement history unavailable:",s.error);
   if(h.error)console.warn("Order audit history unavailable:",h.error);
-  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];banners=b.data||[];
+  if(r.error)console.warn("Product reviews unavailable:",r.error);
+  if(v.error)console.warn("Delivery rates unavailable:",v.error);
+  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];banners=b.data||[];productReviews=r.data||[];deliveryRatesAdmin=v.data||[];
   renderAll();
-   renderBanners();
+   renderBanners();renderDeliveryRates();renderReviewModeration();
  }catch(e){console.error(e);toast("تعذر تحميل البيانات: "+(e.message||"خطأ غير معروف"))}
 }
 function renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements();renderOrderAudit()}
@@ -135,6 +139,12 @@ function renderOrderAudit(){
  const names={created:"إنشاء طلب",status:"تغيير حالة",payment:"تغيير حالة الدفع",deleted:"حذف طلب"};
  el.innerHTML=orderEvents.length?'<div class="admin-table-wrap"><table><thead><tr><th>رقم الطلب</th><th>العملية</th><th>التغيير</th><th>التاريخ</th></tr></thead><tbody>'+orderEvents.map(x=>'<tr><td>#'+esc(x.order_number??"—")+'</td><td>'+esc(names[x.event_type]||x.event_type)+'</td><td>'+esc(STATUS[x.from_status]||PAYMENT[x.from_status]||x.from_status||"—")+' '+(x.to_status?'← '+esc(STATUS[x.to_status]||PAYMENT[x.to_status]||x.to_status):"")+'</td><td>'+new Date(x.created_at).toLocaleString("ar-IQ")+'</td></tr>').join("")+'</tbody></table></div>':'<p class="muted">لا توجد عمليات مسجلة بعد.</p>';
 }
+
+function renderDeliveryRates(){const el=$("delivery-rates-list");if(!el)return;el.innerHTML=deliveryRatesAdmin.map((r,i)=>'<label class="delivery-rate-row"><b>'+esc(r.governorate)+'</b><input type="number" min="0" step="500" data-delivery-governorate="'+esc(r.governorate)+'" value="'+Number(r.fee||0)+'" aria-label="أجرة توصيل '+esc(r.governorate)+'"><span>د.ع</span></label>').join("")||'<p class="muted">لا توجد محافظات معرفة.</p>';}
+async function saveDeliveryRates(){const btn=$("save-delivery-rates"),msg=$("delivery-rates-message");btn.disabled=true;msg.textContent="جارٍ حفظ الأجور...";try{const rows=[...document.querySelectorAll("[data-delivery-governorate]")].map(x=>({governorate:x.dataset.deliveryGovernorate,fee:Math.max(0,Number(x.value)||0),is_active:true,updated_at:new Date().toISOString()}));const {error}=await db.from("delivery_rates").upsert(rows,{onConflict:"governorate"});if(error)throw error;deliveryRatesAdmin=rows;msg.textContent="تم حفظ أجور التوصيل. ستظهر للزبون عند اختيار المحافظة.";toast("تم حفظ أجور التوصيل");}catch(e){msg.textContent="تعذر حفظ الأجور: "+e.message;}finally{btn.disabled=false;}}
+function renderReviewModeration(){const el=$("reviews-moderation-list");if(!el)return;el.innerHTML=productReviews.length?'<div class="admin-table-wrap"><table><thead><tr><th>المنتج</th><th>الزبون</th><th>التقييم</th><th>الرأي</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>'+productReviews.map(r=>'<tr><td>'+esc(r.products?.name||"منتج")+'</td><td>'+esc(r.customer_name)+'</td><td>'+("★".repeat(r.rating))+'</td><td>'+esc(r.review_text)+'</td><td><span class="badge '+(r.is_approved?"good":"off")+'">'+(r.is_approved?"منشور":"بانتظار الموافقة")+'</span></td><td><button class="action-btn" data-review-toggle="'+r.id+'">'+(r.is_approved?"إخفاء":"موافقة ونشر")+'</button></td></tr>').join("")+'</tbody></table></div>':'<p class="muted">ماكو تقييمات مستلمة لحد الآن.</p>';}
+async function toggleReview(id){const r=productReviews.find(x=>x.id===id);if(!r)return;const {error}=await db.from("product_reviews").update({is_approved:!r.is_approved}).eq("id",id);if(error){toast("تعذر تحديث التقييم: "+error.message);return;}r.is_approved=!r.is_approved;renderReviewModeration();toast(r.is_approved?"تم نشر التقييم":"تم إخفاء التقييم");}
+
 function renderBanners(){
  const el=$("banners-list");if(!el)return;
  el.innerHTML=banners.length?banners.map(x=>'<article class="banner-admin-row"><img src="'+esc(x.image_url)+'" alt=""><div class="banner-admin-copy"><b>'+esc(x.title||"بانر بدون عنوان")+'</b><small>'+esc(x.subtitle||"")+'</small><span class="badge '+(x.is_active?"good":"off")+'">'+(x.is_active?"ظاهر بالواجهة":"غير مفعل")+'</span></div><div class="banner-admin-actions"><button class="action-btn" data-banner-edit="'+x.id+'">تعديل</button><button class="action-btn" data-banner-toggle="'+x.id+'">'+(x.is_active?"إيقاف":"تفعيل")+'</button><button class="action-btn danger" data-banner-delete="'+x.id+'">حذف</button></div></article>').join(""):'<div class="empty-row">ماكو بانرات محفوظة. أضف أول بانر من النموذج أعلاه.</div>';
@@ -249,6 +259,8 @@ function bind(){
  $("refresh-orders").onclick=loadAll;$("menu-toggle").onclick=()=>$("app").classList.toggle("menu-open");
 
  $("admin-export-orders")?.addEventListener("click",exportOrders);
+ $("save-delivery-rates")?.addEventListener("click",saveDeliveryRates);
+ $("reviews-moderation-list")?.addEventListener("click",e=>{const b=e.target.closest("[data-review-toggle]");if(b)toggleReview(b.dataset.reviewToggle)});
 }
 async function init(){
  if(!CONFIG.supabaseUrl||!CONFIG.supabaseAnonKey||!window.supabase){showLogin("إعداد الاتصال بقاعدة البيانات غير مكتمل.");return}
