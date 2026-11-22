@@ -262,7 +262,7 @@ function renderCategories(categories){
 
 async function loadProducts(){
  if(!hasBackend){
-   products=[...demoProducts];
+   products=demoProducts.filter(p=>Number(p.stock)>0);
    renderProducts();
     await loadHomeBanner();
    return;
@@ -281,7 +281,7 @@ async function loadProducts(){
  try{
    const [{data:categories,error:categoryError},{data:rows,error:productError}]=await Promise.all([
      sb.from("categories").select("id,name,slug").eq("is_active",true),
-     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_featured,is_active,created_at").eq("is_active",true).order("created_at",{ascending:false})
+     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_featured,is_active,created_at").eq("is_active",true).gt("stock",0).order("created_at",{ascending:false})
    ]);
 
    if(productError) throw productError;
@@ -315,7 +315,7 @@ async function loadProducts(){
        tag:row.is_featured?"اختيار مميز":"",isFeatured:!!row.is_featured,createdAt:row.created_at||""
      };
    });
-   cart=cart.map(item=>{const current=products.find(p=>String(p.id)===String(item.id));return current?{...item,name:current.name,price:current.price}:item;});
+   cart=cart.filter(item=>products.some(p=>String(p.id)===String(item.id))).map(item=>{const current=products.find(p=>String(p.id)===String(item.id));return {...item,name:current.name,price:current.price};});
    localStorage.setItem("honor-cart",JSON.stringify(cart));
    renderCart();
    if(categoryError){
