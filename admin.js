@@ -7,7 +7,7 @@ const money=n=>new Intl.NumberFormat("en-US").format(Number(n)||0)+" د.ع";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const STATUS={new:"جديد",confirmed:"تم التأكيد",processing:"قيد التجهيز",shipped:"تم الشحن",delivered:"تم التسليم",cancelled:"ملغي"};
 const PAYMENT={pending:"بانتظار الدفع",paid:"مدفوع",failed:"فشل الدفع"};
-let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},banners=[],productReviews=[],deliveryRatesAdmin=[],repairRequests=[],tradeInRequests=[],editingImages=[],newFiles=[],previewUrls=[],bannerFile=null,bannerPreviewUrl="";
+let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},banners=[],productReviews=[],deliveryRatesAdmin=[],repairRequests=[],tradeInRequests=[],bundlesAdmin=[],editingImages=[],newFiles=[],previewUrls=[],bannerFile=null,bannerPreviewUrl="";
 const productFields=["name","category_id","brand","price","old_price","stock","ram","storage","color","chipset","screen","camera","battery","protection","description"];
 function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2800)}
 function setError(id,msg){$(id).textContent=msg||""}
@@ -28,7 +28,7 @@ async function checkAccess(){
 }
 async function loadAll(){
  try{
-  const [c,p,o,m,s,h,b,r,v,rr,tr]=await Promise.all([
+  const [c,p,o,m,s,h,b,r,v,rr,tr,bu]=await Promise.all([
    db.from("categories").select("id,name,slug,is_active").order("name"),
    db.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,is_active,created_at,updated_at,sku,ram,storage,color,is_featured,chipset,screen,camera,battery,protection").order("created_at",{ascending:false}),
    db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(1000),
@@ -45,12 +45,18 @@ async function loadAll(){
   if(h.error)console.warn("Order audit history unavailable:",h.error);
   if(r.error)console.warn("Product reviews unavailable:",r.error);
   if(v.error)console.warn("Delivery rates unavailable:",v.error);
-  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];banners=b.data||[];productReviews=r.data||[];deliveryRatesAdmin=v.data||[];repairRequests=rr.data||[];tradeInRequests=tr.data||[];
+  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];banners=b.data||[];productReviews=r.data||[];deliveryRatesAdmin=v.data||[];repairRequests=rr.data||[];tradeInRequests=tr.data||[];bundlesAdmin=bu.data||[];
   renderAll();
-   renderBanners();renderDeliveryRates();renderReviewModeration();renderServiceRequests();
+   renderBanners();renderDeliveryRates();renderReviewModeration();renderServiceRequests();renderBundlesAdmin();
  }catch(e){console.error(e);toast("تعذر تحميل البيانات: "+(e.message||"خطأ غير معروف"))}
 }
-function renderServiceRequests(){
+function renderBundlesAdmin(){
+ const sel=$("bundle-products-select");
+ if(sel)sel.innerHTML=products.map(p=>'<option value="'+p.id+'">'+esc(p.name)+' — '+money(p.price)+'</option>').join("");
+ const box=$("admin-bundles-list");
+ if(box)box.innerHTML=bundlesAdmin.length?'<table><thead><tr><th>الباقة</th><th>السعر</th><th>عدد المنتجات</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>'+bundlesAdmin.map(b=>'<tr><td>'+esc(b.title)+'</td><td>'+money(b.bundle_price)+'</td><td>'+(b.store_bundle_items||[]).length+'</td><td>'+(b.is_active?'منشورة':'مخفية')+'</td><td><button class="action-btn" data-bundle-toggle-admin="'+b.id+'">'+(b.is_active?'إخفاء':'نشر')+'</button></td></tr>').join('')+'</tbody></table>':'<div class="empty-row">ماكو باقات محفوظة حالياً.</div>';
+}
+\nfunction renderServiceRequests(){
  const labels={new:"جديد",contacted:"تم التواصل",received:"تم الاستلام",diagnosing:"قيد الفحص",waiting_parts:"بانتظار قطع",repairing:"قيد الصيانة",ready:"جاهز",delivered:"تم التسليم",cancelled:"ملغي",inspection:"قيد الفحص",offer_sent:"تم إرسال العرض",accepted:"مقبول",rejected:"مرفوض",completed:"مكتمل"};
  const repairStates=["new","contacted","received","diagnosing","waiting_parts","repairing","ready","delivered","cancelled"],tradeStates=["new","contacted","inspection","offer_sent","accepted","rejected","completed"];
  const table=(rows,kind)=>{if(!rows.length)return '<div class="empty-row">لا توجد طلبات حالياً.</div>';const states=kind==="repair"?repairStates:tradeStates;return '<table><thead><tr><th>رقم</th><th>الزبون</th><th>الهاتف</th><th>الجهاز</th><th>التفاصيل</th><th>التاريخ</th><th>الحالة</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>#'+x.request_number+'</td><td>'+esc(x.customer_name)+'</td><td dir="ltr">'+esc(x.phone)+'</td><td>'+esc(x.device_brand+' '+x.device_model)+'</td><td>'+esc(kind==="repair"?x.issue:(x.condition+' · '+(x.storage||'')+' · '+(x.notes||'')))+'</td><td>'+new Date(x.created_at).toLocaleDateString("ar-IQ")+'</td><td><select data-request-status data-kind="'+kind+'" data-id="'+x.id+'">'+states.map(s=>'<option value="'+s+'" '+(s===x.status?'selected':'')+'>'+labels[s]+'</option>').join('')+'</select></td></tr>').join('')+'</tbody></table>'};
@@ -235,7 +241,7 @@ async function toggleProduct(id){
 function go(view){
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+view));
  document.querySelectorAll(".nav-link").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
- const titles={overview:"نظرة عامة",products:"إدارة المنتجات",orders:"إدارة الطلبات",categories:"أقسام المتجر",banners:"بانر العروض",requests:"الصيانة والاستبدال",delivery:"التوصيل والتقييمات"};
+ const titles={overview:"نظرة عامة",products:"إدارة المنتجات",orders:"إدارة الطلبات",categories:"أقسام المتجر",banners:"بانر العروض",bundles:"باقات العروض",requests:"الصيانة والاستبدال",delivery:"التوصيل والتقييمات"};
  $("page-title").textContent=titles[view]||"لوحة الإدارة";$("app").classList.remove("menu-open");
 }
 async function exportOrders(){
@@ -265,7 +271,26 @@ function bind(){
  $("refresh-orders").onclick=loadAll;$("menu-toggle").onclick=()=>$("app").classList.toggle("menu-open");
 
  $("admin-export-orders")?.addEventListener("click",exportOrders);
- $("save-delivery-rates")?.addEventListener("click",saveDeliveryRates);\n $("refresh-service-requests")?.addEventListener("click",loadAll);\n document.addEventListener("change",async e=>{const s=e.target.closest("[data-request-status]");if(!s)return;const table=s.dataset.kind==="repair"?"repair_requests":"trade_in_requests";const {error}=await db.from(table).update({status:s.value,updated_at:new Date().toISOString()}).eq("id",s.dataset.id);if(error){toast("تعذر تحديث الحالة: "+error.message);await loadAll();return}toast("تم تحديث حالة الطلب");await loadAll()});
+ $("save-delivery-rates")?.addEventListener("click",saveDeliveryRates);\n $("refresh-service-requests")?.addEventListener("click",loadAll);\n
+ $("bundle-admin-form")?.addEventListener("submit",async e=>{
+  e.preventDefault();const f=e.currentTarget,d=new FormData(f),btn=f.querySelector('button[type="submit"]');btn.disabled=true;
+  try{
+   const ids=Array.from(f.elements.products.selectedOptions).map(o=>o.value);
+   if(!ids.length)throw new Error("اختار منتجاً واحداً على الأقل");
+   const {data,error}=await db.from("store_bundles").insert({title:String(d.get("title")).trim(),description:String(d.get("description")||"").trim(),bundle_price:Number(d.get("bundle_price")),is_active:f.elements.is_active.checked}).select("id").single();
+   if(error)throw error;
+   const {error:itemError}=await db.from("store_bundle_items").insert(ids.map(product_id=>({bundle_id:data.id,product_id,quantity:1})));
+   if(itemError){await db.from("store_bundles").delete().eq("id",data.id);throw itemError}
+   f.reset();toast("تم حفظ الباقة");await loadAll();
+  }catch(err){toast("تعذر حفظ الباقة: "+err.message)}finally{btn.disabled=false}
+ });
+ $("admin-bundles-list")?.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-bundle-toggle-admin]");if(!b)return;
+  const x=bundlesAdmin.find(v=>v.id===b.dataset.bundleToggleAdmin);if(!x)return;
+  const {error}=await db.from("store_bundles").update({is_active:!x.is_active,updated_at:new Date().toISOString()}).eq("id",x.id);
+  if(error){toast(error.message);return}await loadAll();
+ });
+\n document.addEventListener("change",async e=>{const s=e.target.closest("[data-request-status]");if(!s)return;const table=s.dataset.kind==="repair"?"repair_requests":"trade_in_requests";const {error}=await db.from(table).update({status:s.value,updated_at:new Date().toISOString()}).eq("id",s.dataset.id);if(error){toast("تعذر تحديث الحالة: "+error.message);await loadAll();return}toast("تم تحديث حالة الطلب");await loadAll()});
  $("reviews-moderation-list")?.addEventListener("click",e=>{const b=e.target.closest("[data-review-toggle]");if(b)toggleReview(b.dataset.reviewToggle)});
 }
 async function init(){
