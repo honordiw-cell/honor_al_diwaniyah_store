@@ -3144,3 +3144,22 @@ body.theme-light #page-product-detail .product-detail-back span { color:#8a96a7;
  .brand-block-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
  .brand-block{min-height:100px;border-radius:14px}
 }
+
+
+/* Two-step catalog filters: device type first, matching brand blocks second */
+.catalog-filter-panel{width:min(1160px,calc(100% - 32px));margin:0 auto 20px;padding:20px;border:1px solid #e0e9e8;border-radius:20px;background:#fff;box-shadow:0 10px 30px rgba(20,50,48,.045)}
+.catalog-filter-label{display:block;color:#253338;font-size:14px;font-weight:900}
+.catalog-type-row{display:flex;flex-direction:column;gap:12px}
+.catalog-type-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.catalog-type-option{min-height:46px;padding:10px 12px;border:1px solid #dce7e5;border-radius:12px;background:#f8fbfa;color:#344247;font:800 13px Cairo,sans-serif;cursor:pointer;transition:.18s}
+.catalog-type-option.active{background:#e8f7f5;border:1.5px solid #159d96;color:#128d87;box-shadow:inset 0 0 0 1px #159d9622}
+.catalog-brand-area{margin-top:20px;padding-top:17px;border-top:1px solid #edf1f0}
+.catalog-brand-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.catalog-brand-heading>span:last-child{color:#169b94;font-size:12px;font-weight:800}
+.catalog-filter-panel .brand-block-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.catalog-filter-panel .brand-block{min-height:82px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:10px;padding:12px;border:1px solid #e1e9e8;border-radius:13px;background:#fbfdfd;color:#29383b;font:800 13px Cairo,sans-serif;cursor:pointer}
+.catalog-filter-panel .brand-block-mark{width:38px;height:38px;flex:0 0 38px;border-radius:11px}
+.catalog-filter-panel .brand-block.active{border:1.5px solid #159d96;background:#eaf8f6;color:#128d87}
+.catalog-availability,.catalog-search{margin-top:15px}
+.catalog-filter-panel .brand-filter-native{display:none!important}
+@media(max-width:760px){.catalog-filter-panel{width:calc(100% - 28px);padding:15px 12px;border-radius:17px}.catalog-type-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-type-option{min-height:44px}.catalog-filter-panel .brand-block-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.catalog-filter-panel .brand-block{min-height:70px;padding:9px;font-size:12px}.catalog-filter-panel .brand-block-mark{width:34px;height:34px;flex-basis:34px}}
