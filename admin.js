@@ -7,7 +7,7 @@ const money=n=>new Intl.NumberFormat("en-US").format(Number(n)||0)+" د.ع";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const STATUS={new:"جديد",confirmed:"تم التأكيد",processing:"قيد التجهيز",shipped:"تم الشحن",delivered:"تم التسليم",cancelled:"ملغي"};
 const PAYMENT={pending:"بانتظار الدفع",paid:"مدفوع",failed:"فشل الدفع"};
-let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},banners=[],productReviews=[],deliveryRatesAdmin=[],editingImages=[],newFiles=[],previewUrls=[],bannerFile=null,bannerPreviewUrl="";
+let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},banners=[],productReviews=[],deliveryRatesAdmin=[],repairRequests=[],tradeInRequests=[],editingImages=[],newFiles=[],previewUrls=[],bannerFile=null,bannerPreviewUrl="";
 const productFields=["name","category_id","brand","price","old_price","stock","ram","storage","color","chipset","screen","camera","battery","protection","description"];
 function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2800)}
 function setError(id,msg){$(id).textContent=msg||""}
@@ -28,7 +28,7 @@ async function checkAccess(){
 }
 async function loadAll(){
  try{
-  const [c,p,o,m,s,h,b,r,v]=await Promise.all([
+  const [c,p,o,m,s,h,b,r,v,rr,tr]=await Promise.all([
    db.from("categories").select("id,name,slug,is_active").order("name"),
    db.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,is_active,created_at,updated_at,sku,ram,storage,color,is_featured,chipset,screen,camera,battery,protection").order("created_at",{ascending:false}),
    db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(1000),
@@ -45,12 +45,18 @@ async function loadAll(){
   if(h.error)console.warn("Order audit history unavailable:",h.error);
   if(r.error)console.warn("Product reviews unavailable:",r.error);
   if(v.error)console.warn("Delivery rates unavailable:",v.error);
-  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];banners=b.data||[];productReviews=r.data||[];deliveryRatesAdmin=v.data||[];
+  categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];banners=b.data||[];productReviews=r.data||[];deliveryRatesAdmin=v.data||[];repairRequests=rr.data||[];tradeInRequests=tr.data||[];
   renderAll();
-   renderBanners();renderDeliveryRates();renderReviewModeration();
+   renderBanners();renderDeliveryRates();renderReviewModeration();renderServiceRequests();
  }catch(e){console.error(e);toast("تعذر تحميل البيانات: "+(e.message||"خطأ غير معروف"))}
 }
-function renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements();renderOrderAudit()}
+function renderServiceRequests(){
+ const labels={new:"جديد",contacted:"تم التواصل",received:"تم الاستلام",diagnosing:"قيد الفحص",waiting_parts:"بانتظار قطع",repairing:"قيد الصيانة",ready:"جاهز",delivered:"تم التسليم",cancelled:"ملغي",inspection:"قيد الفحص",offer_sent:"تم إرسال العرض",accepted:"مقبول",rejected:"مرفوض",completed:"مكتمل"};
+ const repairStates=["new","contacted","received","diagnosing","waiting_parts","repairing","ready","delivered","cancelled"],tradeStates=["new","contacted","inspection","offer_sent","accepted","rejected","completed"];
+ const table=(rows,kind)=>{if(!rows.length)return '<div class="empty-row">لا توجد طلبات حالياً.</div>';const states=kind==="repair"?repairStates:tradeStates;return '<table><thead><tr><th>رقم</th><th>الزبون</th><th>الهاتف</th><th>الجهاز</th><th>التفاصيل</th><th>التاريخ</th><th>الحالة</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>#'+x.request_number+'</td><td>'+esc(x.customer_name)+'</td><td dir="ltr">'+esc(x.phone)+'</td><td>'+esc(x.device_brand+' '+x.device_model)+'</td><td>'+esc(kind==="repair"?x.issue:(x.condition+' · '+(x.storage||'')+' · '+(x.notes||'')))+'</td><td>'+new Date(x.created_at).toLocaleDateString("ar-IQ")+'</td><td><select data-request-status data-kind="'+kind+'" data-id="'+x.id+'">'+states.map(s=>'<option value="'+s+'" '+(s===x.status?'selected':'')+'>'+labels[s]+'</option>').join('')+'</select></td></tr>').join('')+'</tbody></table>'};
+ $("repair-requests-list").innerHTML=table(repairRequests,"repair");$("tradein-requests-list").innerHTML=table(tradeInRequests,"tradein");
+}
+\nfunction renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements();renderOrderAudit()}
 function renderStats(){
  const active=products.filter(p=>p.is_active).length,pending=Number(dashboardMetrics.pending_orders??orders.filter(o=>["new","confirmed","processing"].includes(o.status)).length),sales=Number(dashboardMetrics.delivered_sales??0);
  $("stat-products").textContent=active;$("stat-orders").textContent=Number(dashboardMetrics.total_orders??orders.length);$("stat-pending").textContent=pending;$("stat-sales").textContent=money(sales);
@@ -229,7 +235,7 @@ async function toggleProduct(id){
 function go(view){
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+view));
  document.querySelectorAll(".nav-link").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
- const titles={overview:"نظرة عامة",products:"إدارة المنتجات",orders:"إدارة الطلبات",categories:"أقسام المتجر",banners:"بانر العروض"};
+ const titles={overview:"نظرة عامة",products:"إدارة المنتجات",orders:"إدارة الطلبات",categories:"أقسام المتجر",banners:"بانر العروض",requests:"الصيانة والاستبدال",delivery:"التوصيل والتقييمات"};
  $("page-title").textContent=titles[view]||"لوحة الإدارة";$("app").classList.remove("menu-open");
 }
 async function exportOrders(){
@@ -259,7 +265,7 @@ function bind(){
  $("refresh-orders").onclick=loadAll;$("menu-toggle").onclick=()=>$("app").classList.toggle("menu-open");
 
  $("admin-export-orders")?.addEventListener("click",exportOrders);
- $("save-delivery-rates")?.addEventListener("click",saveDeliveryRates);
+ $("save-delivery-rates")?.addEventListener("click",saveDeliveryRates);\n $("refresh-service-requests")?.addEventListener("click",loadAll);\n document.addEventListener("change",async e=>{const s=e.target.closest("[data-request-status]");if(!s)return;const table=s.dataset.kind==="repair"?"repair_requests":"trade_in_requests";const {error}=await db.from(table).update({status:s.value,updated_at:new Date().toISOString()}).eq("id",s.dataset.id);if(error){toast("تعذر تحديث الحالة: "+error.message);await loadAll();return}toast("تم تحديث حالة الطلب");await loadAll()});
  $("reviews-moderation-list")?.addEventListener("click",e=>{const b=e.target.closest("[data-review-toggle]");if(b)toggleReview(b.dataset.reviewToggle)});
 }
 async function init(){
