@@ -32,3 +32,7 @@
 /* Respect the native hidden state for inline product editors */
 #view-products #products-table tr[hidden],
 #view-products #products-table [hidden]{display:none!important}
+
+/* Ensure native category dropdown options remain readable */
+#product-category-filter{color:#263638!important;background-color:#fff!important;opacity:1!important;visibility:visible!important}
+#product-category-filter option{color:#263638!important;background:#fff!important;font-size:14px!important}
