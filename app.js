@@ -87,12 +87,15 @@ async function loadHomeBanner(){
  }catch(error){console.warn("Home banner unavailable:",error);section.classList.add("hidden")}
 }
 function renderHomeCollections(){
- const marked=products.filter(p=>p.isFeatured&&p.stock>0&&p.deviceType!=="accessories");
- const featured=(marked.length?marked:[...products].filter(p=>p.stock>0&&p.deviceType!=="accessories").sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0))).slice(0,4);
+ const available=products.filter(p=>p.stock>0);
+ const markedPhones=available.filter(p=>p.isFeatured&&p.deviceType==="phone");
+ const phones=(markedPhones.length?markedPhones:available.filter(p=>p.deviceType==="phone").sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0))).slice(0,6);
+ const accessories=available.filter(p=>p.deviceType==="accessories").sort((a,b)=>(b.isFeatured?1:0)-(a.isFeatured?1:0)||new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,6);
  const deals=products.filter(p=>p.oldPrice>p.price&&p.stock>0).slice(0,4);
  const card=p=>'<article class="home-product-card"><button type="button" class="home-product-open" data-home-details="'+escapeHtml(p.id)+'"><div class="home-product-image">'+(p.image?'<img src="'+escapeHtml(p.image)+'" alt="'+escapeHtml(p.name)+'" loading="lazy">':'<span>HONOR AL-DIWANIYAH</span>')+'</div><small>'+escapeHtml(p.brand||p.category||"")+'</small><b>'+escapeHtml(p.name)+'</b><strong>'+money(p.price)+'</strong></button></article>';
- const l=$("home-latest-grid"),d=$("home-deals-grid");
- if(l)l.innerHTML=featured.length?featured.map(card).join(""):'<p class="home-no-products">الأجهزة المميزة تظهر هنا قريباً.</p>';
+ const l=$("home-latest-grid"),a=$("home-accessories-grid"),d=$("home-deals-grid");
+ if(l)l.innerHTML=phones.length?phones.map(card).join(""):'<p class="home-no-products">الأجهزة المميزة تظهر هنا قريباً.</p>';
+ if(a)a.innerHTML=accessories.length?accessories.map(card).join(""):'<p class="home-no-products">الإكسسوارات المتوفرة تظهر هنا قريباً.</p>';
  if(d)d.innerHTML=deals.length?deals.map(p=>card(p).replace('<strong>'+money(p.price)+'</strong>','<strong>'+money(p.price)+' <del>'+money(p.oldPrice)+'</del></strong>')).join(""):'<p class="home-no-products">ماكو عروض محددة حالياً.</p>';
  document.querySelectorAll("[data-home-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.homeDetails)));
 }
@@ -441,6 +444,15 @@ document.querySelectorAll("[data-device-type]").forEach(card=>card.addEventListe
  $("device-type-filter").value=selectedDeviceType;
  selectedBrand="الكل";$("brand-filter").value="الكل";
  visibleProductCount=productsPerPage;renderProducts();showStorePage("products");
+}));
+document.querySelectorAll("[data-home-filter]").forEach(btn=>btn.addEventListener("click",()=>{
+ selectedDeviceType=btn.dataset.homeFilter;
+ $("device-type-filter").value=selectedDeviceType;
+ selectedBrand="الكل";$("brand-filter").value="الكل";
+ selectedAvailability="all";$("availability-filter").value="all";
+ $("products-search-input").value="";
+ visibleProductCount=productsPerPage;
+ renderProducts();showStorePage("products");
 }));
 document.querySelectorAll("[data-shop-accessories]").forEach(btn=>btn.addEventListener("click",()=>{
  selectedDeviceType="accessories";$("device-type-filter").value="accessories";
