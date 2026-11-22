@@ -3450,3 +3450,11 @@ body.theme-dark #page-home .home-collection-section .home-product-image img{
  background:#fff!important;background-image:none!important;
 }
 body.theme-dark #page-home .home-collection-section .home-product-image span{color:#899895!important;}
+
+/* Product stock states and variant selector */
+.product-stock-note.low-stock,.landing-stock.low-stock{color:#9a6700!important;background:#fff4cc!important;border-color:#f0c44a!important}
+.product-stock-note.out-stock,.landing-stock.out-stock{color:#b42318!important;background:#fee4e2!important;border-color:#f3aaa5!important}
+.product-stock-note.in-stock,.landing-stock.in-stock{color:#16794b!important;background:#dcfce7!important;border-color:#9cddb9!important}
+.product-variant-picker{display:grid;gap:8px;margin:14px 0;padding:12px;border:1px solid var(--border-color,#e5e7eb);border-radius:14px}
+.product-variant-picker label{font-weight:700}
+.product-variant-picker select{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--border-color,#d1d5db);border-radius:10px;background:var(--surface,#fff);color:inherit}
