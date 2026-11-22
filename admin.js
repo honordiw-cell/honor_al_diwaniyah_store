@@ -294,7 +294,8 @@ function bind(){
   const {error}=await db.from("store_bundles").update({is_active:!x.is_active,updated_at:new Date().toISOString()}).eq("id",x.id);
   if(error){toast(error.message);return}await loadAll();
  });
-\n document.addEventListener("change",async e=>{const s=e.target.closest("[data-request-status]");if(!s)return;const table=s.dataset.kind==="repair"?"repair_requests":"trade_in_requests";const {error}=await db.from(table).update({status:s.value,updated_at:new Date().toISOString()}).eq("id",s.dataset.id);if(error){toast("تعذر تحديث الحالة: "+error.message);await loadAll();return}toast("تم تحديث حالة الطلب");await loadAll()});
+
+document.addEventListener("change",async e=>{const s=e.target.closest("[data-request-status]");if(!s)return;const table=s.dataset.kind==="repair"?"repair_requests":"trade_in_requests";const {error}=await db.from(table).update({status:s.value,updated_at:new Date().toISOString()}).eq("id",s.dataset.id);if(error){toast("تعذر تحديث الحالة: "+error.message);await loadAll();return}toast("تم تحديث حالة الطلب");await loadAll()});
  $("reviews-moderation-list")?.addEventListener("click",e=>{const b=e.target.closest("[data-review-toggle]");if(b)toggleReview(b.dataset.reviewToggle)});
 }
 async function init(){
