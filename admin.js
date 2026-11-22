@@ -31,7 +31,7 @@ async function loadAll(){
   const [c,p,o,m,s,h,b,r,v,rr,tr,bu]=await Promise.all([
    db.from("categories").select("id,name,slug,is_active").order("name"),
    db.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,is_active,created_at,updated_at,sku,ram,storage,color,is_featured,chipset,screen,camera,battery,protection").order("created_at",{ascending:false}),
-   db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total)").order("created_at",{ascending:false}).limit(1000),
+   db.from("orders").select("id,order_number,customer_name,phone,province,city,district,address,notes,payment_method,payment_status,status,order_status,total,subtotal,delivery_fee,created_at,updated_at,order_items(id,product_name,quantity,unit_price,line_total,selected_color)").order("created_at",{ascending:false}).limit(1000),
    db.rpc("admin_dashboard_metrics"),
    db.from("stock_movements").select("id,product_id,product_name,old_stock,new_stock,quantity_delta,reason,created_at").order("created_at",{ascending:false}).limit(50),
    db.from("order_status_history").select("id,order_id,order_number,event_type,from_status,to_status,details,created_at").order("created_at",{ascending:false}).limit(50),
@@ -138,7 +138,7 @@ async function deleteOrder(id){
 async function showOrder(id){
  const o=orders.find(x=>x.id===id);if(!o)return;
  const fields=[["رقم الطلب","#"+(o.order_number??"")],["الزبون",o.customer_name],["الهاتف",o.phone],["المحافظة",o.province],["المنطقة",o.district||o.city||"—"],["العنوان",o.address],["طريقة الدفع",o.payment_method==="cod"?"عند الاستلام":o.payment_method],["حالة الدفع",PAYMENT[o.payment_status]||o.payment_status],["قيمة المنتجات",money(o.subtotal??o.total)],["أجور التوصيل",money(o.delivery_fee||0)],["المجموع النهائي",money(o.total)],["ملاحظات",o.notes||"—"]];
- $("order-details").innerHTML='<div class="order-detail-grid">'+fields.map(x=>'<div class="detail-box"><small>'+esc(x[0])+'</small><b>'+esc(x[1])+'</b></div>').join("")+'</div><table class="order-items"><thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th><th>المجموع</th></tr></thead><tbody>'+(o.order_items||[]).map(i=>'<tr><td>'+esc(i.product_name)+'</td><td>'+i.quantity+'</td><td>'+money(i.unit_price)+'</td><td>'+money(i.line_total)+'</td></tr>').join("")+'</tbody></table>';
+ $("order-details").innerHTML='<div class="order-detail-grid">'+fields.map(x=>'<div class="detail-box"><small>'+esc(x[0])+'</small><b>'+esc(x[1])+'</b></div>').join("")+'</div><table class="order-items"><thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th><th>المجموع</th></tr></thead><tbody>'+(o.order_items||[]).map(i=>'<tr><td>'+esc(i.product_name)+(i.selected_color?'<small class="muted">اللون: '+esc(i.selected_color)+'</small>':'')+'</td><td>'+i.quantity+'</td><td>'+money(i.unit_price)+'</td><td>'+money(i.line_total)+'</td></tr>').join("")+'</tbody></table>';
  $("order-dialog").showModal();
  $("order-history-list").textContent="جارٍ تحميل سجل التغييرات...";
  const {data:history,error}=await db.from("order_status_history").select("event_type,from_status,to_status,actor_id,details,created_at").eq("order_id",id).order("created_at",{ascending:false}).limit(30);
