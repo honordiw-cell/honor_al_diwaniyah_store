@@ -3458,3 +3458,6 @@ body.theme-dark #page-home .home-collection-section .home-product-image span{col
 .product-variant-picker{display:grid;gap:8px;margin:14px 0;padding:12px;border:1px solid var(--border-color,#e5e7eb);border-radius:14px}
 .product-variant-picker label{font-weight:700}
 .product-variant-picker select{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--border-color,#d1d5db);border-radius:10px;background:var(--surface,#fff);color:inherit}
+
+/* Keep cart drawer heading readable on mobile */
+#cart-drawer .drawer-head h3{color:#30383d!important;opacity:1!important;font-weight:800}
