@@ -3050,3 +3050,26 @@ body.theme-light #page-product-detail .product-detail-back span { color:#8a96a7;
  .compare-dialog{width:calc(100vw - 24px);max-width:none;padding:16px}
  .compare-table{min-width:500px}
 }
+
+/* Delivery breakdown and moderated customer reviews */
+.checkout-cost-summary{display:grid!important;gap:9px!important}
+.checkout-cost-summary>div{display:flex;justify-content:space-between;gap:12px}
+.checkout-cost-summary>small{font-size:11px;color:#6b7d7c}
+.checkout-cost-summary .checkout-grand-total{border-top:1px solid #d4e5e1;padding-top:11px;margin-top:3px}
+.checkout-cost-summary .checkout-grand-total span{font-weight:800;color:#263638!important}
+.checkout-cost-summary .checkout-grand-total b{font-size:20px!important}
+.product-review-form{margin-top:22px;padding:18px;border:1px solid #e0ece9;border-radius:16px;background:#f8fbfa}
+.product-review-form h3{margin:0 0 14px;color:#253536}
+.review-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.review-form-grid label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#344849}
+.review-form-grid input,.review-form-grid select,.review-form-grid textarea{width:100%;min-height:44px;border:1px solid #d8e4e1;border-radius:10px;padding:10px;background:white;color:#263638}
+.review-form-grid textarea{min-height:90px;resize:vertical}
+.review-wide{grid-column:1/-1}
+.review-summary{display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:12px;background:#eef7f5;color:#168f89;margin-bottom:12px}
+.review-summary b{font-size:20px}
+.review-summary span,.customer-review small{font-size:11px;color:#71817f}
+.customer-review{padding:14px 2px;border-bottom:1px solid #e5ecea}
+.customer-review>div{display:flex;justify-content:space-between;gap:12px}
+.customer-review>div b{color:#263638}.customer-review>div span{color:#d69a2d;white-space:nowrap}.customer-review>div i{font-style:normal;color:#dfe4e3}
+.customer-review p{margin:8px 0;color:#536363;font-size:13px;line-height:1.8}
+@media(max-width:600px){.review-form-grid{grid-template-columns:1fr}.review-wide{grid-column:auto}}
