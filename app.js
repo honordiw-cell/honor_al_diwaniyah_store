@@ -31,8 +31,9 @@ async function loadStoreBundles(){
  try{
   const {data,error}=await sb.from("store_bundles").select("id,title,description,image_url,bundle_price,store_bundle_items(quantity,products(name))").eq("is_active",true).order("created_at",{ascending:false}).limit(8);
   if(error)throw error;storeBundles=data||[];
-  const box=$("home-bundles-grid");if(!box)return;
-  box.innerHTML=storeBundles.length?storeBundles.map(b=>'<article class="home-product-card bundle-card">'+(b.image_url?'<div class="home-product-image"><img src="'+escapeHtml(b.image_url)+'" alt="'+escapeHtml(b.title)+'"></div>':'<div class="home-product-image"><span>HONOR AL-DIWANIYAH</span></div>')+'<small>باقة متكاملة</small><b>'+escapeHtml(b.title)+'</b><p>'+escapeHtml(b.description||"")+'</p><strong>'+money(b.bundle_price)+'</strong><button type="button" class="add-btn" data-bundle-inquiry="'+escapeHtml(b.id)+'">استفسر عن الباقة</button></article>').join(""):'<p class="home-no-products">نجهزلكم باقات المتجر قريباً.</p>';
+  const box=$("home-bundles-grid"),section=$("home-bundles-section");if(!box||!section)return;
+  section.classList.toggle("hidden",!storeBundles.length);
+  box.innerHTML=storeBundles.map(b=>'<article class="home-product-card bundle-card">'+(b.image_url?'<div class="home-product-image"><img src="'+escapeHtml(b.image_url)+'" alt="'+escapeHtml(b.title)+'"></div>':'<div class="home-product-image"><span>HONOR AL-DIWANIYAH</span></div>')+'<small>باقة متكاملة</small><b>'+escapeHtml(b.title)+'</b><p>'+escapeHtml(b.description||"")+'</p><strong>'+money(b.bundle_price)+'</strong><button type="button" class="add-btn" data-bundle-inquiry="'+escapeHtml(b.id)+'">استفسر عن الباقة</button></article>').join("");
  }catch(e){console.warn("Bundles unavailable",e)}
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-bundle-inquiry]");if(!b)return;const x=storeBundles.find(v=>String(v.id)===b.dataset.bundleInquiry);if(!x)return;const msg="أريد الاستفسار عن باقة "+x.title+" بسعر "+money(x.bundle_price);window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(msg),"_blank","noopener")});
@@ -110,9 +111,13 @@ function renderHomeCollections(){
  const deals=products.filter(p=>p.oldPrice>p.price&&p.stock>0).slice(0,4);
  const card=p=>'<article class="home-product-card"><button type="button" class="home-product-open" data-home-details="'+escapeHtml(p.id)+'"><div class="home-product-image">'+(p.image?'<img src="'+escapeHtml(p.image)+'" alt="'+escapeHtml(p.name)+'" loading="lazy">':'<span>HONOR AL-DIWANIYAH</span>')+'</div><small>'+escapeHtml(p.brand||p.category||"")+'</small><b>'+escapeHtml(p.name)+'</b><strong>'+money(p.price)+'</strong></button></article>';
  const l=$("home-latest-grid"),a=$("home-accessories-grid"),d=$("home-deals-grid");
- if(l)l.innerHTML=phones.length?phones.map(card).join(""):'<p class="home-no-products">الأجهزة المميزة تظهر هنا قريباً.</p>';
- if(a)a.innerHTML=accessories.length?accessories.map(card).join(""):'<p class="home-no-products">الإكسسوارات المتوفرة تظهر هنا قريباً.</p>';
- if(d)d.innerHTML=deals.length?deals.map(p=>card(p).replace('<strong>'+money(p.price)+'</strong>','<strong>'+money(p.price)+' <del>'+money(p.oldPrice)+'</del></strong>')).join(""):'<p class="home-no-products">ماكو عروض محددة حالياً.</p>';
+ const latestSection=l?.closest(".home-collection-section"),accessoriesSection=a?.closest(".home-collection-section"),dealsSection=d?.closest(".home-collection-section");
+ latestSection?.classList.toggle("hidden",!phones.length);
+ accessoriesSection?.classList.toggle("hidden",!accessories.length);
+ dealsSection?.classList.toggle("hidden",!deals.length);
+ if(l)l.innerHTML=phones.map(card).join("");
+ if(a)a.innerHTML=accessories.map(card).join("");
+ if(d)d.innerHTML=deals.map(p=>card(p).replace('<strong>'+money(p.price)+'</strong>','<strong>'+money(p.price)+' <del>'+money(p.oldPrice)+'</del></strong>')).join("");
  document.querySelectorAll("[data-home-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.homeDetails)));
 }
 
