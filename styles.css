@@ -2948,3 +2948,43 @@ body.theme-light #page-product-detail .product-detail-back span { color:#8a96a7;
  .home-product-open b{font-size:12px}
  .home-product-open strong{font-size:13px}
 }
+
+
+/* Homepage horizontal product rails: phones and accessories */
+.home-collection-section{
+  width:min(1240px,calc(100% - 48px));margin:34px auto 42px;padding:30px;
+  border:1px solid #e8eeee;border-radius:24px;background:#fff;
+  box-shadow:0 8px 28px rgba(25,65,65,.035);overflow:hidden
+}
+.home-collection-section .home-section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+.home-collection-section .home-section-heading h2{margin:5px 0;font-size:clamp(22px,2.5vw,30px);font-weight:900}
+.home-collection-section .home-section-heading p{margin:0;color:#7c898c;font-size:13px}
+.home-collection-more{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:12px;min-height:42px;
+  padding:0 17px;border:1px solid #b9e5e1;border-radius:12px;background:#f4fbfa;
+  color:#128f89;font-family:inherit;font-size:12px;font-weight:900;cursor:pointer
+}
+.home-collection-more span{font-size:17px}
+.home-collection-track{
+  display:grid;grid-auto-flow:column;grid-auto-columns:minmax(190px,1fr);
+  grid-auto-columns:clamp(190px,22%,250px);gap:14px;overflow-x:auto;overscroll-behavior-inline:contain;
+  scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#b7dedb transparent;
+  padding:2px 2px 13px
+}
+.home-collection-track .home-product-card{min-width:0;scroll-snap-align:start}
+.home-accessories-section{background:linear-gradient(145deg,#fbfdfd,#f4f9f8)}
+@media(max-width:700px){
+ .home-collection-section{width:calc(100% - 24px);margin:22px auto 28px;padding:17px 13px;border-radius:18px}
+ .home-collection-section .home-section-heading{align-items:center;gap:8px;margin-bottom:13px}
+ .home-collection-section .home-section-heading h2{font-size:19px}
+ .home-collection-section .home-section-heading p{font-size:10px;line-height:1.7}
+ .home-collection-section .store-kicker{font-size:8px;letter-spacing:1px}
+ .home-collection-more{min-height:36px;padding:0 10px;gap:6px;border-radius:10px;font-size:10px;white-space:nowrap}
+ .home-collection-more span{font-size:14px}
+ .home-collection-track{grid-auto-columns:clamp(145px,43%,190px);gap:9px;padding-bottom:10px}
+ .home-collection-track .home-product-card{padding:8px;border-radius:14px}
+ .home-collection-track .home-product-image{aspect-ratio:1/1.05;padding:8px}
+ .home-collection-track .home-product-open{gap:6px}
+ .home-collection-track .home-product-open b{font-size:11px}
+ .home-collection-track .home-product-open strong{font-size:12px}
+}
