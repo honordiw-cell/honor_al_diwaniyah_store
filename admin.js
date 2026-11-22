@@ -78,11 +78,18 @@ function renderStats(){
  $("top-products").innerHTML=tops.length?tops.map((x,i)=>'<div class="top-product-row"><b>'+(i+1)+'. '+esc(x.name)+'</b><span>'+Number(x.quantity)+' قطعة · '+money(x.sales)+'</span></div>').join(""):'<p class="muted">تظهر المنتجات الأكثر مبيعاً بعد إتمام الطلبات.</p>';
 }
 function renderCategoryOptions(selected=""){
- const opts=categories.map(c=>'<option value="'+esc(c.id)+'" '+(String(c.id)===String(selected)?"selected":"")+'>'+esc(c.name)+'</option>').join("");
- $("form-category").innerHTML='<option value="">اختر القسم</option>'+opts;
- const filter=$("product-category-filter"),prev=filter.value;
- filter.innerHTML='<option value="">كل الأقسام</option>'+opts;
- filter.value=categories.some(c=>String(c.id)===String(prev))?prev:"";
+ const formSelect=$("form-category"),filter=$("product-category-filter");
+ const rows=Array.isArray(categories)?categories:[];
+ const optionRows=rows.map(c=>{
+  const count=products.filter(p=>String(p.category_id)===String(c.id)).length;
+  return '<option value="'+esc(c.id)+'">'+esc(c.name)+' ('+count+')</option>';
+ }).join("");
+ if(formSelect)formSelect.innerHTML='<option value="">اختر القسم</option>'+optionRows;
+ if(filter){
+  const previous=selected||filter.value||"";
+  filter.innerHTML='<option value="">كل الأقسام ('+products.length+')</option>'+optionRows;
+  filter.value=rows.some(c=>String(c.id)===String(previous))?String(previous):"";
+ }
 }
 async function saveQuickProduct(id,button){
  const p=products.find(x=>String(x.id)===String(id));if(!p)return;
