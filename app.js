@@ -58,6 +58,9 @@ function persistCart(){
 function escapeHtml(s=""){
  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
+function stockState(p,stock=p.stock){const n=Math.max(0,Number(stock)||0),limit=Math.max(1,Number(p.lowStockThreshold)||3);return n<=0?'out':n<=limit?'low':'in'}
+function stockLabel(s){return s==='out'?'Out of Stock':s==='low'?'Low in Stock':'In Stock'}
+function stockClass(s){return s==='out'?'out-stock':s==='low'?'low-stock':'in-stock'}
 function renderProducts(){
  const q=($("products-search-input")?.value||$("search-input").value).trim().toLowerCase();
  const filtered=products.filter(p=>{
@@ -78,8 +81,8 @@ function renderProducts(){
      <div class="product-card-copy">
        <span class="product-brand">${escapeHtml(p.brand||p.category||"")}</span>
        <h3>${escapeHtml(p.name)}</h3>
-       <div class="product-meta">${[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(" · ")||escapeHtml(p.description||p.category||"")}</div>
-       <div class="product-price-row"><b class="price">${money(p.price)}</b>${p.oldPrice>p.price?`<del class="old-price">${money(p.oldPrice)}</del>`:""}</div><small class="product-stock-note ${p.stock>0?"in-stock":"out-stock"}">${p.stock>0?"متوفر":"نفذت الكمية حالياً"}</small>
+       <div class="product-meta">${p.variants?.length>1?"خيارات متعددة · "+p.variants.length+" نسخ":[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(" · ")||escapeHtml(p.description||p.category||"")}</div>
+       <div class="product-price-row"><b class="price">${money(p.price)}</b>${p.oldPrice>p.price?`<del class="old-price">${money(p.oldPrice)}</del>`:""}</div><small class="product-stock-note ${stockClass(stockState(p))}">${stockLabel(stockState(p))}</small>
      </div>
    </button>
    <div class="product-bottom">${p.stock>0?`<button class="add-btn" data-add="${escapeHtml(p.id)}">أضف للسلة</button>`:`<a class="add-btn stock-inquiry" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد الاستفسار عن توفر "+p.name)}" target="_blank" rel="noopener">اسأل عن التوفر</a>`}<button type="button" class="product-tool-btn favorite-tool ${favoriteIds.includes(String(p.id))?"is-favorite":""}" data-favorite="${escapeHtml(p.id)}" aria-label="${favoriteIds.includes(String(p.id))?"إزالة من المفضلة":"إضافة للمفضلة"}" title="${favoriteIds.includes(String(p.id))?"إزالة من المفضلة":"إضافة للمفضلة"}">${favoriteIds.includes(String(p.id))?"♥":"♡"}</button><button type="button" class="product-tool-btn compare-tool" data-compare="${escapeHtml(p.id)}" aria-label="إضافة للمقارنة" title="إضافة للمقارنة">⇄</button></div>
@@ -187,16 +190,17 @@ function showProductDetails(id){
  if(!location.hash.startsWith("#product/"))history.pushState({productId:id},"","#product/"+encodeURIComponent(id));
 }
 
-function addToCart(id,color=""){
+function addToCart(id,color="",variantKey=""){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return false;
- const stock=Math.max(0,Number(p.stock)||0);
- if(stock<=0){toast("نفذ من المخزون");return false}
- const row=cart.find(x=>String(x.id)===String(id)&&String(x.color||"")===String(color||""));
- const sameProductQty=cart.filter(x=>String(x.id)===String(id)).reduce((n,x)=>n+x.qty,0);
- if(sameProductQty>=stock){toast("الكمية المتوفرة بالمخزون: "+stock);return false}
+ const variant=p.variants?.find(v=>v.variant_key===variantKey);
+ const stock=Math.max(0,Number(variant?variant.stock:p.stock)||0);
+ if(stock<=0){toast("نفذت النسخة المختارة");return false}
+ const row=cart.find(x=>String(x.id)===String(id)&&String(x.color||"")===String(color||"")&&String(x.variantKey||"")===String(variantKey||""));
+ const sameProductQty=cart.filter(x=>String(x.id)===String(id)&&String(x.variantKey||"")===String(variantKey||"")).reduce((n,x)=>n+x.qty,0);
+ if(sameProductQty>=stock){toast("الكمية المطلوبة غير متوفرة");return false}
  if(row)row.qty++;
- else cart.push({id:p.id,name:p.name,price:Number(p.price)||0,qty:1,color:color||""});
+ else cart.push({id:p.id,name:p.name,price:Number(variant?.price??p.price)||0,qty:1,color:color||"",variantKey:variant?.variant_key||"",ram:variant?.ram||p.ram||"",storage:variant?.storage||p.storage||""});
  persistCart();
  toast("انضاف المنتج إلى السلة");
  return true;
@@ -205,7 +209,7 @@ function renderCart(){
  const cartCount=cart.reduce((a,x)=>a+x.qty,0);
  $("cart-count").textContent=cartCount;
  if($("mobile-cart-count")) $("mobile-cart-count").textContent=cartCount;
- $("cart-items").innerHTML=cart.length?cart.map((x,index)=>`<div class="cart-row"><div><b>${escapeHtml(x.name)}</b><small>${x.color?'اللون: '+escapeHtml(x.color)+' · ':''}${money(x.price)} × ${x.qty}</small></div><div class="qty-controls"><button data-dec-index="${index}">−</button><b>${x.qty}</b><button data-inc-index="${index}">+</button></div></div>`).join(""):`<p class="empty-state">السلة فارغة حالياً.</p>`;
+ $("cart-items").innerHTML=cart.length?cart.map((x,index)=>`<div class="cart-row"><div><b>${escapeHtml(x.name)}</b><small>${[x.ram,x.storage].filter(Boolean).map(escapeHtml).join(" · ")}${x.color?' · اللون: '+escapeHtml(x.color):''} · ${money(x.price)} × ${x.qty}</small></div><div class="qty-controls"><button data-dec-index="${index}">−</button><b>${x.qty}</b><button data-inc-index="${index}">+</button></div></div>`).join(""):`<p class="empty-state">السلة فارغة حالياً.</p>`;
  const total=cart.reduce((a,x)=>a+(Number(x.price)||0)*x.qty,0);
  $("cart-total").textContent=money(total);
  updateCheckoutTotals();
@@ -216,8 +220,8 @@ function changeQty(index,d){
  const x=cart[index];if(!x)return;
  if(d>0){
    const p=products.find(p=>String(p.id)===String(x.id));
-   const stock=Math.max(0,Number(p?.stock)||0);
-   const sameProductQty=cart.filter(item=>String(item.id)===String(x.id)).reduce((n,item)=>n+item.qty,0);
+   const stock=Math.max(0,Number(x.variantKey?p?.variants?.find(v=>v.variant_key===x.variantKey)?.stock:p?.stock)||0);
+   const sameProductQty=cart.filter(item=>String(item.id)===String(x.id)&&String(item.variantKey||"")===String(x.variantKey||"")).reduce((n,item)=>n+item.qty,0);
    if(stock<=0){toast("نفذ من المخزون");return}
    if(sameProductQty>=stock){toast("الكمية المتوفرة بالمخزون: "+stock);return}
  }
@@ -283,7 +287,7 @@ async function loadProducts(){
  try{
    const [{data:categories,error:categoryError},{data:rows,error:productError}]=await Promise.all([
      sb.from("categories").select("id,name,slug").eq("is_active",true),
-     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_featured,is_active,created_at").eq("is_active",true).gt("stock",0).order("created_at",{ascending:false})
+     sb.from("products").select("id,category_id,name,description,price,old_price,stock,image_url,images,brand,ram,storage,color,chipset,screen,camera,battery,protection,is_featured,is_active,created_at,variants,low_stock_threshold").eq("is_active",true).gt("stock",0).order("created_at",{ascending:false})
    ]);
 
    if(productError) throw productError;
@@ -299,6 +303,7 @@ async function loadProducts(){
        category:category?.name||"غير مصنف",
        categorySlug:category?.slug||"",
        deviceType:category?.slug==="tablets"?"tablet":category?.slug==="accessories"?"accessories":category?.slug==="maintenance"?"maintenance":"phone",
+       variants:Array.isArray(row.variants)?row.variants:[],lowStockThreshold:Number(row.low_stock_threshold)||3,
        description:row.description||row.brand||category?.name||"",
        price:Number(row.price)||0,
        oldPrice:Number(row.old_price)||0,
@@ -317,7 +322,7 @@ async function loadProducts(){
        tag:row.is_featured?"اختيار مميز":"",isFeatured:!!row.is_featured,createdAt:row.created_at||""
      };
    });
-   cart=cart.filter(item=>products.some(p=>String(p.id)===String(item.id))).map(item=>{const current=products.find(p=>String(p.id)===String(item.id));return {...item,name:current.name,price:current.price};});
+   cart=cart.filter(item=>products.some(p=>String(p.id)===String(item.id))).map(item=>{const current=products.find(p=>String(p.id)===String(item.id)),variant=current.variants?.find(v=>v.variant_key===item.variantKey);return {...item,name:current.name,price:Number(variant?.price??current.price),ram:variant?.ram??item.ram,storage:variant?.storage??item.storage};});
    localStorage.setItem("honor-cart",JSON.stringify(cart));
    renderCart();
    if(categoryError){
@@ -345,7 +350,7 @@ async function submitOrder(e){
  if(!cart.length){toast("السلة فارغة");return}
  for(const item of cart){
    const p=products.find(p=>String(p.id)===String(item.id));
-   const stock=Math.max(0,Number(p?.stock)||0);
+   const stock=Math.max(0,Number(item.variantKey?p?.variants?.find(v=>v.variant_key===item.variantKey)?.stock:p?.stock)||0);
    if(!p||stock<=0||item.qty>stock){
      toast(stock<=0?"نفذ من المخزون":"الكمية المطلوبة غير متوفرة حالياً");
      return;
@@ -365,7 +370,7 @@ async function submitOrder(e){
    governorate:form.get("governorate"),district:form.get("district"),
    address:form.get("address"),payment_method:form.get("payment_method"),
    notes:form.get("notes"),
-   items:cart.map(x=>({product_id:x.id,name:x.name,price:x.price,quantity:x.qty,color:x.color||null})),
+   items:cart.map(x=>({product_id:x.id,name:x.name,price:x.price,quantity:x.qty,color:x.color||null,variant_key:x.variantKey||null,ram:x.ram||null,storage:x.storage||null})),
    total:cart.reduce((a,x)=>a+x.price*x.qty,0),status:"new"
  };
  try{
@@ -376,7 +381,7 @@ async function submitOrder(e){
        p_province:form.get("governorate"),p_district:form.get("district"),
        p_address:form.get("address"),p_payment_method:form.get("payment_method"),
        p_notes:form.get("notes"),
-       p_items:cart.map(x=>({product_id:x.id,quantity:x.qty,color:x.color||null}))
+       p_items:cart.map(x=>({product_id:x.id,quantity:x.qty,color:x.color||null,variant_key:x.variantKey||null}))
      });
      if(error)throw error;
      $("form-message").textContent="تم استلام طلبك بنجاح. رقم طلبك: "+orderNumber;
