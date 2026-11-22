@@ -3478,3 +3478,7 @@ body.theme-dark #page-home .home-collection-section .home-product-image span{col
 .variant-option:disabled{opacity:.48;cursor:not-allowed;background:#f2f3f3}
 .variant-soldout{font-size:11px;color:#b42318}
 @media(max-width:420px){.product-variant-picker{padding:13px}.variant-options{gap:8px}.variant-option{padding:11px 9px}.variant-option-top b{font-size:13px}.variant-option>strong{font-size:13px}}
+
+/* Prevent selected checkmark from covering storage text */
+.variant-option-top span{padding-left:30px;min-width:0}
+.variant-option.active:after{left:10px;top:10px;width:18px;height:18px;font-size:11px;z-index:1}
