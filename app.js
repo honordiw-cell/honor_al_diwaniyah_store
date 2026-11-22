@@ -136,7 +136,7 @@ function showProductDetails(id){
  const productColors=(p.color||"").split(/[,،/|]+/).map(x=>x.trim()).filter(Boolean);
  let selectedProductColor=productColors.length===1?productColors[0]:"";
  const related=products.filter(x=>String(x.id)!==String(p.id)&&((p.brand&&x.brand===p.brand)||(p.categoryId&&String(x.categoryId)===String(p.categoryId)))).slice(0,4);
- const gallery=images.length?'<div class="landing-gallery"><div class="landing-main-image"><img id="landing-main-image" src="'+escapeHtml(images[0])+'" alt="'+escapeHtml(p.name)+'"></div>'+(images.length>1?'<div class="landing-thumbs">'+images.map((src,i)=>'<button type="button" class="landing-thumb '+(i===0?'active':'')+'" data-gallery-image="'+i+'" aria-label="الصورة '+(i+1)+'"><img src="'+escapeHtml(src)+'" alt=""></button>').join('')+'</div>':'')+'</div>':'<div class="landing-gallery"><div class="landing-main-image landing-no-image">صورة المنتج غير متوفرة حالياً</div></div>';
+ const gallery=images.length?'<div class="landing-gallery"><div class="landing-gallery-count">'+(images.length>1?'1 / '+images.length:'صورة المنتج')+'</div><div class="landing-main-image"><img id="landing-main-image" src="'+escapeHtml(images[0])+'" alt="'+escapeHtml(p.name)+'" fetchpriority="high" decoding="async"></div>'+(images.length>1?'<div class="landing-thumbs">'+images.map((src,i)=>'<button type="button" class="landing-thumb '+(i===0?'active':'')+'" data-gallery-image="'+i+'" aria-label="عرض الصورة '+(i+1)+'"><img src="'+escapeHtml(src)+'" alt="" loading="lazy"></button>').join('')+'</div>':'')+'</div>':'<div class="landing-gallery"><div class="landing-main-image landing-no-image">صورة المنتج غير متوفرة حالياً</div></div>';
  content.innerHTML=
  '<div class="product-landing">'+
   '<div class="landing-topline"><span class="eyebrow">HONOR AL-DIWANIYAH</span><span class="landing-stock '+(p.stock>0?'available':'unavailable')+'">'+(p.stock>0?'متوفر حالياً':'غير متوفر حالياً')+'</span></div>'+
@@ -144,7 +144,7 @@ function showProductDetails(id){
    '<div class="landing-buy-panel"><span class="landing-brand">'+escapeHtml(p.brand||p.category||"متجر هونر الديوانية")+'</span>'+
     '<h1>'+escapeHtml(p.name)+'</h1>'+
     '<div class="landing-memory">'+[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(' · ')+'</div>'+
-    '<div class="landing-price-line"><strong>'+money(p.price)+'</strong>'+(p.oldPrice>p.price?'<del>'+money(p.oldPrice)+'</del>':'')+'</div>'+
+    '<div class="landing-price-line"><strong>'+money(p.price)+'</strong>'+(p.oldPrice>p.price?'<del>'+money(p.oldPrice)+'</del>':'')+'</div><div class="landing-stock-detail">'+(p.stock>0?'<span class="stock-dot"></span> متوفر الآن · '+Number(p.stock)+' قطعة بالمخزون':'<span class="stock-dot unavailable-dot"></span> غير متوفر حالياً')+'</div>'+
     ((p.deviceType==="phone"||p.deviceType==="tablet")?'<div class="product-color-picker"><div class="product-color-heading"><b>اختار لون الجهاز</b><span>'+(productColors.length?'اللون المختار: <strong id="selected-product-color">'+escapeHtml(selectedProductColor||"لم يتم الاختيار")+'</strong>':'الألوان غير محددة حالياً')+'</span></div>'+(productColors.length?'<div class="product-color-options">'+productColors.map((color,i)=>'<button type="button" class="product-color-option '+(color===selectedProductColor?'active':'')+'" data-product-color="'+escapeHtml(color)+'"><span class="color-dot"></span>'+escapeHtml(color)+'</button>').join('')+'</div>':'<small class="product-color-hint">تواصل ويانه لتأكيد اللون المتوفر قبل إكمال الطلب.</small>')+'</div>':'')+
     (p.description?'<p class="landing-description">'+escapeHtml(p.description)+'</p>':'')+
     '<div class="landing-actions"><button type="button" class="landing-share-btn" id="detail-share">مشاركة المنتج</button><button type="button" class="primary-btn" id="detail-order-now" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(p.stock<=0?'disabled':'')+'>أضف للسلة</button><a class="landing-whatsapp-btn" href="https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent("أريد الاستفسار عن "+p.name+" بسعر "+money(p.price))+'" target="_blank" rel="noopener">استفسر عبر واتساب ↗</a></div>'+
@@ -162,12 +162,14 @@ function showProductDetails(id){
   '</section>'+
   (related.length?'<section class="landing-section"><div class="landing-section-title"><span>03 / YOU MAY ALSO LIKE</span><h2>منتجات مشابهة</h2></div><div class="landing-related">'+related.map(x=>'<button type="button" class="landing-related-card" data-related-product="'+escapeHtml(x.id)+'">'+(x.image?'<img src="'+escapeHtml(x.image)+'" alt="'+escapeHtml(x.name)+'">':'<span class="landing-related-placeholder">HONOR AL-DIWANIYAH</span>')+'<b>'+escapeHtml(x.name)+'</b><strong>'+money(x.price)+'</strong></button>').join('')+'</div></section>':'')+
   '<div class="landing-bottom-cta"><div><b>جاهز تطلب '+escapeHtml(p.name)+'؟</b><span>اختار اطلب الآن حتى نكمل طلبك.</span></div><button type="button" class="primary-btn" id="detail-order-bottom" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button></div>'+
+  '<div class="product-mobile-buybar"><div><small>السعر</small><b>'+money(p.price)+'</b></div><button type="button" id="detail-mobile-buy" '+(p.stock<=0?'disabled':'')+'>اطلب الآن</button></div>'+
  '</div>';
  loadProductReviews(p.id);bindReviewForm(p.id);
  const mainImage=$("landing-main-image");
  document.querySelectorAll("[data-gallery-image]").forEach(b=>b.addEventListener("click",()=>{
   const index=Number(b.dataset.galleryImage);
   if(mainImage&&images[index])mainImage.src=images[index];
+  const counter=document.querySelector(".landing-gallery-count");if(counter)counter.textContent=(index+1)+" / "+images.length;
   document.querySelectorAll(".landing-thumb").forEach(x=>x.classList.toggle("active",x===b));
  }));
  $("detail-share")?.addEventListener("click",async()=>{const url=location.origin+"/#product/"+encodeURIComponent(p.id);try{if(navigator.share)await navigator.share({title:p.name,text:"شوف "+p.name+" من HONOR AL-DIWANIYAH",url});else{await navigator.clipboard.writeText(url);toast("تم نسخ رابط المنتج")}}catch(err){if(err?.name!=="AbortError"){try{await navigator.clipboard.writeText(url);toast("تم نسخ رابط المنتج")}catch{toast("ما قدرنا نشارك الرابط")}}}});
@@ -178,7 +180,7 @@ function showProductDetails(id){
  }));
  const chosenColor=()=>productColors.length>1?selectedProductColor:(productColors[0]||"");
  const orderNow=()=>{if(p.stock<=0)return;if(productColors.length>1&&!chosenColor()){toast("اختار لون الجهاز أولاً");return}if(addToCart(p.id,chosenColor()))$("checkout-dialog").showModal()};
- ["detail-order-now","detail-order-bottom"].forEach(id=>$(id)?.addEventListener("click",orderNow));
+ ["detail-order-now","detail-order-bottom","detail-mobile-buy"].forEach(id=>$(id)?.addEventListener("click",orderNow));
  $("detail-add-cart")?.addEventListener("click",()=>{if(productColors.length>1&&!chosenColor()){toast("اختار لون الجهاز أولاً");return}addToCart(p.id,chosenColor())});
  document.querySelectorAll("[data-related-product]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.relatedProduct)));
  showStorePage("product-detail",{push:false});
