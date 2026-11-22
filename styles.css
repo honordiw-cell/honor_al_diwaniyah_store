@@ -3532,3 +3532,25 @@ body.theme-dark .installment-monthly strong{color:#62d5c8}
 body.theme-dark .installment-monthly small{color:#b1c4c5}
 body.theme-dark .installment-details span{background:#263e43;color:#c4ddda}
 @media(prefers-color-scheme:dark){body:not(.theme-light) .installment-offer{background:#1c2b34;border-color:#31514f;color:#edf7f6}body:not(.theme-light) .installment-bank-mark{background:#214b49;color:#83e4d8}body:not(.theme-light) .installment-offer-head small,body:not(.theme-light) .installment-disclaimer{color:#a9bcbe}body:not(.theme-light) .installment-tag{background:#214b38;color:#a4e7bd}body:not(.theme-light) .installment-monthly strong{color:#62d5c8}body:not(.theme-light) .installment-monthly small{color:#b1c4c5}body:not(.theme-light) .installment-details span{background:#263e43;color:#c4ddda}}
+
+/* QiCard / Rafidain installment identity and placement */
+.installment-offer{margin:20px 0 8px;padding:18px;border:1px solid #eadb9d;background:linear-gradient(135deg,#fff9df 0%,#fff 58%,#fff4c5 100%);color:#28252b;box-shadow:0 8px 24px rgba(112,82,16,.08)}
+.installment-offer-head{gap:12px}
+.qicard-logo{width:78px;height:58px;object-fit:contain;border-radius:9px;background:#fff;padding:3px}
+.installment-bank-mark{display:none}
+.installment-offer-head b{color:#29242d}
+.installment-offer-head small{color:#766b58}
+.installment-tag{background:#f7df78;color:#5e4810}
+.installment-monthly strong{color:#8c6a00}
+.installment-details span{background:#f5edcf;color:#5c4c27}
+.installment-whatsapp{background:#4d243e;color:#fff!important}
+.installment-whatsapp:hover{background:#37182d}
+.installment-disclaimer{color:#756b58}
+body.theme-dark .installment-offer{background:linear-gradient(135deg,#332e20,#26232b 65%,#342c20);border-color:#75612d;color:#fff8df}
+body.theme-dark .installment-offer-head b{color:#fff4cf}
+body.theme-dark .installment-offer-head small,body.theme-dark .installment-disclaimer{color:#d0c49e}
+body.theme-dark .installment-tag{background:#66521d;color:#ffe68b}
+body.theme-dark .installment-monthly strong{color:#ffdc62}
+body.theme-dark .installment-details span{background:#51452a;color:#f6e7b8}
+body.theme-dark .installment-whatsapp{background:#713c5d}
+@media(prefers-color-scheme:dark){body:not(.theme-light) .installment-offer{background:linear-gradient(135deg,#332e20,#26232b 65%,#342c20);border-color:#75612d;color:#fff8df}body:not(.theme-light) .installment-offer-head b{color:#fff4cf}body:not(.theme-light) .installment-offer-head small,body:not(.theme-light) .installment-disclaimer{color:#d0c49e}body:not(.theme-light) .installment-tag{background:#66521d;color:#ffe68b}body:not(.theme-light) .installment-monthly strong{color:#ffdc62}body:not(.theme-light) .installment-details span{background:#51452a;color:#f6e7b8}body:not(.theme-light) .installment-whatsapp{background:#713c5d}}
