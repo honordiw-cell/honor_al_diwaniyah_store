@@ -3482,3 +3482,28 @@ body.theme-dark #page-home .home-collection-section .home-product-image span{col
 /* Prevent selected checkmark from covering storage text */
 .variant-option-top span{padding-left:30px;min-width:0}
 .variant-option.active:after{left:10px;top:10px;width:18px;height:18px;font-size:11px;z-index:1}
+
+/* RAM / storage selector — match the site's dark theme */
+body.theme-dark .product-variant-picker{background:#202b38!important;border-color:#3b4a5e!important;color:#edf3fa!important}
+body.theme-dark .variant-picker-head b{color:#f1f5f9!important}
+body.theme-dark .variant-picker-head small{color:#aebbd0!important}
+body.theme-dark .variant-option{background:#182230!important;border-color:#40516a!important;color:#edf3fa!important}
+body.theme-dark .variant-option-top b{color:#f1f5f9!important}
+body.theme-dark .variant-option-top span{color:#b7c3d5!important}
+body.theme-dark .variant-option>strong{color:#f1f5f9!important}
+body.theme-dark .variant-option.active{background:#153b3c!important;border-color:#35c4ba!important;box-shadow:0 0 0 2px rgba(53,196,186,.16)!important}
+body.theme-dark .variant-option.active:after{background:#35c4ba!important;color:#102b2d!important}
+body.theme-dark .variant-option:disabled{background:#242d39!important;color:#8793a5!important;opacity:.62}
+body.theme-dark .variant-soldout{color:#ff9b96!important}
+@media(prefers-color-scheme:dark){
+ body:not(.theme-light) .product-variant-picker{background:#202b38;border-color:#3b4a5e;color:#edf3fa}
+ body:not(.theme-light) .variant-picker-head b{color:#f1f5f9}
+ body:not(.theme-light) .variant-picker-head small{color:#aebbd0}
+ body:not(.theme-light) .variant-option{background:#182230;border-color:#40516a;color:#edf3fa}
+ body:not(.theme-light) .variant-option-top b,body:not(.theme-light) .variant-option>strong{color:#f1f5f9}
+ body:not(.theme-light) .variant-option-top span{color:#b7c3d5}
+ body:not(.theme-light) .variant-option.active{background:#153b3c;border-color:#35c4ba;box-shadow:0 0 0 2px rgba(53,196,186,.16)}
+ body:not(.theme-light) .variant-option.active:after{background:#35c4ba;color:#102b2d}
+ body:not(.theme-light) .variant-option:disabled{background:#242d39;color:#8793a5;opacity:.62}
+ body:not(.theme-light) .variant-soldout{color:#ff9b96}
+}
