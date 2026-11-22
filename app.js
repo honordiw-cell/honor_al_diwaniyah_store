@@ -479,6 +479,7 @@ function showStorePage(page,{push=true}={}){
  if(push)history.pushState({storePage:page},"","#"+page);
  window.scrollTo({top:0,behavior:"instant"});
 }
+document.querySelectorAll("[data-home-compare]").forEach(link=>link.addEventListener("click",()=>toast("اختار جهازين من المنتجات واضغط قارن لإظهار الفروقات.")));
 document.querySelectorAll("[data-page]").forEach(link=>link.addEventListener("click",e=>{
  e.preventDefault();
  if(link.dataset.deviceType){
