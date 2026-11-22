@@ -3384,3 +3384,26 @@ body.theme-dark .home-favorites-section,body.theme-dark .home-deals-section{back
 body.theme-dark .theme-toggle{background:#263744!important;color:#f2f6fa!important;border-color:#405466!important}
 body.theme-dark .theme-toggle-label{color:#f2f6fa!important}
 @media(max-width:700px){body.theme-dark .landing-buy-panel{padding:16px!important}body.theme-dark .mobile-bottom-nav{box-shadow:0 -8px 28px rgba(0,0,0,.22)}}
+
+
+/* Product photography always sits on white, in both light and dark themes. */
+body.theme-dark .product-image,
+body.theme-dark .home-product-image,
+body.theme-dark .home-collection-track .home-product-image,
+body.theme-dark .landing-main-image,
+body.theme-dark .landing-thumb,
+body.theme-dark .landing-related-card img,
+body.theme-dark .landing-related-placeholder,
+body.theme-dark .product-gallery-image,
+body.theme-dark .product-card .product-image{
+ background:#fff!important;
+ background-image:none!important;
+ border-color:#e5e9e8!important;
+}
+body.theme-dark .product-image img,
+body.theme-dark .home-product-image img,
+body.theme-dark .landing-main-image img,
+body.theme-dark .landing-thumb img,
+body.theme-dark .landing-related-card img{background:#fff!important;}
+body.theme-dark .home-product-image span,
+body.theme-dark .landing-related-placeholder{color:#899895!important;}
