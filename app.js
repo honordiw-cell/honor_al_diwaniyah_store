@@ -79,10 +79,10 @@ function renderProducts(){
        <span class="product-brand">${escapeHtml(p.brand||p.category||"")}</span>
        <h3>${escapeHtml(p.name)}</h3>
        <div class="product-meta">${[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(" · ")||escapeHtml(p.description||p.category||"")}</div>
-       <div class="product-price-row"><b class="price">${money(p.price)}</b>${p.oldPrice>p.price?`<del class="old-price">${money(p.oldPrice)}</del>`:""}</div><small class="product-stock-note ${p.stock>0?"in-stock":"out-stock"}">${p.stock>0?"متوفر · الكمية: "+Number(p.stock):"نفذت الكمية حالياً"}</small>
+       <div class="product-price-row"><b class="price">${money(p.price)}</b>${p.oldPrice>p.price?`<del class="old-price">${money(p.oldPrice)}</del>`:""}</div><small class="product-stock-note ${p.stock>0?"in-stock":"out-stock"}">${p.stock>0?"متوفر":"نفذت الكمية حالياً"}</small>
      </div>
    </button>
-   <div class="product-bottom">${p.stock>0?`<button class="add-btn" data-add="${escapeHtml(p.id)}">أضف للسلة</button>`:`<a class="add-btn stock-inquiry" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد الاستفسار عن توفر "+p.name)}" target="_blank" rel="noopener">اسأل عن التوفر</a>`}<span class="details-hint">التفاصيل ←</span><button type="button" class="product-tool-btn" data-favorite="${escapeHtml(p.id)}" aria-label="إضافة للمفضلة">${favoriteIds.includes(String(p.id))?"♥":"♡"}</button><button type="button" class="product-tool-btn" data-compare="${escapeHtml(p.id)}" aria-label="مقارنة المنتج" title="مقارنة المنتج">⇄</button></div>
+   <div class="product-bottom">${p.stock>0?`<button class="add-btn" data-add="${escapeHtml(p.id)}">أضف للسلة</button>`:`<a class="add-btn stock-inquiry" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد الاستفسار عن توفر "+p.name)}" target="_blank" rel="noopener">اسأل عن التوفر</a>`}<button type="button" class="product-tool-btn favorite-tool ${favoriteIds.includes(String(p.id))?"is-favorite":""}" data-favorite="${escapeHtml(p.id)}" aria-label="${favoriteIds.includes(String(p.id))?"إزالة من المفضلة":"إضافة للمفضلة"}" title="${favoriteIds.includes(String(p.id))?"إزالة من المفضلة":"إضافة للمفضلة"}">${favoriteIds.includes(String(p.id))?"♥":"♡"}</button><button type="button" class="product-tool-btn compare-tool" data-compare="${escapeHtml(p.id)}" aria-label="إضافة للمقارنة" title="إضافة للمقارنة">⇄</button></div>
  </article>`).join("");
  const empty=$("empty-state");
  empty.classList.toggle("hidden",filtered.length>0);
