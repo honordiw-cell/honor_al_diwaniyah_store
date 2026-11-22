@@ -23,7 +23,8 @@ let selectedDeviceType = "الكل";
 let visibleProductCount = 8;
 const productsPerPage = 8;
 let selectedAvailability = "all";
-const WHATSAPP_NUMBER = "9647874400300";\n
+const WHATSAPP_NUMBER = "9647874400300";
+
 let storeBundles=[];
 async function loadStoreBundles(){
  if(!sb)return;
@@ -458,7 +459,8 @@ function bindFeatureForms(){
 \nfunction renderCompareDock(){const d=$("compare-dock");if(!d)return;d.classList.toggle("hidden",!compareIds.length);$("compare-count").textContent=compareIds.length;}
 function renderCompare(){const rows=compareIds.map(id=>products.find(p=>String(p.id)===String(id))).filter(Boolean);const fields=[["السعر",p=>money(p.price)],["الماركة",p=>p.brand||"—"],["الرام",p=>p.ram||"—"],["الذاكرة",p=>p.storage||"—"],["الشاشة",p=>p.screen||"—"],["المعالج",p=>p.chipset||"—"],["الكاميرات",p=>p.camera||"—"],["البطارية",p=>p.battery||"—"],["التوفر",p=>p.stock>0?"متوفر":"نفذت الكمية"]];$("compare-content").innerHTML=rows.length?'<div class="compare-table-wrap"><table class="compare-table" dir="rtl"><colgroup><col class="compare-label-col">'+rows.map(()=>'<col>').join("")+'</colgroup><thead><tr><th scope="col">المواصفة</th>'+rows.map(p=>'<th scope="col">'+escapeHtml(p.name)+'</th>').join("")+'</tr></thead><tbody>'+fields.map(f=>'<tr><th scope="row">'+f[0]+'</th>'+rows.map(p=>'<td>'+escapeHtml(f[1](p))+'</td>').join("")+'</tr>').join("")+'</tbody></table></div>':'<p>أضف أجهزة للمقارنة.</p>';}
 document.addEventListener("click",e=>{const f=e.target.closest("[data-favorite]"),c=e.target.closest("[data-compare]");if(f){e.preventDefault();e.stopPropagation();const id=String(f.dataset.favorite);favoriteIds=favoriteIds.includes(id)?favoriteIds.filter(x=>x!==id):favoriteIds.concat(id);localStorage.setItem("honor-favorites",JSON.stringify(favoriteIds));renderProducts();renderFavorites();toast(favoriteIds.includes(id)?"انضاف للمفضلة":"انحذف من المفضلة");}if(c){e.preventDefault();e.stopPropagation();const id=String(c.dataset.compare);if(compareIds.includes(id)){toast("هذا المنتج موجود بالمقارنة");return;}if(compareIds.length>=3){toast("تقدر تقارن 3 أجهزة كحد أقصى");return;}compareIds.push(id);localStorage.setItem("honor-compare",JSON.stringify(compareIds));renderCompareDock();toast("انضاف للمقارنة");}});
-bindFeatureForms();\n$("compare-open")?.addEventListener("click",()=>{renderCompare();$("compare-dialog").showModal();});
+bindFeatureForms();
+$("compare-open")?.addEventListener("click",()=>{renderCompare();$("compare-dialog").showModal();});
 $("compare-close")?.addEventListener("click",()=>$("compare-dialog").close());
 $("compare-clear")?.addEventListener("click",()=>{compareIds=[];localStorage.setItem("honor-compare","[]");renderCompareDock();});
 
