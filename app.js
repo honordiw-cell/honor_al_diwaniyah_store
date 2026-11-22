@@ -92,7 +92,7 @@ function renderProducts(){
    moreButton.classList.toggle("hidden",filtered.length<=visibleProductCount);
    moreButton.textContent=`عرض المزيد (${filtered.length-visibleProductCount})`;
  }
- document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>addToCart(b.dataset.add)));
+ document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>{const p=products.find(x=>String(x.id)===String(b.dataset.add));if(!p)return;const colors=(p.color||"").split(/[,،/|]+/).map(x=>x.trim()).filter(Boolean);if((p.deviceType==="phone"||p.deviceType==="tablet")&&colors.length>1){showProductDetails(p.id);toast("اختار لون الجهاز قبل إضافته للسلة");return}addToCart(p.id,colors[0]||"")}));
  document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
  renderHomeCollections();
  renderFavorites();
@@ -360,7 +360,7 @@ async function submitOrder(e){
    address:form.get("address"),
    payment_method:form.get("payment_method"),
    notes:form.get("notes"),
-   items:cart.map(x=>({product_id:x.id,name:x.name,price:x.price,quantity:x.qty})),
+   items:cart.map(x=>({product_id:x.id,name:x.name,price:x.price,quantity:x.qty,color:x.color||null})),
    total:cart.reduce((a,x)=>a+x.price*x.qty,0),
    status:"new"
  };
