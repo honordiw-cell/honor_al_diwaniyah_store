@@ -115,13 +115,25 @@
       <div><span class="store-kicker">THE COLLECTION</span><h1>كل المنتجات</h1><p>اكتشف الأجهزة المتوفرة وقارن الخيارات بسهولة.</p></div>
       <button type="button" class="page-back-link" data-page="departments">← رجوع للأقسام</button>
     </section>
-    <div class="category-filters product-page-filters">
-      <label class="category-filter"><span>نوع الجهاز</span><select id="device-type-filter" aria-label="اختار نوع الجهاز"><option value="الكل">كل الأجهزة</option><option value="phone">هواتف</option><option value="tablet">تابلت</option><option value="accessories">إكسسوارات</option></select></label>
-      <div class="category-filter brand-filter-block"><span>البراند</span><button type="button" id="brand-picker-open" class="brand-picker-trigger"><span id="brand-picker-current">كل البراندات</span><b>⌄</b></button><select id="brand-filter" aria-label="اختار البراند" class="brand-filter-native"><option value="الكل">كل البراندات</option></select></div>
-      <dialog id="brand-picker-dialog" class="brand-picker-dialog"><div class="brand-picker-head"><div><span class="store-kicker">SHOP BY BRAND</span><h2>اختار الشركة</h2></div><button type="button" id="brand-picker-close" class="close-btn" aria-label="إغلاق">×</button></div><div id="brand-block-grid" class="brand-block-grid"></div></dialog>
-      <label class="category-filter"><span>التوفر</span><select id="availability-filter" aria-label="حالة التوفر"><option value="all">كل المنتجات</option><option value="available">المتوفر فقط</option><option value="unavailable">غير المتوفر</option></select></label>
-      <label class="products-search-inline"><span>بحث سريع</span><input id="products-search-input" type="search" placeholder="ابحث عن جهاز أو منتج..."></label>
-    </div>
+    <section class="catalog-filter-panel product-page-filters" aria-label="تصفية المنتجات">
+      <div class="catalog-type-row">
+        <span class="catalog-filter-label">نوع الجهاز</span>
+        <div class="catalog-type-options" id="device-type-options">
+          <button type="button" class="catalog-type-option active" data-device-choice="الكل">كل الأجهزة</button>
+          <button type="button" class="catalog-type-option" data-device-choice="phone">هواتف</button>
+          <button type="button" class="catalog-type-option" data-device-choice="tablet">تابلت</button>
+          <button type="button" class="catalog-type-option" data-device-choice="accessories">إكسسوارات</button>
+        </div>
+      </div>
+      <div class="catalog-brand-area">
+        <div class="catalog-brand-heading"><span class="catalog-filter-label">الشركة / البراند</span><span id="brand-scope-label">كل الشركات</span></div>
+        <div id="brand-block-grid" class="brand-block-grid"></div>
+      </div>
+      <select id="device-type-filter" aria-label="نوع الجهاز" hidden><option value="الكل">كل الأجهزة</option><option value="phone">هواتف</option><option value="tablet">تابلت</option><option value="accessories">إكسسوارات</option></select>
+      <select id="brand-filter" aria-label="البراند" hidden><option value="الكل">كل البراندات</option></select>
+      <label class="category-filter catalog-availability"><span>التوفر</span><select id="availability-filter" aria-label="حالة التوفر"><option value="all">كل المنتجات</option><option value="available">المتوفر فقط</option><option value="unavailable">غير المتوفر</option></select></label>
+      <label class="products-search-inline catalog-search"><span>بحث سريع</span><input id="products-search-input" type="search" placeholder="ابحث عن جهاز أو منتج..."></label>
+    </section>
     <section class="store-section store-products-section products-section" id="products">
       <div class="store-section-heading store-products-heading">
         <div><span class="store-kicker">THE COLLECTION</span><h2>تسوّق أحدث الأجهزة</h2><p>تصفّح الخيارات وقارن المواصفات والأسعار بسهولة.</p></div>
