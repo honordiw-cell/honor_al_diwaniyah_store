@@ -3258,3 +3258,14 @@ body.theme-dark .product-color-option{background:#27343d;border-color:#405153;co
 }
 @media(min-width:701px){#page-product-detail .landing-overview{grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr)}#page-product-detail .landing-buy-panel{position:sticky;top:105px}}
 @media(prefers-reduced-motion:reduce){#page-product-detail .landing-main-image img,#page-product-detail .landing-thumb,#page-product-detail .landing-spec{transition:none}}
+
+/* Mobile checkout: keep the full form reachable above the keyboard and safe areas. */
+@media(max-width:700px){
+ .checkout-dialog{width:calc(100% - 20px);max-width:560px;max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;padding:16px;margin:auto;border-radius:18px}
+ .checkout-dialog .drawer-head{position:sticky;top:-16px;z-index:2;background:#fff;padding:4px 0 12px}
+ .checkout-dialog .form-grid{grid-template-columns:1fr;gap:11px;margin:15px 0}
+ .checkout-dialog .form-grid .wide{grid-column:auto}
+ .checkout-dialog .form-grid input,.checkout-dialog .form-grid select,.checkout-dialog .form-grid textarea{font-size:16px;min-height:44px}
+ .checkout-dialog .checkout-summary{gap:8px;flex-wrap:wrap}
+ .cart-drawer{width:min(420px,100%);padding:20px 16px calc(18px + env(safe-area-inset-bottom))}
+}
