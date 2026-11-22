@@ -244,6 +244,9 @@ function renderCategories(categories){
  brandSelect.innerHTML='<option value="الكل">كل البراندات</option>'+brands.map(b=>'<option value="'+escapeHtml(b)+'">'+escapeHtml(b)+'</option>').join("");
  selectedBrand=brands.includes(previous)?previous:"الكل";
  brandSelect.value=selectedBrand;
+ const grid=$("brand-block-grid"),current=$("brand-picker-current");
+ if(current)current.textContent=selectedBrand==="الكل"?"كل البراندات":selectedBrand;
+ if(grid)grid.innerHTML='<button type="button" class="brand-block '+(selectedBrand==="الكل"?"active":"")+'" data-brand-choice="الكل"><span class="brand-block-mark">ALL</span><b>كل البراندات</b></button>'+brands.map(b=>'<button type="button" class="brand-block '+(selectedBrand===b?"active":"")+'" data-brand-choice="'+escapeHtml(b)+'"><span class="brand-block-mark">'+escapeHtml(b.slice(0,2).toUpperCase())+'</span><b>'+escapeHtml(b)+'</b></button>').join("");
 }
 async function loadProducts(){
  if(!hasBackend){
@@ -409,7 +412,10 @@ if($("products-search-input"))$("products-search-input").addEventListener("input
 if($("availability-filter"))$("availability-filter").addEventListener("change",e=>{selectedAvailability=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 $("search-input").addEventListener("keydown",e=>{if(e.key==="Enter"){visibleProductCount=productsPerPage;renderProducts();showStorePage("products")}});
 
-$("brand-filter").addEventListener("change",e=>{selectedBrand=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
+$("brand-filter").addEventListener("change",e=>{selectedBrand=e.target.value;visibleProductCount=productsPerPage;renderProducts();renderCategories(storeCategories)});
+$("brand-picker-open")?.addEventListener("click",()=>$("brand-picker-dialog")?.showModal());
+$("brand-picker-close")?.addEventListener("click",()=>$("brand-picker-dialog")?.close());
+$("brand-block-grid")?.addEventListener("click",e=>{const choice=e.target.closest("[data-brand-choice]");if(!choice)return;selectedBrand=choice.dataset.brandChoice;$("brand-filter").value=selectedBrand;visibleProductCount=productsPerPage;renderProducts();renderCategories(storeCategories);$("brand-picker-dialog").close()});
 $("device-type-filter").addEventListener("change",e=>{selectedDeviceType=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 if($("load-more-products")) $("load-more-products").addEventListener("click",()=>{visibleProductCount+=productsPerPage;renderProducts()});
 $("search-toggle").onclick=()=>{showStorePage("products");setTimeout(()=>$("products-search-input")?.focus(),80)};
