@@ -312,6 +312,7 @@ async function loadProducts(){
    }
    renderProducts();
    await loadHomeBanner();
+   await loadStoreBundles();
  }catch(error){
    console.error("Supabase products load failed:",error);
    products=[];
