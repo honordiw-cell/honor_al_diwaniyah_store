@@ -141,7 +141,7 @@ function showProductDetails(id){
  const variantStock=v=>Math.max(0,Number(v?.stock)||0);
  const variantState=()=>stockState(p,variantStock(selectedVariant));
  const specs=[
-  ["الرام",p.ram],["الذاكرة الداخلية",p.storage],["المعالج",p.chipset],
+  ["الرام",selectedVariant.ram],["الذاكرة الداخلية",selectedVariant.storage],["المعالج",p.chipset],
   ["الشاشة",p.screen],["الكاميرات",p.camera],["البطارية والشحن",p.battery],
   ["مقاومة الماء والغبار",p.protection]
  ].filter(x=>x[1]);
@@ -164,7 +164,7 @@ function showProductDetails(id){
    '</div>'+
   '</div>'+
   '<section class="landing-section"><div class="landing-section-title"><span>01 / SPECIFICATIONS</span><h2>المواصفات التقنية</h2><p>المعلومات المعروضة هي المواصفات المسجلة لهذا المنتج في المتجر.</p></div>'+
-   (specs.length?'<div class="landing-spec-grid">'+specs.map((s,i)=>'<article class="landing-spec"><small>'+String(i+1).padStart(2,'0')+'</small><span>'+escapeHtml(s[0])+'</span><b>'+escapeHtml(s[1])+'</b></article>').join('')+'</div>':'<p class="landing-empty-specs">المواصفات التفصيلية غير مضافة لهذا المنتج حالياً.</p>')+
+   (specs.length?'<div class="landing-spec-grid">'+specs.map((s,i)=>'<article class="landing-spec"><small>'+String(i+1).padStart(2,'0')+'</small><span>'+escapeHtml(s[0])+'</span><b data-spec-value="'+escapeHtml(s[0])+'">'+escapeHtml(s[1])+'</b></article>').join('')+'</div>':'<p class="landing-empty-specs">المواصفات التفصيلية غير مضافة لهذا المنتج حالياً.</p>')+
   '</section>'+
   '<section class="landing-section product-reviews-section" id="product-reviews-section" hidden><div class="landing-section-title"><span>04 / CUSTOMER REVIEWS</span><h2>تقييمات الزبائن</h2></div><div id="product-reviews-list"></div></section>'+
 
@@ -187,7 +187,7 @@ function showProductDetails(id){
  }));
  const chosenColor=()=>productColors.length>1?selectedProductColor:(productColors[0]||"");
  const chosenVariantKey=()=>selectedVariant?.variant_key||"";
- const refreshVariant=()=>{const v=productVariants.find(x=>x.variant_key===chosenVariantKey())||selectedVariant;selectedVariant=v;const price=$("detail-price"),old=$("detail-old-price"),mobile=$("detail-mobile-price"),mem=$("detail-memory"),state=variantState(),badge=$("detail-stock-state"),stockText=$("detail-stock-text");if(price)price.textContent=money(v.price);if(mobile)mobile.textContent=money(v.price);if(old){old.textContent=money(v.old_price);old.hidden=!(Number(v.old_price)>Number(v.price))}if(mem)mem.textContent=[v.ram,v.storage].filter(Boolean).join(" · ");if(badge){badge.textContent=stockLabel(state);badge.className="landing-stock "+stockClass(state)}if(stockText)stockText.textContent=stockLabel(state);["detail-order-now","detail-add-cart","detail-mobile-buy"].forEach(id=>{const b=$(id);if(b)b.disabled=variantStock(v)<=0})};
+ const refreshVariant=()=>{const v=productVariants.find(x=>x.variant_key===chosenVariantKey())||selectedVariant;selectedVariant=v;const price=$("detail-price"),old=$("detail-old-price"),mobile=$("detail-mobile-price"),mem=$("detail-memory"),state=variantState(),badge=$("detail-stock-state"),stockText=$("detail-stock-text");if(price)price.textContent=money(v.price);if(mobile)mobile.textContent=money(v.price);if(old){old.textContent=money(v.old_price);old.hidden=!(Number(v.old_price)>Number(v.price))}if(mem)mem.textContent=[v.ram,v.storage].filter(Boolean).join(" · ");document.querySelectorAll("[data-spec-value]").forEach(el=>{const label=el.dataset.specValue;if(label==="الرام")el.textContent=v.ram||"غير محدد";if(label==="الذاكرة الداخلية")el.textContent=v.storage||"غير محددة"});if(badge){badge.textContent=stockLabel(state);badge.className="landing-stock "+stockClass(state)}if(stockText)stockText.textContent=stockLabel(state);["detail-order-now","detail-add-cart","detail-mobile-buy"].forEach(id=>{const b=$(id);if(b)b.disabled=variantStock(v)<=0})};
  $("detail-variant-select")?.addEventListener("change",e=>{selectedVariant=productVariants.find(v=>v.variant_key===e.target.value)||selectedVariant;refreshVariant()});
  const orderNow=()=>{if(variantStock(selectedVariant)<=0)return;if(productColors.length>1&&!chosenColor()){toast("اختار لون الجهاز أولاً");return}if(addToCart(p.id,chosenColor(),chosenVariantKey()))$("checkout-dialog").showModal()};
  ["detail-order-now","detail-mobile-buy"].forEach(id=>$(id)?.addEventListener("click",orderNow));
