@@ -230,7 +230,7 @@ function changeQty(index,d){
    const stock=Math.max(0,Number(x.variantKey?p?.variants?.find(v=>v.variant_key===x.variantKey)?.stock:p?.stock)||0);
    const sameProductQty=cart.filter(item=>String(item.id)===String(x.id)&&String(item.variantKey||"")===String(x.variantKey||"")).reduce((n,item)=>n+item.qty,0);
    if(stock<=0){toast("نفذ من المخزون");return}
-   if(sameProductQty>=stock){toast("الكمية المتوفرة بالمخزون: "+stock);return}
+   if(sameProductQty>=stock){toast("الكمية المطلوبة غير متوفرة حالياً");return}
  }
  x.qty+=d;cart=cart.filter(x=>x.qty>0);persistCart();
 }
