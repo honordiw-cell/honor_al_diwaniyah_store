@@ -136,6 +136,10 @@ function showProductDetails(id){
  const content=$("product-details-content");
  if(!content)return;
  const images=[...new Set([p.image,...(Array.isArray(p.images)?p.images:[])].filter(Boolean))];
+ const productVariants=(p.variants||[]).length?p.variants:[{variant_key:(p.ram||"")+"|"+(p.storage||""),ram:p.ram||"",storage:p.storage||"",price:p.price,old_price:p.oldPrice,stock:p.stock}];
+ let selectedVariant=productVariants.slice().sort((a,b)=>Number(a.price)-Number(b.price))[0];
+ const variantStock=v=>Math.max(0,Number(v?.stock)||0);
+ const variantState=()=>stockState(p,variantStock(selectedVariant));
  const specs=[
   ["الرام",p.ram],["الذاكرة الداخلية",p.storage],["المعالج",p.chipset],
   ["الشاشة",p.screen],["الكاميرات",p.camera],["البطارية والشحن",p.battery],
@@ -147,12 +151,12 @@ function showProductDetails(id){
  const gallery=images.length?'<div class="landing-gallery"><div class="landing-gallery-count">'+(images.length>1?'1 / '+images.length:'صورة المنتج')+'</div><div class="landing-main-image"><img id="landing-main-image" src="'+escapeHtml(images[0])+'" alt="'+escapeHtml(p.name)+'" fetchpriority="high" decoding="async"></div>'+(images.length>1?'<div class="landing-thumbs">'+images.map((src,i)=>'<button type="button" class="landing-thumb '+(i===0?'active':'')+'" data-gallery-image="'+i+'" aria-label="عرض الصورة '+(i+1)+'"><img src="'+escapeHtml(src)+'" alt="" loading="lazy"></button>').join('')+'</div>':'')+'</div>':'<div class="landing-gallery"><div class="landing-main-image landing-no-image">صورة المنتج غير متوفرة حالياً</div></div>';
  content.innerHTML=
  '<div class="product-landing">'+
-  '<div class="landing-topline"><span class="eyebrow">HONOR AL-DIWANIYAH</span><span class="landing-stock '+(p.stock>0?'available':'unavailable')+'">'+(p.stock>0?'متوفر حالياً':'غير متوفر حالياً')+'</span></div>'+
+  '<div class="landing-topline"><span class="eyebrow">HONOR AL-DIWANIYAH</span><span id="detail-stock-state" class="landing-stock '+stockClass(variantState())+'">'+stockLabel(variantState())+'</span></div>'+
   '<div class="landing-overview">'+gallery+
    '<div class="landing-buy-panel"><span class="landing-brand">'+escapeHtml(p.brand||p.category||"متجر هونر الديوانية")+'</span>'+
     '<h1>'+escapeHtml(p.name)+'</h1>'+
-    '<div class="landing-memory">'+[p.ram,p.storage].filter(Boolean).map(escapeHtml).join(' · ')+'</div>'+
-    '<div class="landing-price-line"><strong>'+money(p.price)+'</strong>'+(p.oldPrice>p.price?'<del>'+money(p.oldPrice)+'</del>':'')+'</div><div class="landing-stock-detail">'+(p.stock>0?'<span class="stock-dot"></span> متوفر الآن · '+Number(p.stock)+' قطعة بالمخزون':'<span class="stock-dot unavailable-dot"></span> غير متوفر حالياً')+'</div>'+
+    '<div class="landing-memory" id="detail-memory">'+[selectedVariant.ram,selectedVariant.storage].filter(Boolean).map(escapeHtml).join(' · ')+'</div>'+
+    '<div class="landing-price-line"><strong id="detail-price">'+money(selectedVariant.price)+'</strong><del id="detail-old-price" '+(Number(selectedVariant.old_price)>Number(selectedVariant.price)?'':'hidden')+'>'+money(selectedVariant.old_price)+'</del></div><div class="landing-stock-detail" id="detail-stock-text">'+stockLabel(variantState())+'</div>'+(productVariants.length>1?'<div class="product-variant-picker"><label for="detail-variant-select">اختار الرام والذاكرة</label><select id="detail-variant-select">'+productVariants.map(v=>'<option value="'+escapeHtml(v.variant_key)+'" '+(v.variant_key===selectedVariant.variant_key?'selected':'')+'>'+escapeHtml([v.ram,v.storage].filter(Boolean).join(" / "))+' — '+money(v.price)+'</option>').join('')+'</select></div>':'')+
     ((p.deviceType==="phone"||p.deviceType==="tablet")?'<div class="product-color-picker"><div class="product-color-heading"><b>اختار لون الجهاز</b><span>'+(productColors.length?'اللون المختار: <strong id="selected-product-color">'+escapeHtml(selectedProductColor||"لم يتم الاختيار")+'</strong>':'الألوان غير محددة حالياً')+'</span></div>'+(productColors.length?'<div class="product-color-options">'+productColors.map((color,i)=>'<button type="button" class="product-color-option '+(color===selectedProductColor?'active':'')+'" data-product-color="'+escapeHtml(color)+'"><span class="color-dot"></span>'+escapeHtml(color)+'</button>').join('')+'</div>':'<small class="product-color-hint">تواصل ويانه لتأكيد اللون المتوفر قبل إكمال الطلب.</small>')+'</div>':'')+
     (p.description?'<p class="landing-description">'+escapeHtml(p.description)+'</p>':'')+
     '<div class="landing-actions"><button type="button" class="primary-btn" id="detail-order-now" '+(variantStock(selectedVariant)<=0?'disabled':'')+'>اطلب الآن</button><button type="button" class="landing-cart-btn" id="detail-add-cart" '+(variantStock(selectedVariant)<=0?'disabled':'')+'>أضف للسلة</button><a class="landing-whatsapp-btn" href="https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent("أريد الاستفسار عن "+p.name+" بسعر "+money(p.price))+'" target="_blank" rel="noopener">استفسر عبر واتساب ↗</a></div>'+
