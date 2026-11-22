@@ -3423,3 +3423,30 @@ body.theme-dark .store-products-section .product-placeholder{
 body.theme-dark .store-products-section .product-image img{
  background:#fff!important;
 }
+
+
+/* Dark-mode styling for homepage horizontal collections (featured, offers, accessories). */
+body.theme-dark #page-home .home-collection-section{
+ background:#171f2b!important;
+ color:#e8edf5!important;
+ border-color:#303d51!important;
+ box-shadow:0 8px 28px rgba(0,0,0,.18)!important;
+}
+body.theme-dark #page-home .home-collection-section .home-section-heading h2,
+body.theme-dark #page-home .home-collection-section .home-section-heading b{color:#f1f5f9!important;}
+body.theme-dark #page-home .home-collection-section .home-section-heading p{color:#aebbd0!important;}
+body.theme-dark #page-home .home-collection-section .store-kicker{color:#72d8d0!important;}
+body.theme-dark #page-home .home-collection-section .home-collection-more{background:#e8f7f5!important;color:#087c77!important;border-color:#b9e5e1!important;}
+body.theme-dark #page-home .home-collection-section .home-product-card{
+ background:#222d3d!important;color:#e8edf5!important;border-color:#35445a!important;
+ box-shadow:0 6px 18px rgba(0,0,0,.16)!important;
+}
+body.theme-dark #page-home .home-collection-section .home-product-open,
+body.theme-dark #page-home .home-collection-section .home-product-open b{color:#f1f5f9!important;}
+body.theme-dark #page-home .home-collection-section .home-product-open small{color:#aebbd0!important;}
+body.theme-dark #page-home .home-collection-section .home-product-open strong{color:#72d8d0!important;}
+body.theme-dark #page-home .home-collection-section .home-product-image,
+body.theme-dark #page-home .home-collection-section .home-product-image img{
+ background:#fff!important;background-image:none!important;
+}
+body.theme-dark #page-home .home-collection-section .home-product-image span{color:#899895!important;}
