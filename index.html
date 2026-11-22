@@ -222,7 +222,7 @@
         <label class="wide">طريقة الدفع<select name="payment_method" required><option value="cod">الدفع عند الاستلام</option><option value="online" disabled>الدفع الإلكتروني — قريباً</option></select><small class="field-note">الدفع الإلكتروني يتفعّل بعد ربط بوابة دفع معتمدة.</small></label>
         <label class="wide">ملاحظات إضافية<textarea name="notes" rows="2" placeholder="اختياري"></textarea></label>
       </div>
-      <div class="checkout-summary"><span>المجموع التقديري</span><b id="checkout-total">0 د.ع</b></div>
+      <div class="checkout-summary checkout-cost-summary"><div><span>قيمة المنتجات</span><b id="checkout-subtotal">0 د.ع</b></div><div><span>أجور التوصيل</span><b id="checkout-delivery-fee">0 د.ع</b></div><small id="checkout-delivery-note">اختار المحافظة حتى نحسب أجور التوصيل</small><div class="checkout-grand-total"><span>المجموع النهائي</span><b id="checkout-total">0 د.ع</b></div></div>
       <button class="primary-btn full" type="submit">تأكيد الطلب</button>
       <p class="form-message" id="form-message"></p>
     </form>
