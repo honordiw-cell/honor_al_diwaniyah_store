@@ -64,7 +64,7 @@ function renderServiceRequests(){
  $("repair-requests-list").innerHTML=table(repairRequests,"repair");$("tradein-requests-list").innerHTML=table(tradeInRequests,"tradein");
 }
 
-function renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements();renderOrderAudit()}
+function renderAll(){renderCategoryOptions();renderProducts();renderStats();renderOrders();renderCategories();renderStockMovements();renderOrderAudit()}
 function renderStats(){
  const active=products.filter(p=>p.is_active).length,pending=Number(dashboardMetrics.pending_orders??orders.filter(o=>["new","confirmed","processing"].includes(o.status)).length),sales=Number(dashboardMetrics.delivered_sales??0);
  $("stat-products").textContent=active;$("stat-orders").textContent=Number(dashboardMetrics.total_orders??orders.length);$("stat-pending").textContent=pending;$("stat-sales").textContent=money(sales);
@@ -110,9 +110,11 @@ async function saveQuickProduct(id,button){
  finally{button.disabled=false;button.textContent="حفظ الصور والألوان"}
 }
 function renderProducts(){
- const q=$("product-search").value.trim().toLowerCase(),cat=$("product-category-filter").value,state=$("product-state-filter").value;
+ const host=$("products-table");if(!host)return;
+ const search=$("product-search"),categoryFilter=$("product-category-filter"),stateFilter=$("product-state-filter");
+ const q=(search?.value||"").trim().toLowerCase(),cat=categoryFilter?.value||"",state=stateFilter?.value||"";
  const rows=products.filter(p=>(!cat||String(p.category_id)===cat)&&(state===""||String(p.is_active)===state)&&(!q||[p.name,p.brand,p.sku].join(" ").toLowerCase().includes(q)));
- $("products-table").innerHTML=rows.length?'<table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الظهور</th><th>إجراءات</th></tr></thead><tbody>'+rows.map(p=>{
+ host.innerHTML=rows.length?'<table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الظهور</th><th>إجراءات</th></tr></thead><tbody>'+rows.map(p=>{
  const catName=categories.find(c=>c.id===p.category_id)?.name||"غير مصنف",img=p.image_url||p.images?.[0];
  return '<tr><td><div class="product-cell">'+(img?'<img src="'+esc(img)+'" alt="">':'<span class="product-thumb"></span>')+'<div><b>'+esc(p.name)+'</b><small>'+esc(p.brand||catName)+'</small></div></div></td><td>'+esc(catName)+'</td><td>'+money(p.price)+(p.old_price>p.price?'<small class="muted"> <del>'+money(p.old_price)+'</del></small>':'')+'</td><td>'+Number(p.stock||0)+'</td><td><span class="badge '+(p.is_active?"good":"off")+'">'+(p.is_active?"منشور":"مخفي")+'</span></td><td><button class="action-btn" data-quick-images="'+p.id+'">الصور</button><button class="action-btn" data-quick-colors="'+p.id+'">الألوان</button><button class="action-btn" data-edit="'+p.id+'">تعديل</button><button class="action-btn '+(p.is_active?"danger":"")+'" data-toggle="'+p.id+'">'+(p.is_active?"إخفاء":"نشر")+'</button></td></tr><tr class="quick-product-row" id="quick-product-'+p.id+'" hidden><td colspan="6"><div class="quick-product-editor"><div class="quick-image-editor"><b>صور المنتج</b><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple data-quick-file="'+p.id+'"><div class="quick-image-current">'+([...new Set([p.image_url,...(p.images||[])].filter(Boolean))]).map((u,i)=>'<div class="quick-primary-choice"><img src="'+esc(u)+'" alt=""><button type="button" class="action-btn '+(u===(p.image_url||p.images?.[0])?'primary-image':'')+'" data-quick-primary="'+p.id+'" data-image-index="'+i+'">'+(u===(p.image_url||p.images?.[0])?'الصورة الأولى':'اجعلها الأولى')+'</button></div>').join("")+'</div><small>حدد الصورة التي تريد عرضها أولاً، ويمكنك إضافة صور جديدة أيضاً.</small></div><div class="quick-color-editor"><b>ألوان الجهاز</b><input type="text" value="'+esc(p.color||"")+'" placeholder="أسود، أزرق، فضي" data-quick-color="'+p.id+'"><small>افصل بين الألوان بفاصلة.</small></div><button type="button" class="btn primary" data-quick-save="'+p.id+'">حفظ الصور والألوان</button><button type="button" class="btn secondary" data-quick-cancel="'+p.id+'">إغلاق</button></div></td></tr>';
  }).join("")+'</tbody></table>':'<div class="empty-row">ماكو منتجات تطابق البحث.</div>';
