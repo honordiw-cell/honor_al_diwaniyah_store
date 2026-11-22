@@ -28,3 +28,7 @@
 #view-products #products-table>table tr{display:table-row}
 #view-products #products-table>table th,#view-products #products-table>table td{display:table-cell;vertical-align:middle}
 #view-products .empty-row{display:block;padding:28px 14px;text-align:center;color:#788587;background:#fff}
+
+/* Respect the native hidden state for inline product editors */
+#view-products #products-table tr[hidden],
+#view-products #products-table [hidden]{display:none!important}
