@@ -364,6 +364,7 @@ async function submitOrder(e){
  persistCart();
  await loadProducts();
  e.currentTarget.reset();
+ updateCheckoutTotals();
  setTimeout(()=>$("checkout-dialog").close(),3000);
 }
 
