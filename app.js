@@ -73,7 +73,7 @@ function renderProducts(){
  $("product-grid").innerHTML=visibleProducts.map(p=>`<article class="product-card">
    ${p.tag?`<span class="product-tag">${escapeHtml(p.tag)}</span>`:""}
    <button type="button" class="product-view" data-details="${escapeHtml(p.id)}" aria-label="تفاصيل ${escapeHtml(p.name)}">
-     <div class="product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}">`:`<div class="product-placeholder"><span>${escapeHtml(p.brand||"TECH")}</span><b>${escapeHtml(p.name)}</b><small>HONOR AL-DIWANIYAH</small></div>`}</div>
+     <div class="product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">`:`<div class="product-placeholder"><span>${escapeHtml(p.brand||"TECH")}</span><b>${escapeHtml(p.name)}</b><small>HONOR AL-DIWANIYAH</small></div>`}</div>
      <div class="product-card-copy">
        <span class="product-brand">${escapeHtml(p.brand||p.category||"")}</span>
        <h3>${escapeHtml(p.name)}</h3>
