@@ -56,13 +56,15 @@ function renderBundlesAdmin(){
  const box=$("admin-bundles-list");
  if(box)box.innerHTML=bundlesAdmin.length?'<table><thead><tr><th>الباقة</th><th>السعر</th><th>عدد المنتجات</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>'+bundlesAdmin.map(b=>'<tr><td>'+esc(b.title)+'</td><td>'+money(b.bundle_price)+'</td><td>'+(b.store_bundle_items||[]).length+'</td><td>'+(b.is_active?'منشورة':'مخفية')+'</td><td><button class="action-btn" data-bundle-toggle-admin="'+b.id+'">'+(b.is_active?'إخفاء':'نشر')+'</button></td></tr>').join('')+'</tbody></table>':'<div class="empty-row">ماكو باقات محفوظة حالياً.</div>';
 }
-\nfunction renderServiceRequests(){
+
+function renderServiceRequests(){
  const labels={new:"جديد",contacted:"تم التواصل",received:"تم الاستلام",diagnosing:"قيد الفحص",waiting_parts:"بانتظار قطع",repairing:"قيد الصيانة",ready:"جاهز",delivered:"تم التسليم",cancelled:"ملغي",inspection:"قيد الفحص",offer_sent:"تم إرسال العرض",accepted:"مقبول",rejected:"مرفوض",completed:"مكتمل"};
  const repairStates=["new","contacted","received","diagnosing","waiting_parts","repairing","ready","delivered","cancelled"],tradeStates=["new","contacted","inspection","offer_sent","accepted","rejected","completed"];
  const table=(rows,kind)=>{if(!rows.length)return '<div class="empty-row">لا توجد طلبات حالياً.</div>';const states=kind==="repair"?repairStates:tradeStates;return '<table><thead><tr><th>رقم</th><th>الزبون</th><th>الهاتف</th><th>الجهاز</th><th>التفاصيل</th><th>التاريخ</th><th>الحالة</th></tr></thead><tbody>'+rows.map(x=>'<tr><td>#'+x.request_number+'</td><td>'+esc(x.customer_name)+'</td><td dir="ltr">'+esc(x.phone)+'</td><td>'+esc(x.device_brand+' '+x.device_model)+'</td><td>'+esc(kind==="repair"?x.issue:(x.condition+' · '+(x.storage||'')+' · '+(x.notes||'')))+'</td><td>'+new Date(x.created_at).toLocaleDateString("ar-IQ")+'</td><td><select data-request-status data-kind="'+kind+'" data-id="'+x.id+'">'+states.map(s=>'<option value="'+s+'" '+(s===x.status?'selected':'')+'>'+labels[s]+'</option>').join('')+'</select></td></tr>').join('')+'</tbody></table>'};
  $("repair-requests-list").innerHTML=table(repairRequests,"repair");$("tradein-requests-list").innerHTML=table(tradeInRequests,"tradein");
 }
-\nfunction renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements();renderOrderAudit()}
+
+function renderAll(){renderStats();renderProducts();renderOrders();renderCategories();renderCategoryOptions();renderStockMovements();renderOrderAudit()}
 function renderStats(){
  const active=products.filter(p=>p.is_active).length,pending=Number(dashboardMetrics.pending_orders??orders.filter(o=>["new","confirmed","processing"].includes(o.status)).length),sales=Number(dashboardMetrics.delivered_sales??0);
  $("stat-products").textContent=active;$("stat-orders").textContent=Number(dashboardMetrics.total_orders??orders.length);$("stat-pending").textContent=pending;$("stat-sales").textContent=money(sales);
