@@ -96,7 +96,7 @@ function renderProducts(){
    moreButton.classList.toggle("hidden",filtered.length<=visibleProductCount);
    moreButton.textContent=`عرض المزيد (${filtered.length-visibleProductCount})`;
  }
- document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>{const p=products.find(x=>String(x.id)===String(b.dataset.add));if(!p)return;const colors=(p.color||"").split(/[,،/|]+/).map(x=>x.trim()).filter(Boolean);if((p.deviceType==="phone"||p.deviceType==="tablet")&&colors.length>1){showProductDetails(p.id);toast("اختار لون الجهاز قبل إضافته للسلة");return}addToCart(p.id,colors[0]||"")}));
+ document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>{const p=products.find(x=>String(x.id)===String(b.dataset.add));if(!p)return;if((p.variants||[]).length>1){showProductDetails(p.id);toast("اختار نسخة الرام والذاكرة أولاً");return}const colors=(p.color||"").split(/[,،/|]+/).map(x=>x.trim()).filter(Boolean);if((p.deviceType==="phone"||p.deviceType==="tablet")&&colors.length>1){showProductDetails(p.id);toast("اختار لون الجهاز قبل إضافته للسلة");return}addToCart(p.id,colors[0]||"",p.variants?.[0]?.variant_key||"")}));
  document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
  renderHomeCollections();
  renderFavorites();
