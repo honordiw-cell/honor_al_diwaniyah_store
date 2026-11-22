@@ -416,6 +416,15 @@ $("order-tracking-form")?.addEventListener("submit",async e=>{
 });
 
 $("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
+
+function renderFavorites(){const section=$("home-favorites-section"),grid=$("home-favorites-grid");if(!section||!grid)return;const rows=favoriteIds.map(id=>products.find(p=>String(p.id)===String(id))).filter(Boolean);section.classList.toggle("hidden",!rows.length);grid.innerHTML=rows.map(p=>'<article class="home-product-card"><button type="button" class="home-product-open" data-home-details="'+escapeHtml(p.id)+'"><div class="home-product-image">'+(p.image?'<img src="'+escapeHtml(p.image)+'" alt="'+escapeHtml(p.name)+'">':'<span>HONOR AL-DIWANIYAH</span>')+'</div><b>'+escapeHtml(p.name)+'</b><strong>'+money(p.price)+'</strong></button></article>').join("");}
+function renderCompareDock(){const d=$("compare-dock");if(!d)return;d.classList.toggle("hidden",!compareIds.length);$("compare-count").textContent=compareIds.length;}
+function renderCompare(){const rows=compareIds.map(id=>products.find(p=>String(p.id)===String(id))).filter(Boolean);const fields=[["السعر",p=>money(p.price)],["الماركة",p=>p.brand||"—"],["الرام",p=>p.ram||"—"],["الذاكرة",p=>p.storage||"—"],["الشاشة",p=>p.screen||"—"],["المعالج",p=>p.chipset||"—"],["الكاميرات",p=>p.camera||"—"],["البطارية",p=>p.battery||"—"],["التوفر",p=>p.stock>0?"متوفر":"نفذت الكمية"]];$("compare-content").innerHTML=rows.length?'<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>المواصفة</th>'+rows.map(p=>'<th>'+escapeHtml(p.name)+'</th>').join("")+'</tr></thead><tbody>'+fields.map(f=>'<tr><th>'+f[0]+'</th>'+rows.map(p=>'<td>'+escapeHtml(f[1](p))+'</td>').join("")+'</tr>').join("")+'</tbody></table></div>':'<p>أضف أجهزة للمقارنة.</p>';}
+document.addEventListener("click",e=>{const f=e.target.closest("[data-favorite]"),c=e.target.closest("[data-compare]");if(f){e.preventDefault();e.stopPropagation();const id=String(f.dataset.favorite);favoriteIds=favoriteIds.includes(id)?favoriteIds.filter(x=>x!==id):favoriteIds.concat(id);localStorage.setItem("honor-favorites",JSON.stringify(favoriteIds));renderProducts();renderFavorites();toast(favoriteIds.includes(id)?"انضاف للمفضلة":"انحذف من المفضلة");}if(c){e.preventDefault();e.stopPropagation();const id=String(c.dataset.compare);if(compareIds.includes(id)){toast("هذا المنتج موجود بالمقارنة");return;}if(compareIds.length>=3){toast("تقدر تقارن 3 أجهزة كحد أقصى");return;}compareIds.push(id);localStorage.setItem("honor-compare",JSON.stringify(compareIds));renderCompareDock();toast("انضاف للمقارنة");}});
+$("compare-open")?.addEventListener("click",()=>{renderCompare();$("compare-dialog").showModal();});
+$("compare-close")?.addEventListener("click",()=>$("compare-dialog").close());
+$("compare-clear")?.addEventListener("click",()=>{compareIds=[];localStorage.setItem("honor-compare","[]");renderCompareDock();});
+
 function showStorePage(page,{push=true}={}){
  const allowed=["home","departments","products","accessories","maintenance","product-detail","tracking"];
  if(!allowed.includes(page))page="home";
@@ -478,7 +487,7 @@ $("year").textContent=new Date().getFullYear();
 initGovernors();
 renderProducts();
 renderCart();
-loadProducts().then(()=>{if(location.hash.startsWith("#product/"))handleStoreLocationA()});
+loadProducts().then(()=>{renderFavorites();renderCompareDock();if(location.hash.startsWith("#product/"))handleStoreLocationA()});
 
 
 /* Admin dashboard: open with ?admin=1 */
