@@ -182,9 +182,12 @@ function showProductDetails(id){
   const label=$("selected-product-color");if(label)label.textContent=selectedProductColor;
  }));
  const chosenColor=()=>productColors.length>1?selectedProductColor:(productColors[0]||"");
- const orderNow=()=>{if(p.stock<=0)return;if(productColors.length>1&&!chosenColor()){toast("اختار لون الجهاز أولاً");return}if(addToCart(p.id,chosenColor()))$("checkout-dialog").showModal()};
+ const chosenVariantKey=()=>selectedVariant?.variant_key||"";
+ const refreshVariant=()=>{const v=productVariants.find(x=>x.variant_key===chosenVariantKey())||selectedVariant;selectedVariant=v;const price=$("detail-price"),old=$("detail-old-price"),mobile=$("detail-mobile-price"),mem=$("detail-memory"),state=variantState(),badge=$("detail-stock-state"),stockText=$("detail-stock-text");if(price)price.textContent=money(v.price);if(mobile)mobile.textContent=money(v.price);if(old){old.textContent=money(v.old_price);old.hidden=!(Number(v.old_price)>Number(v.price))}if(mem)mem.textContent=[v.ram,v.storage].filter(Boolean).join(" · ");if(badge){badge.textContent=stockLabel(state);badge.className="landing-stock "+stockClass(state)}if(stockText)stockText.textContent=stockLabel(state);["detail-order-now","detail-add-cart","detail-mobile-buy"].forEach(id=>{const b=$(id);if(b)b.disabled=variantStock(v)<=0})};
+ $("detail-variant-select")?.addEventListener("change",e=>{selectedVariant=productVariants.find(v=>v.variant_key===e.target.value)||selectedVariant;refreshVariant()});
+ const orderNow=()=>{if(variantStock(selectedVariant)<=0)return;if(productColors.length>1&&!chosenColor()){toast("اختار لون الجهاز أولاً");return}if(addToCart(p.id,chosenColor(),chosenVariantKey()))$("checkout-dialog").showModal()};
  ["detail-order-now","detail-mobile-buy"].forEach(id=>$(id)?.addEventListener("click",orderNow));
- $("detail-add-cart")?.addEventListener("click",()=>{if(productColors.length>1&&!chosenColor()){toast("اختار لون الجهاز أولاً");return}addToCart(p.id,chosenColor())});
+ $("detail-add-cart")?.addEventListener("click",()=>{if(productColors.length>1&&!chosenColor()){toast("اختار لون الجهاز أولاً");return}addToCart(p.id,chosenColor(),chosenVariantKey())});
  document.querySelectorAll("[data-related-product]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.relatedProduct)));
  showStorePage("product-detail",{push:false});
  if(!location.hash.startsWith("#product/"))history.pushState({productId:id},"","#product/"+encodeURIComponent(id));
