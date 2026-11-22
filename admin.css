@@ -19,3 +19,12 @@
 .quick-image-current img{width:42px;height:42px;object-fit:cover;border-radius:7px;border:1px solid #dce5e3}
 .quick-image-editor small,.quick-color-editor small{font-size:11px;color:#778582}
 @media(max-width:760px){.quick-product-editor{grid-template-columns:1fr 1fr;gap:11px;padding:12px}.quick-product-editor .btn{width:100%;padding:9px 6px;font-size:12px}.quick-image-editor{grid-column:1/-1}}
+
+/* Improve product list visibility and table sizing in admin */
+#view-products #products-table{display:block;width:100%;min-height:130px;overflow-x:auto;overflow-y:visible}
+#view-products #products-table>table{display:table;width:100%;min-width:760px;border-collapse:collapse;background:#fff}
+#view-products #products-table>table thead{display:table-header-group}
+#view-products #products-table>table tbody{display:table-row-group}
+#view-products #products-table>table tr{display:table-row}
+#view-products #products-table>table th,#view-products #products-table>table td{display:table-cell;vertical-align:middle}
+#view-products .empty-row{display:block;padding:28px 14px;text-align:center;color:#788587;background:#fff}
