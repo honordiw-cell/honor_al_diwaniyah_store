@@ -3712,3 +3712,42 @@ body.theme-dark .store-products-section .product-bottom{border-color:#39485b}
   .store-products-section .product-image{width:92px;height:102px;min-height:102px}
   .store-products-section .product-card-copy h3{font-size:12px}
 }
+
+
+/* Home installment calculator — matching HONOR teal service cards */
+.installment-calculator-card{font-family:Cairo,sans-serif;text-align:right;cursor:pointer}
+.installment-calculator-card .home-quick-icon{color:#159e97}
+.installment-calculator-dialog{width:min(92vw,480px);max-width:480px;max-height:90dvh;overflow-y:auto;margin:auto;padding:clamp(18px,4vw,26px);border:1px solid #dce9e7;border-radius:22px;background:#fff;color:#202a2d;box-shadow:0 24px 70px rgba(12,35,35,.2)}
+.installment-calculator-dialog::backdrop{background:rgba(15,27,30,.66);backdrop-filter:blur(4px)}
+.installment-calculator-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:20px}
+.installment-calculator-head h2{margin:5px 0;color:#202a2d;font-size:24px;font-weight:900}
+.installment-calculator-head p{margin:0;color:#718080;font-size:12px;line-height:1.8}
+.installment-calculator-head .close-btn{flex:0 0 40px;width:40px;height:40px;border:1px solid #dce7e5;border-radius:12px;background:#f8fbfa;color:#52605f;font-size:26px;cursor:pointer}
+.installment-price-field{display:grid;gap:8px;color:#344344;font-size:13px;font-weight:800}
+.installment-price-field input{width:100%;min-height:52px;padding:12px 14px;border:1px solid #d8e5e3;border-radius:13px;background:#f8fbfa;color:#202a2d;font:700 17px Cairo,sans-serif;outline:none}
+.installment-price-field input:focus{border-color:#16aaa2;box-shadow:0 0 0 3px rgba(22,170,162,.12)}
+.installment-calculator-results{display:grid;gap:11px;margin-top:17px;padding:15px;border:1px solid #dcece9;border-radius:16px;background:#f7fbfa}
+.installment-calculator-empty{margin:0;color:#7a8988;font-size:12px;text-align:center;line-height:1.8}
+.installment-calculator-row{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#657474;font-size:12px}
+.installment-calculator-row b{color:#283a3a;font-size:13px}
+.installment-calculator-total{padding-top:10px;border-top:1px solid #dce8e6;color:#344747;font-weight:800}
+.installment-calculator-total b{color:#087f78;font-size:15px}
+.installment-calculator-monthly{display:grid;gap:4px;margin-top:3px;padding:14px;border-radius:13px;background:#e5f6f3;text-align:center}
+.installment-calculator-monthly small{color:#50716e;font-size:12px}
+.installment-calculator-monthly strong{color:#07877e;font-size:24px;font-weight:900;line-height:1.5}
+.installment-calculator-note{margin:13px 2px 0;color:#82908f;font-size:10px;line-height:1.9}
+body.theme-dark .installment-calculator-dialog{background:#18232e;color:#e7eef4;border-color:#344454}
+body.theme-dark .installment-calculator-head h2{color:#f1f5f9}
+body.theme-dark .installment-calculator-head p,body.theme-dark .installment-calculator-note{color:#aebdca}
+body.theme-dark .installment-calculator-head .close-btn{background:#243341;color:#e7eef4;border-color:#405466}
+body.theme-dark .installment-price-field{color:#e7eef4}
+body.theme-dark .installment-price-field input{background:#111a24;color:#edf4f8;border-color:#405466}
+body.theme-dark .installment-calculator-results{background:#202f39;border-color:#3b5558}
+body.theme-dark .installment-calculator-row{color:#b8c8c8}
+body.theme-dark .installment-calculator-row b{color:#edf4f8}
+body.theme-dark .installment-calculator-total{border-color:#3b5558}
+body.theme-dark .installment-calculator-total b{color:#72d8d0}
+body.theme-dark .installment-calculator-monthly{background:#21413f}
+body.theme-dark .installment-calculator-monthly small{color:#b4d6d1}
+body.theme-dark .installment-calculator-monthly strong{color:#72d8d0}
+@media(max-width:600px){.installment-calculator-dialog{width:calc(100vw - 24px);max-height:88dvh;padding:18px;border-radius:19px}.installment-calculator-head h2{font-size:21px}}
