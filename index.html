@@ -72,6 +72,7 @@
         <a class="home-quick-card" href="#repair" data-page="repair"><span class="home-quick-number">01</span><span class="home-quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a5 5 0 0 0-6.4 6.4L3 18l3 3 5.3-5.3a5 5 0 0 0 6.4-6.4l-3 3-3-3 3-3Z"/></svg></span><b>حجز صيانة</b><small>أرسل عطل جهازك واحجز طلب صيانة</small><i>←</i></a>
         <a class="home-quick-card" href="#finder" data-page="finder"><span class="home-quick-number">02</span><span class="home-quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5M8 10.8h5.6M10.8 8v5.6"/></svg></span><b>مساعدك بالاختيار</b><small>حدد ميزانيتك واستخدامك ونرشحلك الأنسب</small><i>←</i></a>
         <a class="home-quick-card" href="#tradein" data-page="tradein"><span class="home-quick-number">03</span><span class="home-quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h14l-3-3m5 11H6l3 3M18 8l2 3-2 2M6 16l-2-3 2-2"/></svg></span><b>استبدل جهازك</b><small>بدّل جهازك الحالي وخلي نساعدك بالجديد</small><i>←</i></a>
+        <button class="home-quick-card installment-calculator-card" type="button" id="installment-calculator-open"><span class="home-quick-number">04</span><span class="home-quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2m4 0h2M8 15h2m4 0h2M8 18h8"/></svg></span><b>حاسبة الأقساط</b><small>احسب قسط جهازك الشهري بسهولة</small><i>←</i></button>
       </div>
     </section>
     <section class="home-collection-section">
@@ -251,6 +252,19 @@
       <button class="primary-btn full" type="submit">تأكيد الطلب</button>
       <p class="form-message" id="form-message"></p>
     </form>
+  </dialog>
+  <dialog id="installment-calculator-dialog" class="installment-calculator-dialog" aria-labelledby="installment-calculator-title">
+    <div class="installment-calculator-head">
+      <div><span class="store-kicker">INSTALLMENT CALCULATOR</span><h2 id="installment-calculator-title">حاسبة الأقساط</h2><p>أدخل سعر الجهاز النقدي حتى نحسبلك القسط الشهري.</p></div>
+      <button type="button" class="close-btn" id="installment-calculator-close" aria-label="إغلاق">×</button>
+    </div>
+    <label class="installment-price-field" for="installment-cash-price">سعر الجهاز النقدي (دينار عراقي)
+      <input id="installment-cash-price" type="number" min="1" step="1000" inputmode="numeric" placeholder="مثلاً 500000">
+    </label>
+    <div class="installment-calculator-results" id="installment-calculator-results" aria-live="polite">
+      <p class="installment-calculator-empty">اكتب سعر الجهاز حتى تظهر تفاصيل الأقساط.</p>
+    </div>
+    <p class="installment-calculator-note">الحسبة حسب عرض أقساطي – مصرف الرافدين: تحميل 25%، مدة 10 أشهر، وبدون دفعة أولى. القسط الشهري يُقرّب للأعلى لأقرب ألف دينار. تخضع الموافقة النهائية لشروط المصرف.</p>
   </dialog>
   <div class="toast" id="toast"></div>
 <section id="admin-login-view" class="admin-screen hidden"><form id="admin-login-form" class="admin-login-card"><span class="eyebrow">HONOR AL-DIWANIYAH</span><h1>لوحة إدارة المتجر</h1><p>سجّل دخولك بحساب الإدارة</p><label>البريد الإلكتروني<input name="email" type="email" required></label><label>كلمة المرور<input name="password" type="password" required></label><button class="primary-btn full" type="submit">تسجيل الدخول</button><p id="admin-login-error" class="admin-error"></p></form></section>
