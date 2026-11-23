@@ -452,6 +452,17 @@ $("cart-close").onclick=closeCart;
 $("overlay").onclick=closeCart;
 $("checkout-open").onclick=()=>{if(!cart.length)return toast("السلة فارغة");closeCart();$("checkout-dialog").showModal()};
 $("checkout-close").onclick=()=>$("checkout-dialog").close();
+
+$("installment-calculator-open")?.addEventListener("click",()=>{$("installment-calculator-dialog").showModal();$("installment-cash-price")?.focus()});
+$("installment-calculator-close")?.addEventListener("click",()=>$("installment-calculator-dialog").close());
+$("installment-calculator-dialog")?.addEventListener("click",e=>{if(e.target===$("installment-calculator-dialog"))$("installment-calculator-dialog").close()});
+$("installment-cash-price")?.addEventListener("input",e=>{
+ const cash=Number(e.target.value),box=$("installment-calculator-results");
+ if(!Number.isFinite(cash)||cash<=0){box.innerHTML='<p class="installment-calculator-empty">اكتب سعر الجهاز حتى تظهر تفاصيل الأقساط.</p>';return}
+ const load=cash*.25,total=cash+load,monthly=Math.ceil((total/10)/1000)*1000;
+ box.innerHTML='<div class="installment-calculator-row"><span>السعر النقدي</span><b>'+money(cash)+'</b></div><div class="installment-calculator-row"><span>التحميل 25%</span><b>'+money(load)+'</b></div><div class="installment-calculator-row installment-calculator-total"><span>إجمالي التقسيط</span><b>'+money(total)+'</b></div><div class="installment-calculator-monthly"><small>القسط الشهري لمدة 10 أشهر</small><strong>'+money(monthly)+'</strong></div>';
+});
+
 $("product-details-back").onclick=()=>{history.pushState({storePage:"products"},"","#products");showStorePage("products",{push:false})};
 $("checkout-form").addEventListener("submit",submitOrder);
 
