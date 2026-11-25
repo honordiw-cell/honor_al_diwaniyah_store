@@ -321,7 +321,9 @@ async function applyBulkProductImages(){
 }
 function bind(){
  $("login-form").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),b=e.currentTarget.querySelector("button");b.disabled=true;b.textContent="جاري التحقق...";const {error}=await db.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});b.disabled=false;b.textContent="دخول إلى لوحة الإدارة";if(error){setError("login-error","بيانات الدخول غير صحيحة أو تعذر الاتصال.");return}if(await checkAccess())await loadAll()};
- $("logout-btn").onclick=async()=>{await db.auth.signOut();location.reload()};\n $("bulk-product-images")?.addEventListener("change",e=>{bulkImageFiles=[...(e.target.files||[])];previewBulkImageMatches()});\n $("bulk-image-apply")?.addEventListener("click",applyBulkProductImages);
+ $("logout-btn").onclick=async()=>{await db.auth.signOut();location.reload()};
+ $("bulk-product-images")?.addEventListener("change",e=>{bulkImageFiles=[...(e.target.files||[])];previewBulkImageMatches()});
+ $("bulk-image-apply")?.addEventListener("click",applyBulkProductImages);
  document.querySelectorAll(".nav-link").forEach(b=>b.onclick=()=>go(b.dataset.view));
  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
  document.querySelectorAll("[data-open-product]").forEach(b=>b.onclick=()=>openProduct());
