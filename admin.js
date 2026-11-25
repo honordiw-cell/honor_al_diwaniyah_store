@@ -37,7 +37,10 @@ async function loadAll(){
    db.from("order_status_history").select("id,order_id,order_number,event_type,from_status,to_status,details,created_at").order("created_at",{ascending:false}).limit(50),
    db.from("home_banners").select("*").order("updated_at",{ascending:false}),
    db.from("product_reviews").select("id,product_id,order_id,customer_name,rating,review_text,is_approved,created_at,products(name)").order("created_at",{ascending:false}).limit(200),
-   db.from("delivery_rates").select("governorate,fee,is_active,is_configured").order("governorate")
+   db.from("delivery_rates").select("governorate,fee,is_active,is_configured").order("governorate"),
+   db.from("repair_requests").select("*").order("created_at",{ascending:false}).limit(200),
+   db.from("trade_in_requests").select("*").order("created_at",{ascending:false}).limit(200),
+   db.from("store_bundles").select("id,title,description,image_url,bundle_price,is_active,created_at,updated_at,store_bundle_items(id,product_id,quantity,products(name))").order("created_at",{ascending:false})
   ]);
   if(c.error)throw c.error;if(p.error)throw p.error;if(o.error)throw o.error;
   if(m.error)console.warn("Dashboard metrics unavailable:",m.error);
@@ -45,6 +48,9 @@ async function loadAll(){
   if(h.error)console.warn("Order audit history unavailable:",h.error);
   if(r.error)console.warn("Product reviews unavailable:",r.error);
   if(v.error)console.warn("Delivery rates unavailable:",v.error);
+  if(rr.error)console.warn("Repair requests unavailable:",rr.error);
+  if(tr.error)console.warn("Trade-in requests unavailable:",tr.error);
+  if(bu.error)console.warn("Bundles unavailable:",bu.error);
   categories=c.data||[];products=p.data||[];orders=o.data||[];dashboardMetrics=m.data||{};stockMovements=s.data||[];orderEvents=h.data||[];banners=b.data||[];productReviews=r.data||[];deliveryRatesAdmin=v.data||[];repairRequests=rr.data||[];tradeInRequests=tr.data||[];bundlesAdmin=bu.data||[];
   renderAll();
    renderBanners();renderDeliveryRates();renderReviewModeration();renderServiceRequests();renderBundlesAdmin();
