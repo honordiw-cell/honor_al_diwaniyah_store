@@ -9,6 +9,7 @@ const STATUS={new:"جديد",confirmed:"تم التأكيد",processing:"قيد 
 const PAYMENT={pending:"بانتظار الدفع",paid:"مدفوع",failed:"فشل الدفع"};
 let db=null,user=null,profile=null,categories=[],products=[],orders=[],stockMovements=[],orderEvents=[],dashboardMetrics={},banners=[],productReviews=[],deliveryRatesAdmin=[],repairRequests=[],tradeInRequests=[],bundlesAdmin=[],editingImages=[],newFiles=[],previewUrls=[],bannerFile=null,bannerPreviewUrl="";
 const productFields=["name","category_id","brand","price","old_price","stock","ram","storage","color","chipset","screen","camera","battery","protection","description"];
+let productSortKey="name",productSortAscending=true;
 function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2800)}
 function setError(id,msg){$(id).textContent=msg||""}
 function cleanupPreviews(){previewUrls.forEach(URL.revokeObjectURL);previewUrls=[]}
