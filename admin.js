@@ -131,7 +131,7 @@ function renderProducts(){
  const rows=products.filter(p=>(!cat||String(p.category_id)===cat)&&(state===""||String(p.is_active)===state)&&(stock!=="available"||Number(p.stock||0)>0)&&(stock!=="empty"||Number(p.stock||0)<=0)&&(!q||[p.name,p.brand,p.sku].join(" ").toLowerCase().includes(q))).sort((a,b)=>{let av,bv;if(productSortKey==="category"){av=categories.find(c=>c.id===a.category_id)?.name||"";bv=categories.find(c=>c.id===b.category_id)?.name||"";}else if(productSortKey==="price"||productSortKey==="stock"){av=Number(a[productSortKey]||0);bv=Number(b[productSortKey]||0);}else{av=String(a.name||"").toLowerCase();bv=String(b.name||"").toLowerCase();}const cmp=typeof av==="number"?av-bv:String(av).localeCompare(String(bv),"ar");return productSortAscending?cmp:-cmp;});
  host.innerHTML=rows.length?'<table><thead><tr><th><button type="button" class="sort-header" data-sort="name">المنتج <span class="sort-indicator"></span></button></th><th><button type="button" class="sort-header" data-sort="category">القسم <span class="sort-indicator"></span></button></th><th><button type="button" class="sort-header" data-sort="price">السعر <span class="sort-indicator"></span></button></th><th><button type="button" class="sort-header" data-sort="stock">المخزون <span class="sort-indicator"></span></button></th><th>الظهور</th><th>إجراءات</th></tr></thead><tbody>'+rows.map(p=>{
  const catName=categories.find(c=>c.id===p.category_id)?.name||"غير مصنف",img=p.image_url||p.images?.[0];
- return '<tr><td><div class="product-cell">'+(img?'<img src="'+esc(img)+'" alt="">':'<span class="product-thumb"></span>')+'<div><b>'+esc(p.name)+'</b><small>'+esc(p.brand||catName)+'</small></div></div></td><td>'+esc(catName)+'</td><td>'+money(p.price)+(p.old_price>p.price?'<small class="muted"> <del>'+money(p.old_price)+'</del></small>':'')+'</td><td>'+Number(p.stock||0)+'</td><td><span class="badge '+(p.is_active?"good":"off")+'">'+(p.is_active?"منشور":"مخفي")+'</span></td><td><button class="action-btn" data-quick-images="'+p.id+'">الصور</button><button class="action-btn" data-quick-colors="'+p.id+'">الألوان</button><button class="action-btn" data-edit="'+p.id+'">تعديل</button><button class="action-btn '+(p.is_active?"danger":"")+'" data-toggle="'+p.id+'">'+(p.is_active?"إخفاء":"نشر")+'</button></td></tr><tr class="quick-product-row" id="quick-product-'+p.id+'" hidden><td colspan="6"><div class="quick-product-editor"><div class="quick-image-editor"><b>صور المنتج</b><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple data-quick-file="'+p.id+'"><div class="quick-image-current">'+([...new Set([p.image_url,...(p.images||[])].filter(Boolean))]).map((u,i)=>'<div class="quick-primary-choice"><img src="'+esc(u)+'" alt=""><button type="button" class="action-btn '+(u===(p.image_url||p.images?.[0])?'primary-image':'')+'" data-quick-primary="'+p.id+'" data-image-index="'+i+'">'+(u===(p.image_url||p.images?.[0])?'الصورة الأولى':'اجعلها الأولى')+'</button></div>').join("")+'</div><small>حدد الصورة التي تريد عرضها أولاً، ويمكنك إضافة صور جديدة أيضاً.</small></div><div class="quick-color-editor"><b>ألوان الجهاز</b><input type="text" value="'+esc(p.color||"")+'" placeholder="أسود، أزرق، فضي" data-quick-color="'+p.id+'"><small>افصل بين الألوان بفاصلة.</small></div><button type="button" class="btn primary" data-quick-save="'+p.id+'">حفظ الصور والألوان</button><button type="button" class="btn secondary" data-quick-cancel="'+p.id+'">إغلاق</button></div></td></tr>';
+ return '<tr><td><div class="product-cell">'+(img?'<img src="'+esc(img)+'" alt="">':'<span class="product-thumb"></span>')+'<div><b>'+esc(p.name)+'</b><small>'+esc(p.brand||catName)+'</small></div></div></td><td>'+esc(catName)+'</td><td>'+money(p.price)+(p.old_price>p.price?'<small class="muted"> <del>'+money(p.old_price)+'</del></small>':'')+'</td><td>'+Number(p.stock||0)+'</td><td><span class="badge '+(p.is_active?"good":"off")+'">'+(p.is_active?"منشور":"مخفي")+'</span></td><td><button class="action-btn" data-quick-images="'+p.id+'">الصور</button><button class="action-btn" data-quick-colors="'+p.id+'">الألوان</button><button class="action-btn" data-edit="'+p.id+'">تعديل</button><button class="action-btn '+(p.is_active?"danger":"")+'" data-toggle="'+p.id+'">'+(p.is_active?"إخفاء":"نشر")+'</button></td></tr><tr class="quick-product-row" id="quick-product-'+p.id+'" hidden><td colspan="6"><div class="quick-product-editor"><div class="quick-image-editor"><b>صور المنتج</b><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple data-quick-file="'+p.id+'"><div class="quick-image-current">'+([...new Set([p.image_url,...(p.images||[])].filter(Boolean))]).map((u,i)=>'<div class="quick-primary-choice"><img src="'+esc(u)+'" alt=""><button type="button" class="action-btn '+(u===(p.image_url||p.images?.[0])?'primary-image':'')+'" data-quick-primary="'+p.id+'" data-image-index="'+i+'">'+(u===(p.image_url||p.images?.[0])?'الصورة الأولى':'اجعلها الأولى')+'</button></div>').join("")+'</div><small>حدد الصورة التي تريد عرضها أولاً، ويمكنك إضافة صور جديدة أيضاً.</small></div><div class="quick-color-editor"><b>ألوان الجهاز</b><input type="text" value="'+esc(p.color||"")+'" placeholder="أسود، أزرق، فضي" data-quick-color="'+p.id+'"><small>افصل بين الألوان بفاصلة.</small></div><button type="button" class="btn primary" data-quick-save="'+p.id+'">حفظ الصور والألوان</button><button type="button" class="btn secondary" data-quick-cancel="'+p.id+'">إغلاق</button></div></td><td><button class="action-btn danger" data-product-delete="'+p.id+'">حذف</button></td></tr>';
  }).join("")+'</tbody></table>':'<div class="empty-row">ماكو منتجات تطابق البحث.</div>';
  const table=$("products-table");
  table.querySelectorAll("[data-sort]").forEach(b=>b.onclick=()=>{if(productSortKey===b.dataset.sort)productSortAscending=!productSortAscending;else{productSortKey=b.dataset.sort;productSortAscending=true;}renderProducts();});
@@ -142,6 +142,7 @@ function renderProducts(){
  table.querySelectorAll("[data-quick-save]").forEach(b=>b.onclick=()=>saveQuickProduct(b.dataset.quickSave,b));
  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openProduct(b.dataset.edit));
  document.querySelectorAll("[data-toggle]").forEach(b=>b.onclick=()=>toggleProduct(b.dataset.toggle));
+ document.querySelectorAll("[data-product-delete]").forEach(b=>b.onclick=()=>deleteProduct(b.dataset.productDelete));
 }
 function tableOrders(rows,compact=false){
  const canDelete=["owner","admin"].includes(profile?.role);
@@ -288,6 +289,28 @@ async function toggleProduct(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  try{const {error}=await db.from("products").update({is_active:!p.is_active,updated_at:new Date().toISOString()}).eq("id",id);if(error)throw error;p.is_active=!p.is_active;renderAll();toast(p.is_active?"تم نشر المنتج":"تم إخفاء المنتج")}
  catch(e){toast("تعذر تحديث المنتج: "+e.message)}
+}
+async function deleteProduct(id){
+ const p=products.find(x=>x.id===id);if(!p||!["owner","admin"].includes(profile?.role))return;
+ const linkedOrder=orders.some(o=>(o.order_items||[]).some(i=>i.product_id===id));
+ const linkedReview=productReviews.some(r=>r.product_id===id);
+ const linkedBundle=bundlesAdmin.some(b=>(b.store_bundle_items||[]).some(i=>i.product_id===id));
+ const linked=linkedOrder||linkedReview||linkedBundle;
+ const reasons=[linkedOrder&&"طلبات سابقة",linkedReview&&"تقييمات",linkedBundle&&"باقات"].filter(Boolean).join(" و");
+ const prompt=linked?`المنتج "${p.name}" مرتبط بـ ${reasons}. سيتم إخفاؤه من المتجر فقط للحفاظ على السجلات. هل تريد المتابعة؟`:`هل أنت متأكد من حذف المنتج "${p.name}" نهائياً؟ لا يمكن التراجع عن هذا الإجراء.`;
+ if(!confirm(prompt))return;
+ try{
+  if(linked){
+   const {error}=await db.from("products").update({is_active:false,updated_at:new Date().toISOString()}).eq("id",id);
+   if(error)throw error;
+   toast("المنتج مرتبط بسجلات سابقة؛ تم إخفاؤه بدلاً من حذفه.");
+  }else{
+   const {error}=await db.from("products").delete().eq("id",id);
+   if(error)throw error;
+   toast("تم حذف المنتج نهائياً");
+  }
+  await loadAll();
+ }catch(e){console.error(e);toast("تعذر حذف المنتج: "+e.message)}
 }
 function go(view){
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+view));
