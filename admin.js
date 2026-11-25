@@ -119,7 +119,8 @@ async function saveQuickProduct(id,button){
 function renderProducts(){
  const host=$("products-table");if(!host)return;
  const search=$("product-search"),categoryFilter=$("product-category-filter"),stateFilter=$("product-state-filter");
- const q=(search?.value||"").trim().toLowerCase(),cat=categoryFilter?.value||"",state=stateFilter?.value||"";
+ const q=(search?.value||"").trim().toLowerCase(),cat=categoryFilter?.value||"",state=stateFilter?.value??"";
+ // Default to all statuses; only apply a publication filter when explicitly selected.
  const rows=products.filter(p=>(!cat||String(p.category_id)===cat)&&(state===""||String(p.is_active)===state)&&(!q||[p.name,p.brand,p.sku].join(" ").toLowerCase().includes(q)));
  host.innerHTML=rows.length?'<table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الظهور</th><th>إجراءات</th></tr></thead><tbody>'+rows.map(p=>{
  const catName=categories.find(c=>c.id===p.category_id)?.name||"غير مصنف",img=p.image_url||p.images?.[0];
