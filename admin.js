@@ -305,9 +305,23 @@ async function exportOrders(){
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="honor-orders-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);toast("تم تصدير "+all.length+" طلب");
  }catch(e){toast("تعذر تصدير الطلبات: "+e.message)}
 }
+function normalizeImageMatch(s){return String(s||"").toLowerCase().replace(/\\.[a-z0-9]+$/i,"").replace(/[^a-z0-9\\u0600-\\u06ff]/g,"")}
+let bulkImageFiles=[],bulkImageMatches=[];
+function previewBulkImageMatches(){
+ const host=$("bulk-image-matches"),btn=$("bulk-image-apply");if(!host)return;
+ bulkImageMatches=bulkImageFiles.map(file=>{const key=normalizeImageMatch(file.name);let match=null;let score=0;for(const p of products){const pn=normalizeImageMatch(p.name);if(!pn||!key)continue;let s=key===pn?1:(key.includes(pn)||pn.includes(key))?Math.min(key.length,pn.length)/Math.max(key.length,pn.length):0;if(s>score){score=s;match=p}}return {file,product:score>=.72?match:null,score}});
+ host.innerHTML=bulkImageMatches.length?'<table><thead><tr><th>الصورة</th><th>المطابقة</th><th>النتيجة</th></tr></thead><tbody>'+bulkImageMatches.map(m=>'<tr><td>'+esc(m.file.name)+'</td><td>'+esc(m.product?.name||"—")+'</td><td><span class="badge '+(m.product?"good":"off")+'">'+(m.product?"مطابقة":"غير مطابق")+'</span></td></tr>').join("")+'</tbody></table>':'<small>اختر صوراً لعرض المطابقات.</small>';
+ btn.disabled=!bulkImageMatches.some(m=>m.product);
+}
+async function applyBulkProductImages(){
+ const btn=$("bulk-image-apply"),status=$("bulk-image-status"),matches=bulkImageMatches.filter(m=>m.product);if(!matches.length)return;
+ btn.disabled=true;status.textContent="جاري رفع الصور وربطها...";let done=0,failed=0;
+ for(const m of matches){try{const ext=(m.file.name.split(".").pop()||"jpg").toLowerCase().replace(/[^a-z0-9]/g,"");const path="products/"+crypto.randomUUID()+"."+ext;const {error}=await db.storage.from(BUCKET).upload(path,m.file,{cacheControl:"31536000",contentType:m.file.type,upsert:false});if(error)throw error;const {data}=db.storage.from(BUCKET).getPublicUrl(path);const p=m.product;const imgs=[data.publicUrl,...new Set([p.image_url,...(p.images||[])].filter(Boolean))];const {error:up}=await db.from("products").update({image_url:data.publicUrl,images:imgs,updated_at:new Date().toISOString()}).eq("id",p.id);if(up)throw up;done++}catch(err){console.error(err);failed++}}
+ status.textContent="تم ربط "+done+" صورة"+(failed?"، وفشل "+failed:"")+".";toast(status.textContent);bulkImageFiles=[];$("bulk-product-images").value="";previewBulkImageMatches();await loadAll();btn.disabled=true;
+}
 function bind(){
  $("login-form").onsubmit=async e=>{e.preventDefault();const f=new FormData(e.currentTarget),b=e.currentTarget.querySelector("button");b.disabled=true;b.textContent="جاري التحقق...";const {error}=await db.auth.signInWithPassword({email:f.get("email"),password:f.get("password")});b.disabled=false;b.textContent="دخول إلى لوحة الإدارة";if(error){setError("login-error","بيانات الدخول غير صحيحة أو تعذر الاتصال.");return}if(await checkAccess())await loadAll()};
- $("logout-btn").onclick=async()=>{await db.auth.signOut();location.reload()};
+ $("logout-btn").onclick=async()=>{await db.auth.signOut();location.reload()};\n $("bulk-product-images")?.addEventListener("change",e=>{bulkImageFiles=[...(e.target.files||[])];previewBulkImageMatches()});\n $("bulk-image-apply")?.addEventListener("click",applyBulkProductImages);
  document.querySelectorAll(".nav-link").forEach(b=>b.onclick=()=>go(b.dataset.view));
  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
  document.querySelectorAll("[data-open-product]").forEach(b=>b.onclick=()=>openProduct());
