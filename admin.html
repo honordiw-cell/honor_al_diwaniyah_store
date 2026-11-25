@@ -53,7 +53,7 @@
   <section class="view" id="view-products">
    <div class="section-toolbar"><div><h2>إدارة المنتجات</h2><p>أضف الأجهزة وعدّل الأسعار والصور والمخزون.</p></div><button class="btn primary" data-open-product>＋ إضافة منتج</button></div>
    <div class="filter-bar"><input id="product-search" type="search" placeholder="ابحث عن اسم المنتج أو الماركة..."><select id="product-category-filter"><option value="">كل الأقسام</option></select><select id="product-state-filter"><option value="">كل الحالات</option><option value="true">منشور</option><option value="false">مخفي</option></select><select id="product-stock-filter"><option value="">كل المخزون</option><option value="available">متوفر فقط</option><option value="empty">نفد المخزون</option></select></div>
-   <div class="panel"><div id="products-table" class="table-holder"></div></div>
+   <div class="panel" id="bulk-image-panel"><div class="panel-heading"><div><h3>رفع صور الموبايلات دفعة واحدة</h3><p>اختر صوراً بأسماء الأجهزة (مثلاً HONOR X9D.jpg)، وسنطابقها مع المنتجات.</p></div></div><label class="field">اختيار الصور<input id="bulk-product-images" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple></label><div id="bulk-image-matches" class="table-holder"></div><button class="btn primary" id="bulk-image-apply" disabled>رفع وربط الصور المطابقة</button><small id="bulk-image-status" class="muted"></small></div><div class="panel"><div id="products-table" class="table-holder"></div></div>
    <section class="panel admin-stock-history"><div class="panel-heading"><div><h3>سجل حركة المخزون</h3><p>كل زيادة أو نقصان في الكميات مع سبب التغيير.</p></div></div><div id="stock-movements"></div></section>
   </section>
   <section class="view" id="view-orders">
