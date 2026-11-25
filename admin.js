@@ -305,7 +305,7 @@ async function exportOrders(){
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="honor-orders-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);toast("تم تصدير "+all.length+" طلب");
  }catch(e){toast("تعذر تصدير الطلبات: "+e.message)}
 }
-function normalizeImageMatch(s){return String(s||"").toLowerCase().replace(/\\.[a-z0-9]+$/i,"").replace(/[^a-z0-9\\u0600-\\u06ff]/g,"")}
+function normalizeImageMatch(s){return String(s||"").toLowerCase().replace(/\.[a-z0-9]+$/i,"").replace(/[^a-z0-9]/g,"")}
 let bulkImageFiles=[],bulkImageMatches=[];
 function previewBulkImageMatches(){
  const host=$("bulk-image-matches"),btn=$("bulk-image-apply");if(!host)return;
