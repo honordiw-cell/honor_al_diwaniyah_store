@@ -3751,3 +3751,6 @@ body.theme-dark .installment-calculator-monthly{background:#21413f}
 body.theme-dark .installment-calculator-monthly small{color:#b4d6d1}
 body.theme-dark .installment-calculator-monthly strong{color:#72d8d0}
 @media(max-width:600px){.installment-calculator-dialog{width:calc(100vw - 24px);max-height:88dvh;padding:18px;border-radius:19px}.installment-calculator-head h2{font-size:21px}}
+
+/* Compact brand filter list */
+.brand-collapse-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0 0;padding:12px 14px;border:1px solid #dce9e7;border-radius:12px;background:#f7fbfa;color:#26393b;font:800 13px Cairo,sans-serif;cursor:pointer}.brand-collapse-toggle span{margin-inline-start:auto;color:#159d96;font-size:12px}.brand-collapse-toggle i{font-style:normal;transition:transform .2s}.catalog-brand-area.brands-open .brand-collapse-toggle i{transform:rotate(180deg)}.catalog-brand-area:not(.brands-open) .brand-block-grid{display:none}.catalog-brand-area.brands-open .brand-block-grid{margin-top:10px;max-height:260px;overflow:auto;padding:2px;grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:760px){.catalog-brand-area.brands-open .brand-block-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:230px}}
