@@ -3942,5 +3942,3 @@ body.theme-dark .installment-calculator-monthly strong{color:#72d8d0}
  .site-footer{margin-top:12px!important;}
 }
 
-/* Keep the mobile purchase bar from covering related items or footer content */
-@media(max-width:700px){.product-mobile-buybar.buybar-hidden{display:none!important}}
