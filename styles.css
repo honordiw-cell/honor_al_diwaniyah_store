@@ -3774,3 +3774,9 @@ body.theme-dark .installment-calculator-monthly strong{color:#72d8d0}
 .catalog-availability select,.catalog-search input{min-height:50px!important;width:100%!important;border-radius:14px!important;border:1px solid #e1e9e8!important;background:#fff!important;padding:10px 13px!important;font-size:13px!important;box-shadow:none!important}
 .catalog-search input:focus,.catalog-availability select:focus{border-color:#16aaa2!important;outline:0!important;box-shadow:0 0 0 3px rgba(22,170,162,.10)!important}
 @media(max-width:600px){.catalog-filter-panel.product-page-filters{gap:15px!important;padding:15px!important}.catalog-type-option{min-height:52px!important;font-size:13px!important}.catalog-brand-area{padding-top:14px!important}.catalog-brand-area.brands-open .brand-block-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Compact product sorting filter */
+.catalog-sort-filter{display:grid;gap:8px;margin:0!important}
+.catalog-sort-filter>span{font-size:12px;font-weight:800;color:#697678}
+.catalog-sort-filter select{width:100%;min-height:50px;border-radius:14px;border:1px solid #e1e9e8;background:#fff;padding:10px 13px;font-size:13px;font-weight:700;box-shadow:none}
+.catalog-sort-filter select:focus{outline:0;border-color:#16aaa2;box-shadow:0 0 0 3px rgba(22,170,162,.10)}
