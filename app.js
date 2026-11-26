@@ -517,7 +517,7 @@ $("compare-open")?.addEventListener("click",()=>{renderCompare();$("compare-dial
 $("compare-close")?.addEventListener("click",()=>$("compare-dialog").close());
 $("compare-clear")?.addEventListener("click",()=>{compareIds=[];localStorage.setItem("honor-compare","[]");renderCompareDock();});
 
-$("home-deals-more")?.addEventListener("click",()=>{selectedDeviceType="الكل";$("device-type-filter").value="الكل";selectedBrand="الكل";$("brand-filter").value="الكل";selectedAvailability="available";$("availability-filter").value="available";$("products-search-input").value="";visibleProductCount=productsPerPage;renderProducts();showStorePage("products");});
+
 function showStorePage(page,{push=true}={}){
  const allowed=["home","departments","products","accessories","maintenance","finder","repair","tradein","product-detail","tracking"];
  if(!allowed.includes(page))page="home";
@@ -550,15 +550,17 @@ document.querySelectorAll("[data-device-type]").forEach(card=>card.addEventListe
  selectedBrand="الكل";$("brand-filter").value="الكل";
  visibleProductCount=productsPerPage;renderProducts();showStorePage("products");
 }));
-document.querySelectorAll("[data-home-filter]").forEach(btn=>btn.addEventListener("click",()=>{
- selectedDeviceType=btn.dataset.homeFilter;
- $("device-type-filter").value=selectedDeviceType;
- selectedBrand="الكل";$("brand-filter").value="الكل";
- selectedAvailability="all";$("availability-filter").value="all";
- $("products-search-input").value="";
- visibleProductCount=productsPerPage;
+// Robust delegated navigation for home collection buttons (capture touch/click)
+document.addEventListener("click",e=>{
+ const more=e.target.closest("[data-home-filter]");
+ const deals=e.target.closest("#home-deals-more");
+ if(!more&&!deals)return;
+ e.preventDefault();e.stopPropagation();
+ if(deals){selectedDeviceType="الكل";$("device-type-filter").value="الكل";selectedAvailability="available";$("availability-filter").value="available";}
+ else {selectedDeviceType=more.dataset.homeFilter;$("device-type-filter").value=selectedDeviceType;selectedAvailability="all";$("availability-filter").value="all";}
+ selectedBrand="الكل";$("brand-filter").value="الكل";$("products-search-input").value="";visibleProductCount=productsPerPage;
  renderProducts();showStorePage("products");
-}));
+},true);
 document.querySelectorAll("[data-shop-accessories]").forEach(btn=>btn.addEventListener("click",()=>{
  selectedDeviceType="accessories";$("device-type-filter").value="accessories";
  selectedBrand="الكل";$("brand-filter").value="الكل";
