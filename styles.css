@@ -3836,3 +3836,27 @@ body.theme-dark .installment-calculator-monthly strong{color:#72d8d0}
 .catalog-filter-badge,.catalog-filter-trigger #catalog-filter-badge{display:none!important}
 .catalog-filter-trigger:focus-visible,.catalog-sort-filter select:focus-visible{outline:2px solid rgba(21,157,150,.22)!important;outline-offset:2px!important}
 @media(max-width:600px){.catalog-toolbar{gap:8px!important}.catalog-filter-trigger,.catalog-sort-filter select{height:44px!important;min-height:44px!important;padding:0 12px!important;border-radius:13px!important;font-size:13px!important}.catalog-results-count{margin-bottom:10px!important}}
+
+/* HONOR AL-DIWANIYAH signature filter panel: compact, premium and calm */
+.catalog-filter-panel.product-page-filters{padding:17px 16px!important;border-radius:23px!important;border:1px solid #e6eeed!important;background:#fff!important;box-shadow:0 10px 28px rgba(30,70,66,.045)!important;gap:17px!important}
+.catalog-type-row{display:grid!important;gap:10px!important}
+.catalog-filter-label{font-size:14px!important;font-weight:900!important;color:#263739!important;letter-spacing:-.2px!important}
+.catalog-type-options{gap:8px!important}
+.catalog-type-option{min-height:47px!important;padding:9px 10px!important;border-radius:14px!important;background:#f7f9f9!important;border:1px solid #e7eeee!important;color:#344547!important;font-size:13px!important;font-weight:800!important;transition:background .18s,border .18s!important}
+.catalog-type-option.active{background:#e7f6f4!important;border:1.5px solid #159d96!important;color:#128a84!important;box-shadow:inset 0 0 0 1px rgba(21,157,150,.04)!important}
+.catalog-brand-area{display:grid!important;gap:10px!important;padding-top:16px!important;border-top:1px solid #eef2f2!important}
+.catalog-brand-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}
+.catalog-brand-heading #brand-scope-label{font-size:11px!important;font-weight:800!important;color:#14958e!important;background:#edf8f6!important;padding:5px 9px!important;border-radius:999px!important}
+.brand-collapse-toggle{width:100%!important;min-height:48px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 14px!important;border-radius:14px!important;border:1px solid #e4eceb!important;background:#f8fbfb!important;color:#293c3e!important;font-size:13px!important;font-weight:850!important;box-shadow:none!important}
+.brand-collapse-toggle span{font-size:12px!important;color:#159d96!important}
+.brand-collapse-toggle i{font-size:16px!important;color:#159d96!important}
+.catalog-brand-area.brands-open .brand-block-grid{max-height:225px!important;overflow:auto!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:2px!important}
+.catalog-brand-area .brand-block-grid button,.catalog-brand-area .brand-block-grid .brand-block{min-height:43px!important;border-radius:12px!important;border:1px solid #e8eeee!important;background:#fff!important;font-size:12px!important;font-weight:750!important;box-shadow:none!important}
+.catalog-search{display:grid!important;gap:8px!important}
+.catalog-search>span{font-size:13px!important;font-weight:850!important;color:#536466!important}
+.catalog-search input{height:48px!important;min-height:48px!important;border-radius:14px!important;border:1px solid #e3ebea!important;background:#fbfdfd!important;padding:0 14px!important;font-size:13px!important;box-shadow:none!important}
+.catalog-search input:focus{border-color:#159d96!important;outline:none!important;box-shadow:0 0 0 3px rgba(21,157,150,.09)!important}
+.catalog-panel-actions{display:grid!important;grid-template-columns:1fr auto!important;gap:9px!important;margin-top:0!important;padding-top:1px!important}
+.catalog-filter-apply{height:49px!important;min-height:49px!important;border-radius:14px!important;background:linear-gradient(135deg,#19a69e,#128e87)!important;color:white!important;font-size:13px!important;font-weight:900!important;box-shadow:0 5px 14px rgba(19,151,143,.14)!important}
+.catalog-filter-reset{height:49px!important;min-height:49px!important;border-radius:14px!important;padding:0 14px!important;border:1px solid #e5eded!important;background:#f6f9f9!important;color:#536264!important;font-size:12px!important;font-weight:800!important}
+@media(max-width:600px){.catalog-filter-panel.product-page-filters{padding:15px!important;gap:15px!important}.catalog-type-option{min-height:45px!important}.catalog-search input{height:46px!important;min-height:46px!important}.catalog-filter-apply,.catalog-filter-reset{height:46px!important;min-height:46px!important}}
