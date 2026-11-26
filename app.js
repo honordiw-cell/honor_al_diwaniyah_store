@@ -100,7 +100,7 @@ function renderProducts(){
  }
  document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>{const p=products.find(x=>String(x.id)===String(b.dataset.add));if(!p)return;if((p.variants||[]).length>1){showProductDetails(p.id);toast("اختار نسخة الرام والذاكرة أولاً");return}const colors=(p.color||"").split(/[,،/|]+/).map(x=>x.trim()).filter(Boolean);if((p.deviceType==="phone"||p.deviceType==="tablet")&&colors.length>1){showProductDetails(p.id);toast("اختار لون الجهاز قبل إضافته للسلة");return}addToCart(p.id,colors[0]||"",p.variants?.[0]?.variant_key||"")}));
  document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
- renderHomeCollections();
+ renderHomeCollections();bindHomeCollectionButtons();
  renderFavorites();
 }
 async function loadHomeBanner(){
@@ -550,17 +550,21 @@ document.querySelectorAll("[data-device-type]").forEach(card=>card.addEventListe
  selectedBrand="الكل";$("brand-filter").value="الكل";
  visibleProductCount=productsPerPage;renderProducts();showStorePage("products");
 }));
-// Robust delegated navigation for home collection buttons (capture touch/click)
-document.addEventListener("click",e=>{
- const more=e.target.closest("[data-home-filter]");
- const deals=e.target.closest("#home-deals-more");
- if(!more&&!deals)return;
- e.preventDefault();e.stopPropagation();
- if(deals){selectedDeviceType="الكل";$("device-type-filter").value="الكل";selectedAvailability="available";$("availability-filter").value="available";}
- else {selectedDeviceType=more.dataset.homeFilter;$("device-type-filter").value=selectedDeviceType;selectedAvailability="all";$("availability-filter").value="all";}
- selectedBrand="الكل";$("brand-filter").value="الكل";$("products-search-input").value="";visibleProductCount=productsPerPage;
- renderProducts();showStorePage("products");
-},true);
+// Explicit callable handler for home collection navigation
+window.handleHomeCollectionNavigation=function(kind){
+ try{
+  selectedDeviceType=kind==="deals"?"الكل":kind;
+  const typeEl=$("device-type-filter"),brandEl=$("brand-filter"),searchEl=$("products-search-input"),availabilityEl=$("availability-filter");
+  if(typeEl)typeEl.value=selectedDeviceType;
+  selectedBrand="الكل";if(brandEl)brandEl.value="الكل";
+  selectedAvailability=kind==="deals"?"available":"all";if(availabilityEl)availabilityEl.value=selectedAvailability;
+  if(searchEl)searchEl.value="";visibleProductCount=productsPerPage;
+  renderProducts();showStorePage("products");window.scrollTo({top:0,behavior:"instant"});
+ }catch(err){console.error("Home collection navigation failed",err);}
+};
+// Assign explicit onclick handlers as a fallback to event delegation on mobile
+function bindHomeCollectionButtons(){document.querySelectorAll("[data-home-filter]").forEach(btn=>btn.onclick=()=>window.handleHomeCollectionNavigation(btn.dataset.homeFilter));const dealsBtn=$("home-deals-more");if(dealsBtn)dealsBtn.onclick=()=>window.handleHomeCollectionNavigation("deals");}
+
 document.querySelectorAll("[data-shop-accessories]").forEach(btn=>btn.addEventListener("click",()=>{
  selectedDeviceType="accessories";$("device-type-filter").value="accessories";
  selectedBrand="الكل";$("brand-filter").value="الكل";
