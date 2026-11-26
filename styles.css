@@ -3933,3 +3933,12 @@ body.theme-dark .installment-calculator-monthly strong{color:#72d8d0}
 #catalog-filter-panel .catalog-filter-apply{flex:1!important;height:46px!important;min-height:46px!important;border-radius:12px!important;background:#159d96!important;color:#fff!important;font-size:13px!important;font-weight:900!important;box-shadow:0 4px 12px #159d9620!important}
 #catalog-filter-panel .catalog-filter-reset{height:46px!important;min-height:46px!important;border-radius:12px!important;padding:0 14px!important;border:1px solid #e8eeee!important;background:#fff!important;color:#5b696b!important;font-size:12px!important;font-weight:800!important}
 @media(max-width:600px){#catalog-filter-panel.product-page-filters{width:calc(100% - 24px)!important;border-radius:20px!important}#catalog-filter-panel .filter-sheet-heading{padding:15px 14px 13px!important}#catalog-filter-panel .catalog-type-row,#catalog-filter-panel .catalog-brand-area{padding-left:14px!important;padding-right:14px!important}#catalog-filter-panel .catalog-type-option{height:41px!important;min-height:41px!important}#catalog-filter-panel .catalog-search{padding-left:14px!important;padding-right:14px!important}#catalog-filter-panel .catalog-panel-actions{padding-left:14px!important;padding-right:14px!important}}
+
+/* Prevent the fixed mobile purchase bar from covering related products or footer */
+@media(max-width:700px){
+ #page-product-detail{padding-bottom:190px!important;}
+ #page-product-detail .landing-section:last-of-type{margin-bottom:30px!important;}
+ #page-product-detail .landing-related{padding-bottom:24px!important;}
+ .product-mobile-buybar{bottom:calc(76px + env(safe-area-inset-bottom))!important;}
+ body.product-detail-open,body:has(#page-product-detail:not(.hidden)){padding-bottom:0!important;}
+}
