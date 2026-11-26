@@ -125,24 +125,16 @@
       <div><span class="store-kicker">THE COLLECTION</span><h1>كل المنتجات</h1><p>اكتشف الأجهزة المتوفرة وقارن الخيارات بسهولة.</p></div>
       <button type="button" class="page-back-link" data-page="departments">← رجوع للأقسام</button>
     </section>
-    <section class="catalog-filter-panel product-page-filters" aria-label="تصفية المنتجات">
-      <div class="catalog-type-row">
-        <span class="catalog-filter-label">نوع الجهاز</span>
-        <div class="catalog-type-options" id="device-type-options">
-          <button type="button" class="catalog-type-option active" data-device-choice="الكل">كل الأجهزة</button>
-          <button type="button" class="catalog-type-option" data-device-choice="phone">هواتف</button>
-          <button type="button" class="catalog-type-option" data-device-choice="tablet">تابلت</button>
-          <button type="button" class="catalog-type-option" data-device-choice="accessories">إكسسوارات</button>
-        </div>
-      </div>
-      <div class="catalog-brand-area">
-        <div class="catalog-brand-heading"><span class="catalog-filter-label">الشركة / البراند</span><span id="brand-scope-label">كل الشركات</span></div>
-        <button type="button" class="brand-collapse-toggle" id="brand-collapse-toggle" aria-expanded="false">عرض الشركات <span id="brand-collapse-count"></span> <i>⌄</i></button><div id="brand-block-grid" class="brand-block-grid"></div>
-      </div>
-      <select id="device-type-filter" aria-label="نوع الجهاز" hidden><option value="الكل">كل الأجهزة</option><option value="phone">هواتف</option><option value="tablet">تابلت</option><option value="accessories">إكسسوارات</option></select>
-      <select id="brand-filter" aria-label="البراند" hidden><option value="الكل">كل البراندات</option></select>
-      
-      <label class="products-search-inline catalog-search"><span>بحث سريع</span><input id="products-search-input" type="search" placeholder="ابحث عن جهاز أو منتج..."></label>
+    <section class="catalog-toolbar" aria-label="أدوات المنتجات">
+      <button type="button" id="catalog-filter-toggle" class="catalog-filter-trigger"><i>☷</i> الفلاتر <span id="catalog-filter-badge" class="hidden"></span></button>
+      <label class="catalog-sort-filter"><select id="catalog-sort-select" aria-label="ترتيب المنتجات"><option value="default">المميز</option><option value="newest">الأحدث</option><option value="price-low">السعر: الأقل</option><option value="price-high">السعر: الأعلى</option><option value="name">الاسم</option></select></label>
+    </section>
+    <p class="catalog-results-count" id="catalog-results-count"></p>
+    <section class="catalog-filter-panel product-page-filters hidden" id="catalog-filter-panel" aria-label="تصفية المنتجات">
+      <div class="catalog-type-row"><span class="catalog-filter-label">نوع الجهاز</span><div class="catalog-type-options" id="device-type-options"><button type="button" class="catalog-type-option active" data-device-choice="الكل">كل الأجهزة</button><button type="button" class="catalog-type-option" data-device-choice="phone">هواتف</button><button type="button" class="catalog-type-option" data-device-choice="tablet">تابلت</button><button type="button" class="catalog-type-option" data-device-choice="accessories">إكسسوارات</button></div></div>
+      <div class="catalog-brand-area"><div class="catalog-brand-heading"><span class="catalog-filter-label">الشركة / البراند</span><span id="brand-scope-label">كل الشركات</span></div><button type="button" class="brand-collapse-toggle" id="brand-collapse-toggle" aria-expanded="false">عرض الشركات <span id="brand-collapse-count"></span><i>⌄</i></button><div id="brand-block-grid" class="brand-block-grid"></div></div>
+      <select id="device-type-filter" aria-label="نوع الجهاز" hidden><option value="الكل">كل الأجهزة</option><option value="phone">هواتف</option><option value="tablet">تابلت</option><option value="accessories">إكسسوارات</option></select><select id="brand-filter" aria-label="البراند" hidden><option value="الكل">كل البراندات</option></select>
+      <label class="products-search-inline catalog-search"><span>بحث سريع</span><input id="products-search-input" type="search" placeholder="ابحث عن جهاز أو منتج..."></label><div class="catalog-panel-actions"><button type="button" id="catalog-filter-apply" class="catalog-filter-apply">عرض المنتجات</button><button type="button" id="catalog-filter-reset" class="catalog-filter-reset">إعادة ضبط</button></div>
     </section>
     <section class="store-section store-products-section products-section" id="products">
       <div class="store-section-heading store-products-heading">
