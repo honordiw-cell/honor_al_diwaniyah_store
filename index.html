@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">\n  <link rel="stylesheet" href="honor-ai-demo.css">
+  <link rel="stylesheet" href="styles.css">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
@@ -266,15 +266,6 @@
     </div>
     <p class="installment-calculator-note">الحسبة حسب عرض أقساطي – مصرف الرافدين: تحميل 25%، مدة 10 أشهر، وبدون دفعة أولى. القسط الشهري يُقرّب للأعلى لأقرب ألف دينار. تخضع الموافقة النهائية لشروط المصرف.</p>
   </dialog>
-
-  <!-- HONOR AI Assistant demo widget -->
-  <button id="honor-ai-launch" class="honor-ai-launch" aria-label="افتح مستشار HONOR AI"><span class="honor-ai-launch-mark">✦</span><span>اسأل HONOR AI</span></button>
-  <section id="honor-ai-panel" class="honor-ai-panel" aria-label="HONOR AI" hidden>
-    <header class="honor-ai-head"><div class="honor-ai-avatar">✦</div><div><b>HONOR AI</b><small>مستشار الأجهزة الذكي</small></div><button id="honor-ai-close" aria-label="إغلاق">×</button></header>
-    <div id="honor-ai-messages" class="honor-ai-messages" aria-live="polite"><div class="honor-ai-message bot">هلا بيك 👋<br>احچيلي شنو تحتاج بالموبايل وشكد ميزانيتك، وأرشحلك من أجهزة المتجر المتوفرة.</div></div>
-    <div class="honor-ai-quick"><button data-ai-prompt="أريد جهاز بحدود 300 ألف">300 ألف</button><button data-ai-prompt="أريد جهاز للألعاب">للألعاب</button><button data-ai-prompt="أريد بطارية قوية">بطارية قوية</button></div>
-    <form id="honor-ai-form" class="honor-ai-form"><input id="honor-ai-input" maxlength="500" autocomplete="off" placeholder="اكتب سؤالك..." required><button type="submit" aria-label="إرسال">➤</button></form><div class="honor-ai-demo-note">نسخة تجريبية للمقترحات — الأسعار من بيانات المتجر</div>
-  </section>
   <div class="toast" id="toast"></div>
 <section id="admin-login-view" class="admin-screen hidden"><form id="admin-login-form" class="admin-login-card"><span class="eyebrow">HONOR AL-DIWANIYAH</span><h1>لوحة إدارة المتجر</h1><p>سجّل دخولك بحساب الإدارة</p><label>البريد الإلكتروني<input name="email" type="email" required></label><label>كلمة المرور<input name="password" type="password" required></label><button class="primary-btn full" type="submit">تسجيل الدخول</button><p id="admin-login-error" class="admin-error"></p></form></section>
 <section id="admin-panel" class="admin-screen hidden">
@@ -320,6 +311,6 @@
 <dialog id="admin-category-dialog" class="admin-dialog"><form id="admin-category-form"><div class="admin-head"><h2>إضافة قسم</h2><button type="button" class="admin-close" data-admin-close="admin-category-dialog">×</button></div><label>اسم القسم<input name="name" required></label><label>Slug<input name="slug" required></label><button class="primary-btn full" type="submit">إضافة</button></form></dialog>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
-  <script src="app.js"></script>\n  <script src="honor-ai-demo.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
