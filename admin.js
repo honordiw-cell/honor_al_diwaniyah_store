@@ -324,7 +324,9 @@ async function exportOrders(){
   while(true){const {data,error}=await db.from("orders").select("order_number,customer_name,phone,province,district,address,payment_method,payment_status,status,total,created_at,notes").order("created_at",{ascending:false}).range(from,from+batch-1);if(error)throw error;all.push(...(data||[]));if(!data||data.length<batch)break;from+=batch}
   const headers=["رقم الطلب","اسم الزبون","الهاتف","المحافظة","المنطقة","العنوان","طريقة الدفع","حالة الدفع","حالة الطلب","المجموع","التاريخ","ملاحظات"];
   const rows=all.map(o=>[o.order_number,o.customer_name,o.phone,o.province,o.district,o.address,o.payment_method,o.payment_status,STATUS[o.status]||o.status,o.total,new Date(o.created_at).toLocaleString("ar-IQ"),o.notes]);
-  const csv="\uFEFF"+[headers,...rows].map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+  // Neutralize spreadsheet formula injection from customer-controlled CSV cells.
+  const csvSafe=v=>{const s=String(v??"");return /^[\\s]*[=+\\-@]/.test(s)?"'"+s:s};
+  const csv="\\uFEFF"+[headers,...rows].map(row=>row.map(v=>'"'+csvSafe(v).replace(/"/g,'""')+'"').join(",")).join("\\r\\n");
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="honor-orders-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(url);toast("تم تصدير "+all.length+" طلب");
  }catch(e){toast("تعذر تصدير الطلبات: "+e.message)}
 }
