@@ -177,12 +177,11 @@ function showProductDetails(id){
 
   '<div class="product-mobile-buybar"><div><small>السعر</small><b id="detail-mobile-price">'+money(selectedVariant.price)+'</b></div><button type="button" id="detail-mobile-buy" '+(variantStock(selectedVariant)<=0?'disabled':'')+'>اطلب الآن</button></div>'+
  '</div>';
- // Hide the fixed purchase bar while related products or the footer are visible, so it never obscures content.
+ // Keep the purchase bar visible; hide it only while the related-products cards are actually under its footprint.
  const mobileBuyBar=document.querySelector('.product-mobile-buybar');
  if(mobileBuyBar&&'IntersectionObserver' in window){
-  const endTargets=[...document.querySelectorAll('#page-product-detail .landing-section')].filter(sec=>sec.querySelector('.landing-related'));
-  const footer=document.querySelector('.site-footer');if(footer)endTargets.push(footer);
-  if(endTargets.length){const observer=new IntersectionObserver(entries=>mobileBuyBar.classList.toggle('buybar-hidden',entries.some(entry=>entry.isIntersecting)),{threshold:0.08});endTargets.forEach(target=>observer.observe(target));}
+  const related=document.querySelector('#page-product-detail .landing-related');
+  if(related){const observer=new IntersectionObserver(entries=>{const visible=entries.some(entry=>entry.isIntersecting);mobileBuyBar.classList.toggle('buybar-hidden',visible);},{rootMargin:'-0px 0px -78% 0px',threshold:0});observer.observe(related);}
  }
  loadProductReviews(p.id);
  const mainImage=$("landing-main-image");
