@@ -72,7 +72,8 @@ function renderProducts(){
      (`${p.name} ${p.description||""} ${p.brand||""}`).toLowerCase().includes(q);
  });
  // المتوفر أولاً، ثم نفذت الكمية مع الحفاظ على ترتيب المنتجات داخل كل مجموعة.
-  const sortedProducts=[...filtered].sort((a,b)=>(Number(b.stock)>0?1:0)-(Number(a.stock)>0?1:0));
+  const sortMode=$("catalog-sort-select")?.value||"default";
+  const sortedProducts=[...filtered].sort((a,b)=>{if(sortMode==="price-low")return Number(a.price)-Number(b.price);if(sortMode==="price-high")return Number(b.price)-Number(a.price);if(sortMode==="name")return String(a.name||"").localeCompare(String(b.name||""),"ar");if(sortMode==="newest")return new Date(b.created_at||b.createdAt||0)-new Date(a.created_at||a.createdAt||0);return (Number(b.stock)>0?1:0)-(Number(a.stock)>0?1:0);});
   const visibleProducts=sortedProducts.slice(0,visibleProductCount);
  $("product-grid").innerHTML=visibleProducts.map(p=>`<article class="product-card">
    ${p.tag?`<span class="product-tag">${escapeHtml(p.tag)}</span>`:""}
@@ -437,6 +438,7 @@ $("theme-toggle").addEventListener("click",()=>{
 // Category buttons are rendered dynamically from Supabase categories.
 $("search-input").addEventListener("input",()=>{if($("products-search-input"))$("products-search-input").value=$("search-input").value;visibleProductCount=productsPerPage;renderProducts()});
 if($("products-search-input"))$("products-search-input").addEventListener("input",()=>{$("search-input").value=$("products-search-input").value;visibleProductCount=productsPerPage;renderProducts()});
+$("catalog-sort-select")?.addEventListener("change",()=>{visibleProductCount=productsPerPage;renderProducts()});
 if($("availability-filter"))$("availability-filter").addEventListener("change",e=>{selectedAvailability=e.target.value;visibleProductCount=productsPerPage;renderProducts()});
 $("search-input").addEventListener("keydown",e=>{if(e.key==="Enter"){visibleProductCount=productsPerPage;renderProducts();showStorePage("products")}});
 
