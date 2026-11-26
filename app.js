@@ -55,7 +55,7 @@ function persistCart(){
  localStorage.setItem("honor-cart",JSON.stringify(cart));
  renderCart();
 }
-function escapeHtml(s=""){
+function safeBannerLink(value=""){\n const raw=String(value||"#products").trim();\n if(raw.startsWith("#")||raw.startsWith("/"))return raw;\n try{const u=new URL(raw,window.location.origin);return (u.protocol==="https:"||u.protocol==="http:")?u.href:"#products"}catch{return "#products"}\n}\nfunction escapeHtml(s=""){
  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 function stockState(p,stock=p.stock){const n=Math.max(0,Number(stock)||0),limit=Math.max(1,Number(p.lowStockThreshold)||3);return n<=0?'out':n<=limit?'low':'in'}
@@ -104,7 +104,7 @@ function renderProducts(){
 async function loadHomeBanner(){
  const section=$("home-promo-banner");if(!section||!sb)return;
  try{const result=await sb.from("home_banners").select("title,subtitle,image_url,button_text,link_url").eq("is_active",true).order("updated_at",{ascending:false}).limit(1).maybeSingle();if(result.error)throw result.error;const data=result.data;if(!data){section.classList.add("hidden");return}
- $("home-promo-image").src=data.image_url;$("home-promo-image").alt=data.title||"عرض خاص";$("home-promo-title").textContent=data.title||"";$("home-promo-subtitle").textContent=data.subtitle||"";$("home-promo-button").textContent=data.button_text||"اكتشف العرض";$("home-promo-link").href=data.link_url||"#products";section.classList.remove("hidden");
+ $("home-promo-image").src=data.image_url;$("home-promo-image").alt=data.title||"عرض خاص";$("home-promo-title").textContent=data.title||"";$("home-promo-subtitle").textContent=data.subtitle||"";$("home-promo-button").textContent=data.button_text||"اكتشف العرض";$("home-promo-link").href=safeBannerLink(data.link_url);section.classList.remove("hidden");
  }catch(error){console.warn("Home banner unavailable:",error);section.classList.add("hidden")}
 }
 function renderHomeCollections(){
