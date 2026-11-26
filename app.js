@@ -311,6 +311,7 @@ async function loadProducts(){
      return {
        id:String(row.id),
        name:row.name,
+       created_at:row.created_at,
        categoryId:row.category_id||"",
        category:category?.name||"غير مصنف",
        categorySlug:category?.slug||"",
