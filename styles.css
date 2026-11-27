@@ -4373,3 +4373,11 @@ body.theme-dark #page-maintenance .store-maintenance-grid article small{color:#b
 body.theme-dark .feature-disclaimer{color:#aebdca}
 
 .catalog-sort-label{display:flex;align-items:center;gap:8px;font-weight:800;font-size:12px;color:var(--hd-ink,#26383b)}#catalog-sort{border:1px solid #dce7e5;border-radius:11px;background:#fff;color:#26383b;padding:9px 12px;font:700 12px Cairo,sans-serif}.store-product-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}#recently-viewed-section{margin-top:24px}body.theme-dark #catalog-sort{background:#1b2733;color:#e7eef4;border-color:#415566}@media(max-width:700px){.store-product-tools{align-items:flex-start}.catalog-sort-label{width:100%;justify-content:space-between}#catalog-sort{flex:1}}
+
+
+/* UI audit polish: comparison state and touch-friendly controls */
+.product-tool-btn.is-compared{background:#16aaa2!important;color:#fff!important;border-color:#16aaa2!important;box-shadow:0 0 0 2px rgba(22,170,162,.16)}
+.product-tool-btn{min-width:42px;min-height:42px;touch-action:manipulation}
+.qty-controls button{min-width:42px;min-height:42px;touch-action:manipulation}
+.compare-tool.is-compared:focus-visible{outline-color:#16aaa2}
+@media(max-width:700px){.product-bottom{gap:8px}.product-bottom .add-btn{min-height:44px}.product-tool-btn{border-radius:12px}}
