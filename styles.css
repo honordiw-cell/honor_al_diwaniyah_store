@@ -4381,3 +4381,57 @@ body.theme-dark .feature-disclaimer{color:#aebdca}
 .qty-controls button{min-width:42px;min-height:42px;touch-action:manipulation}
 .compare-tool.is-compared:focus-visible{outline-color:#16aaa2}
 @media(max-width:700px){.product-bottom{gap:8px}.product-bottom .add-btn{min-height:44px}.product-tool-btn{border-radius:12px}}
+
+/* Product-detail visual refinement batch: mobile-first hierarchy, calmer spacing, clearer actions. */
+#page-product-detail .product-landing{max-width:1180px;padding-top:18px}
+#page-product-detail .landing-topline{flex-wrap:wrap;gap:8px;margin-bottom:14px}
+#page-product-detail .product-share-btn{min-height:40px;padding:8px 13px;border-radius:12px;border:1px solid var(--line);font-weight:700}
+#page-product-detail .landing-overview{gap:clamp(18px,3vw,34px)}
+#page-product-detail .landing-gallery{position:relative}
+#page-product-detail .landing-main-image{height:clamp(310px,42vw,520px);border-radius:24px;background:linear-gradient(145deg,#f9fbfb,#edf3f3);border-color:#dce6e6}
+#page-product-detail .landing-main-image img{padding:clamp(14px,3vw,30px)}
+#page-product-detail .landing-thumbs{gap:8px;padding:4px 2px 6px}
+#page-product-detail .landing-thumb{border-radius:13px;transition:border-color .15s,box-shadow .15s;}
+#page-product-detail .landing-thumb.active{box-shadow:0 0 0 3px rgba(24,182,173,.12)}
+#page-product-detail .landing-buy-panel{padding:18px 20px;border:1px solid var(--line);border-radius:22px;background:var(--white);box-shadow:0 10px 28px rgba(20,45,48,.045)}
+#page-product-detail .landing-buy-panel h1{margin-top:8px;letter-spacing:-.2px}
+#page-product-detail .landing-price-line{padding:12px 0 14px;margin:14px 0 8px;border-bottom:1px solid var(--line)}
+#page-product-detail .landing-price-line strong{font-variant-numeric:tabular-nums}
+#page-product-detail .landing-stock-detail{font-size:12px;font-weight:800;margin-bottom:12px}
+#page-product-detail .product-variant-picker,#page-product-detail .product-color-picker{border:1px solid var(--line);border-radius:16px;padding:13px;margin:12px 0;background:var(--pale)}
+#page-product-detail .variant-options{gap:9px}
+#page-product-detail .variant-option{border-radius:13px;min-height:76px}
+#page-product-detail .landing-actions{gap:9px;margin-top:16px}
+#page-product-detail .landing-actions button,#page-product-detail .landing-actions a{min-height:48px;border-radius:13px}
+#page-product-detail .landing-actions .landing-whatsapp-btn{grid-column:1/-1}
+#page-product-detail .installment-offer{margin-top:18px;padding:15px;border-radius:17px;gap:11px}
+#page-product-detail .installment-monthly strong{font-size:clamp(22px,3vw,28px)}
+#page-product-detail .landing-section{margin-top:30px;padding-top:24px;border-top:1px solid var(--line)}
+#page-product-detail .landing-section-title{margin-bottom:15px}
+#page-product-detail .landing-spec-grid{gap:10px}
+#page-product-detail .landing-spec{border-radius:16px;min-height:105px;padding:15px}
+#page-product-detail .landing-related-card{border-radius:16px;transition:transform .16s,box-shadow .16s}
+#page-product-detail .landing-related-card:active{transform:scale(.985)}
+@media(max-width:700px){
+ #page-product-detail .product-landing{padding:12px 12px 28px}
+ #page-product-detail .landing-topline{margin-bottom:8px}
+ #page-product-detail .landing-topline .eyebrow{letter-spacing:1.5px;font-size:9px}
+ #page-product-detail .landing-main-image{height:clamp(280px,88vw,400px);min-height:280px;border-radius:20px}
+ #page-product-detail .landing-main-image img{padding:12px}
+ #page-product-detail .landing-thumbs{gap:7px}
+ #page-product-detail .landing-thumb{width:56px;height:56px;flex-basis:56px;border-radius:11px}
+ #page-product-detail .landing-buy-panel{padding:16px 14px;border-radius:19px}
+ #page-product-detail .landing-buy-panel h1{font-size:22px;line-height:1.45}
+ #page-product-detail .landing-price-line strong{font-size:24px}
+ #page-product-detail .landing-actions button,#page-product-detail .landing-actions a{min-height:46px}
+ #page-product-detail .installment-offer{padding:13px;border-radius:16px}
+ #page-product-detail .landing-section{margin-top:25px;padding-top:20px}
+ #page-product-detail .landing-spec-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #page-product-detail .landing-spec{padding:12px;min-height:100px}
+ #page-product-detail .landing-spec b{font-size:13px;overflow-wrap:anywhere}
+ #page-product-detail .landing-related{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #page-product-detail .landing-related-card img,#page-product-detail .landing-related-placeholder{height:115px}
+ .product-mobile-buybar{padding:9px 12px;border-radius:16px 16px 0 0}
+ .product-mobile-buybar button{min-width:132px}
+}
+@media(prefers-reduced-motion:reduce){#page-product-detail .landing-thumb,#page-product-detail .landing-related-card{transition:none}}
