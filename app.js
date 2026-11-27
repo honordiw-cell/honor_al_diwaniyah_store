@@ -493,7 +493,7 @@ $("order-tracking-form")?.addEventListener("submit",async e=>{
  }catch(err){console.error(err);box.textContent="تعذر جلب حالة الطلب حالياً. حاول مرة ثانية."}
 });
 
-$("menu-toggle").onclick=()=>document.querySelector(".desktop-nav").classList.toggle("mobile-open");
+$("menu-toggle").onclick=()=>{const nav=document.querySelector(".desktop-nav");const open=nav.classList.toggle("mobile-open");$("menu-toggle").setAttribute("aria-expanded",String(open));$("menu-toggle").setAttribute("aria-label",open?"إغلاق القائمة":"فتح القائمة")};
 
 function renderFavorites(){const section=$("home-favorites-section"),grid=$("home-favorites-grid");if(!section||!grid)return;const rows=favoriteIds.map(id=>products.find(p=>String(p.id)===String(id))).filter(Boolean);section.classList.toggle("hidden",!rows.length);grid.innerHTML=rows.map(p=>'<article class="home-product-card"><button type="button" class="home-product-open" data-home-details="'+escapeHtml(p.id)+'"><div class="home-product-image">'+(p.image?'<img src="'+escapeHtml(p.image)+'" alt="'+escapeHtml(p.name)+'">':'<span>HONOR AL-DIWANIYAH</span>')+'</div><b>'+escapeHtml(p.name)+'</b><strong>'+money(p.price)+'</strong></button></article>').join("");}
 
@@ -530,6 +530,8 @@ function showStorePage(page,{push=true}={}){
    if(link.classList.contains("mobile-nav-item"))link.setAttribute("aria-current",active?"page":"false");
  });
  document.querySelector(".desktop-nav")?.classList.remove("mobile-open");
+ $("menu-toggle")?.setAttribute("aria-expanded","false");
+ $("menu-toggle")?.setAttribute("aria-label","فتح القائمة");
  if(push)history.pushState({storePage:page},"","#"+page);
  window.scrollTo({top:0,behavior:"instant"});
 }
