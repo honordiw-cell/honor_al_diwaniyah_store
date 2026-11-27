@@ -4711,3 +4711,48 @@ body.theme-dark #page-product-detail .product-purchase-controls{background:#fff!
 body.theme-dark #page-product-detail .product-quantity-control{background:#fff!important;border-color:#e6ebef!important}
 body.theme-dark #page-product-detail .product-quantity-control button,body.theme-dark #page-product-detail .product-quantity-control b{color:#243e50!important}
 body.theme-dark #page-product-detail .product-secondary-actions button,body.theme-dark #page-product-detail .product-secondary-actions a{color:#657986!important}
+
+
+/* TEST BRANCH: installment CTA contrast + cohesive product detail dark theme */
+#page-product-detail .installment-whatsapp,
+#page-product-detail button.installment-whatsapp,
+#page-product-detail a.installment-whatsapp{background:#e3f5ec!important;color:#17633f!important;border:1px solid #b9dfca!important;opacity:1!important;text-shadow:none!important}
+#page-product-detail .installment-whatsapp *{color:#17633f!important;opacity:1!important}
+body.theme-dark #page-product-detail,
+body.theme-dark #page-product-detail .product-landing,
+body.theme-dark #page-product-detail .landing-buy-panel,
+body.theme-dark #page-product-detail .product-purchase-controls,
+body.theme-dark #page-product-detail .installment-offer,
+body.theme-dark #page-product-detail .product-info-tabs{background:#17242d!important;color:#eaf2f4!important;border-color:#354b57!important}
+body.theme-dark #page-product-detail .landing-main-image{background:#fff!important}
+body.theme-dark #page-product-detail .landing-buy-panel h1,
+body.theme-dark #page-product-detail .landing-section-title h2,
+body.theme-dark #page-product-detail .product-tab-panel,
+body.theme-dark #page-product-detail .landing-spec b,
+body.theme-dark #page-product-detail .installment-offer-head b,
+body.theme-dark #page-product-detail .product-delivery-feature-grid b{color:#eaf2f4!important}
+body.theme-dark #page-product-detail .landing-brand,
+body.theme-dark #page-product-detail .landing-memory,
+body.theme-dark #page-product-detail .landing-stock-detail,
+body.theme-dark #page-product-detail .installment-offer-head small,
+body.theme-dark #page-product-detail .installment-monthly small,
+body.theme-dark #page-product-detail .installment-disclaimer,
+body.theme-dark #page-product-detail .product-tab-panel,
+body.theme-dark #page-product-detail .landing-section-title p{color:#b5c6cd!important}
+body.theme-dark #page-product-detail .installment-monthly strong{color:#ff7867!important}
+body.theme-dark #page-product-detail .installment-details span,
+body.theme-dark #page-product-detail .landing-spec,
+body.theme-dark #page-product-detail .product-delivery-feature-grid article,
+body.theme-dark #page-product-detail .landing-related-card{background:#22343e!important;color:#dce8eb!important;border-color:#3a505c!important}
+body.theme-dark #page-product-detail .landing-spec small,
+body.theme-dark #page-product-detail .landing-spec span,
+body.theme-dark #page-product-detail .product-delivery-feature-grid span{color:#b5c6cd!important}
+body.theme-dark #page-product-detail .product-tab-buttons{border-color:#354b57!important}
+body.theme-dark #page-product-detail .product-info-tab{color:#b5c6cd!important}
+body.theme-dark #page-product-detail .product-info-tab.active{color:#49cfc5!important;border-bottom-color:#49cfc5!important}
+body.theme-dark #page-product-detail .product-secondary-actions button,
+body.theme-dark #page-product-detail .product-secondary-actions a{color:#b5c6cd!important}
+body.theme-dark #page-product-detail .landing-actions .landing-whatsapp-btn{background:#183d32!important;color:#bcebd4!important;border-color:#39735b!important}
+body.theme-dark #page-product-detail .landing-actions .landing-whatsapp-btn *{color:#bcebd4!important}
+body.theme-dark #page-product-detail .installment-whatsapp{background:#183d32!important;color:#bcebd4!important;border-color:#39735b!important}
+body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!important}
