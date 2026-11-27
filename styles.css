@@ -4287,3 +4287,87 @@ body.theme-dark .home-category-section .home-collection-more{background:#213b40;
   .home-product-card,.home-category-card,.home-quick-card,.store-hero-primary{transition:none!important}
   .home-product-card:hover,.home-category-card:hover,.home-quick-card:hover,.store-hero-primary:hover{transform:none!important}
 }
+
+
+/* Unified service forms and secondary views */
+.feature-form,.order-tracking-form{
+  width:min(920px,calc(100% - 40px));margin:0 auto 26px;padding:clamp(18px,3vw,30px);
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;
+  border:1px solid #e2ebea;border-radius:22px;background:#fff;
+  box-shadow:0 10px 30px rgba(25,65,65,.045)
+}
+.feature-form label,.order-tracking-form label{
+  display:grid;gap:7px;min-width:0;color:#304447;font-size:12px;font-weight:900
+}
+.feature-form input,.feature-form select,.feature-form textarea,
+.order-tracking-form input{
+  width:100%;min-width:0;min-height:47px;padding:11px 13px;
+  border:1px solid #dce7e5;border-radius:12px;background:#f8fbfa;
+  color:#26383b;font:500 13px Cairo,sans-serif;outline:none
+}
+.feature-form textarea{min-height:110px;resize:vertical}
+.feature-form input:focus,.feature-form select:focus,.feature-form textarea:focus,
+.order-tracking-form input:focus{
+  border-color:#16aaa2;box-shadow:0 0 0 3px rgba(22,170,162,.11);background:#fff
+}
+.feature-form .feature-wide{grid-column:1/-1}
+.feature-form button,.order-tracking-form button{grid-column:1/-1;justify-self:start;min-width:190px}
+.feature-results,.order-tracking-result{
+  width:min(920px,calc(100% - 40px));margin:0 auto 30px
+}
+.feature-results:empty,.order-tracking-result:empty{display:none}
+.feature-results>h2{color:#26383b;font-size:20px;font-weight:900}
+.feature-disclaimer{width:min(920px,calc(100% - 40px));margin:0 auto 28px;color:#79898a;font-size:11px;line-height:1.8}
+#page-accessories .store-service-section,#page-maintenance .store-maintenance-section{
+  width:min(1220px,calc(100% - 40px));margin:0 auto 30px;padding:clamp(22px,4vw,38px);
+  border:1px solid #e3ecea;border-radius:24px;box-shadow:0 10px 28px rgba(25,65,65,.04)
+}
+#page-accessories .store-service-section{background:linear-gradient(120deg,#1c3033,#263e40)}
+#page-maintenance .store-maintenance-section{background:#fff}
+#page-accessories .store-service-copy h2,#page-maintenance .store-maintenance-heading h2{font-weight:900}
+#page-maintenance .store-maintenance-grid article{
+  border:1px solid #e5eceb;border-radius:16px;background:#f9fbfb;
+  padding:17px;transition:.2s ease
+}
+#page-maintenance .store-maintenance-grid article:hover{border-color:#a7dcd7;transform:translateY(-2px)}
+#page-maintenance .store-maintenance-grid article b{font-size:13px;font-weight:900}
+#page-maintenance .store-maintenance-grid article small{color:#78888a;line-height:1.8}
+#page-tracking .order-tracking-form{max-width:760px}
+#page-tracking .order-tracking-result .tracking-card{
+  border:1px solid #e2ebea;border-radius:20px;background:#fff;
+  box-shadow:0 8px 25px rgba(25,65,65,.045)
+}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid rgba(22,170,162,.42);outline-offset:2px
+}
+@media(max-width:700px){
+  .feature-form,.order-tracking-form{
+    width:calc(100% - 24px);grid-template-columns:1fr;gap:12px;
+    margin-bottom:20px;padding:15px;border-radius:17px
+  }
+  .feature-form .feature-wide{grid-column:auto}
+  .feature-form button,.order-tracking-form button{width:100%;min-width:0;justify-self:stretch}
+  .feature-results,.order-tracking-result,.feature-disclaimer{width:calc(100% - 24px)}
+  #page-accessories .store-service-section,#page-maintenance .store-maintenance-section{
+    width:calc(100% - 24px);padding:18px;border-radius:18px
+  }
+  #page-maintenance .store-maintenance-grid{grid-template-columns:1fr;gap:9px}
+}
+body.theme-dark .feature-form,body.theme-dark .order-tracking-form,
+body.theme-dark #page-maintenance .store-maintenance-section,
+body.theme-dark #page-tracking .order-tracking-result .tracking-card{
+  background:#1b2733!important;border-color:#35495a!important;color:#e7eef4!important
+}
+body.theme-dark .feature-form label,body.theme-dark .order-tracking-form label{color:#e1ebef}
+body.theme-dark .feature-form input,body.theme-dark .feature-form select,
+body.theme-dark .feature-form textarea,body.theme-dark .order-tracking-form input{
+  background:#111c26!important;border-color:#415566!important;color:#f1f5f9!important;
+  -webkit-text-fill-color:#f1f5f9
+}
+body.theme-dark #page-maintenance .store-maintenance-grid article{
+  background:#202f3a!important;border-color:#3c505f!important;color:#f0f5f7!important
+}
+body.theme-dark #page-maintenance .store-maintenance-grid article b{color:#f0f5f7!important}
+body.theme-dark #page-maintenance .store-maintenance-grid article small{color:#b7c6ce!important}
+body.theme-dark .feature-disclaimer{color:#aebdca}
