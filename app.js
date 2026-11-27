@@ -373,10 +373,16 @@ async function submitOrder(e){
  const formEl=e.currentTarget;
  if(formEl.dataset.submitting==="true")return;
  if(!cart.length){toast("السلة فارغة");return}
+ const orderStockGroups=new Map();
  for(const item of cart){
-   const p=products.find(p=>String(p.id)===String(item.id));
-   const stock=Math.max(0,Number(item.variantKey?p?.variants?.find(v=>v.variant_key===item.variantKey)?.stock:p?.stock)||0);
-   if(!p||stock<=0||item.qty>stock){
+   const key=String(item.id)+"|"+String(item.variantKey||"");
+   orderStockGroups.set(key,(orderStockGroups.get(key)||0)+Number(item.qty||0));
+ }
+ for(const [key,qty] of orderStockGroups){
+   const [id,variantKey]=key.split("|");
+   const p=products.find(p=>String(p.id)===id);
+   const stock=Math.max(0,Number(variantKey?p?.variants?.find(v=>v.variant_key===variantKey)?.stock:p?.stock)||0);
+   if(!p||stock<=0||qty>stock){
      toast(stock<=0?"نفذ من المخزون":"الكمية المطلوبة غير متوفرة حالياً");
      return;
    }
