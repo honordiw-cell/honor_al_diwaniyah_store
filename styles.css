@@ -4756,3 +4756,8 @@ body.theme-dark #page-product-detail .installment-whatsapp{background:#183d32!im
 body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!important}
 
 /* Cloudflare test deployment trigger */
+
+/* Responsive Arabic logo lockup sizing fix */
+#page-home .store-search-intro .store-search-brand{display:block!important;width:100%!important;max-width:460px!important;margin:0 auto 14px!important;line-height:0!important;font-size:0!important;overflow:hidden!important;}
+#page-home .store-search-intro .store-search-brand img{display:block!important;width:100%!important;max-width:460px!important;height:auto!important;max-height:150px!important;object-fit:contain!important;margin:0 auto!important;}
+@media(max-width:760px){#page-home .store-search-intro .store-search-brand{max-width:280px!important;margin:0 auto 10px!important;}#page-home .store-search-intro .store-search-brand img{width:100%!important;max-width:280px!important;max-height:100px!important;height:auto!important;}}
