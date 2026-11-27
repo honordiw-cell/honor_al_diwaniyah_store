@@ -23,6 +23,7 @@ let selectedDeviceType = "الكل";
 let visibleProductCount = 8;
 const productsPerPage = 8;
 let selectedAvailability = "all";
+let catalogSort = "featured";
 const WHATSAPP_NUMBER = "9647874400300";
 
 let storeBundles=[];
@@ -77,7 +78,7 @@ function renderProducts(){
      (`${p.name} ${p.description||""} ${p.brand||""}`).toLowerCase().includes(q);
  });
  // المتوفر أولاً، ثم نفذت الكمية مع الحفاظ على ترتيب المنتجات داخل كل مجموعة.
-  const sortedProducts=[...filtered].sort((a,b)=>(Number(b.stock)>0?1:0)-(Number(a.stock)>0?1:0));
+  const sortedProducts=[...filtered].sort((a,b)=>{const st=(Number(b.stock)>0?1:0)-(Number(a.stock)>0?1:0);if(catalogSort==="price-asc")return Number(a.price)-Number(b.price)||st;if(catalogSort==="price-desc")return Number(b.price)-Number(a.price)||st;if(catalogSort==="newest")return new Date(b.createdAt||0)-new Date(a.createdAt||0)||st;return st;});
   const visibleProducts=sortedProducts.slice(0,visibleProductCount);
  if(productLoadMessage==="جاري تحميل المنتجات..."){$("product-grid").innerHTML=Array.from({length:6},()=>`<article class="product-card product-skeleton"><div class="skeleton-image"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></article>`).join("");}
  else $("product-grid").innerHTML=visibleProducts.map(p=>`<article class="product-card">
@@ -107,6 +108,7 @@ function renderProducts(){
  document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>{const p=products.find(x=>String(x.id)===String(b.dataset.add));if(!p)return;if((p.variants||[]).length>1){showProductDetails(p.id);toast("اختار نسخة الرام والذاكرة أولاً");return}const colors=(p.color||"").split(/[,،/|]+/).map(x=>x.trim()).filter(Boolean);if((p.deviceType==="phone"||p.deviceType==="tablet")&&colors.length>1){showProductDetails(p.id);toast("اختار لون الجهاز قبل إضافته للسلة");return}addToCart(p.id,colors[0]||"",p.variants?.[0]?.variant_key||"")}));
  document.querySelectorAll("[data-details]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.details)));
  renderHomeCollections();
+ renderRecentlyViewed();
  renderFavorites();
 }
 async function loadHomeBanner(){
@@ -115,6 +117,7 @@ async function loadHomeBanner(){
  $("home-promo-image").src=data.image_url;$("home-promo-image").alt=data.title||"عرض خاص";$("home-promo-title").textContent=data.title||"";$("home-promo-subtitle").textContent=data.subtitle||"";$("home-promo-button").textContent=data.button_text||"اكتشف العرض";$("home-promo-link").href=safeBannerLink(data.link_url);section.classList.remove("hidden");
  }catch(error){console.warn("Home banner unavailable:",error);section.classList.add("hidden")}
 }
+function renderRecentlyViewed(){const ids=JSON.parse(localStorage.getItem("honor-recently-viewed")||"[]");const list=ids.map(id=>products.find(p=>String(p.id)===String(id))).filter(Boolean).slice(0,6);const sec=$("recently-viewed-section"),box=$("recently-viewed-grid");if(!sec||!box)return;sec.classList.toggle("hidden",!list.length);box.innerHTML=list.map(p=>`<article class="home-product-card"><button class="home-product-open" data-recent-details="${escapeHtml(p.id)}"><div class="home-product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">`:"<span>HONOR AL-DIWANIYAH</span>"}</div><small>${escapeHtml(p.brand||p.category||"")}</small><b>${escapeHtml(p.name)}</b><strong>${money(p.price)}</strong></button></article>`).join("");box.querySelectorAll("[data-recent-details]").forEach(b=>b.onclick=()=>showProductDetails(b.dataset.recentDetails));}
 function renderHomeCollections(){
  const available=products.filter(p=>p.stock>0);
  const phones=available.filter(p=>p.isFeatured&&(p.deviceType==="phone"||p.deviceType==="tablet")).sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,6);
@@ -141,6 +144,7 @@ function bindReviewForm(productId){const form=$("product-review-form");if(!form)
 function showProductDetails(id){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
+ try{let r=JSON.parse(localStorage.getItem("honor-recently-viewed")||"[]");r=[String(id),...r.filter(x=>String(x)!==String(id))].slice(0,8);localStorage.setItem("honor-recently-viewed",JSON.stringify(r));}catch{}
  const content=$("product-details-content");
  if(!content)return;
  const images=[...new Set([p.image,...(Array.isArray(p.images)?p.images:[])].filter(Boolean))];
@@ -659,3 +663,5 @@ $a("admin-add-product").onclick=()=>openProdA();function openProdA(id){const f=$
  document.addEventListener("click",e=>{const b=e.target.closest("[data-admin-order]");if(b)orderDetailA(b.dataset.adminOrder)});
  authA();
 })();
+
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="catalog-sort"){catalogSort=e.target.value;visibleProductCount=productsPerPage;renderProducts();}});

@@ -4371,3 +4371,5 @@ body.theme-dark #page-maintenance .store-maintenance-grid article{
 body.theme-dark #page-maintenance .store-maintenance-grid article b{color:#f0f5f7!important}
 body.theme-dark #page-maintenance .store-maintenance-grid article small{color:#b7c6ce!important}
 body.theme-dark .feature-disclaimer{color:#aebdca}
+
+.catalog-sort-label{display:flex;align-items:center;gap:8px;font-weight:800;font-size:12px;color:var(--hd-ink,#26383b)}#catalog-sort{border:1px solid #dce7e5;border-radius:11px;background:#fff;color:#26383b;padding:9px 12px;font:700 12px Cairo,sans-serif}.store-product-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}#recently-viewed-section{margin-top:24px}body.theme-dark #catalog-sort{background:#1b2733;color:#e7eef4;border-color:#415566}@media(max-width:700px){.store-product-tools{align-items:flex-start}.catalog-sort-label{width:100%;justify-content:space-between}#catalog-sort{flex:1}}
