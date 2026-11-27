@@ -210,7 +210,8 @@ function showProductDetails(id){
  $("detail-add-cart")?.addEventListener("click",()=>{if(productColors.length>1&&!chosenColor()){toast("اختار لون الجهاز أولاً");return}addToCart(p.id,chosenColor(),chosenVariantKey())});
  document.querySelectorAll("[data-related-product]").forEach(b=>b.addEventListener("click",()=>showProductDetails(b.dataset.relatedProduct)));
  showStorePage("product-detail",{push:false});
- if(!location.hash.startsWith("#product/"))history.pushState({productId:id},"","#product/"+encodeURIComponent(id));
+ const nextProductHash="#product/"+encodeURIComponent(id);
+ if(location.hash!==nextProductHash)history.pushState({productId:id},"",nextProductHash);
 }
 
 function addToCart(id,color="",variantKey=""){
