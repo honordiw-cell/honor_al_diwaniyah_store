@@ -55,7 +55,12 @@ function persistCart(){
  localStorage.setItem("honor-cart",JSON.stringify(cart));
  renderCart();
 }
-function safeBannerLink(value=""){\n const raw=String(value||"#products").trim();\n if(raw.startsWith("#")||raw.startsWith("/"))return raw;\n try{const u=new URL(raw,window.location.origin);return (u.protocol==="https:"||u.protocol==="http:")?u.href:"#products"}catch{return "#products"}\n}\nfunction escapeHtml(s=""){
+function safeBannerLink(value=""){
+ const raw=String(value||"#products").trim();
+ if(raw.startsWith("#")||raw.startsWith("/"))return raw;
+ try{const u=new URL(raw,window.location.origin);return (u.protocol==="https:"||u.protocol==="http:")?u.href:"#products"}catch{return "#products"}
+}
+function escapeHtml(s=""){
  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 function stockState(p,stock=p.stock){const n=Math.max(0,Number(stock)||0),limit=Math.max(1,Number(p.lowStockThreshold)||3);return n<=0?'out':n<=limit?'low':'in'}
