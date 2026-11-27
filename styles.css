@@ -4890,3 +4890,53 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
     box-shadow:0 5px 17px rgba(15,42,49,.10);
   }
 }
+
+/* Premium featured-product banner badge, button, and pagination */
+.home-promo-overlay p{
+ display:inline-flex;
+ align-self:flex-start;
+ width:max-content;
+ max-width:100%;
+ margin:10px 0 0;
+ padding:9px 14px;
+ border:1px solid rgba(255,255,255,.58);
+ border-radius:14px;
+ background:rgba(255,255,255,.76);
+ color:#183b43;
+ font-size:clamp(12px,1.5vw,17px);
+ font-weight:900;
+ line-height:1.45;
+ box-shadow:0 5px 18px rgba(18,45,55,.08);
+ backdrop-filter:blur(10px);
+ -webkit-backdrop-filter:blur(10px);
+}
+.home-promo-banner .promo-slide-dots{
+ display:flex!important;
+ position:absolute;
+ z-index:5;
+ bottom:13px;
+ left:50%;
+ transform:translateX(-50%);
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+ padding:7px 10px;
+ border-radius:999px;
+ background:rgba(20,40,49,.14);
+ backdrop-filter:blur(9px);
+ -webkit-backdrop-filter:blur(9px);
+}
+.home-promo-banner.single-slide .promo-slide-dots{display:none!important}
+.home-promo-banner .promo-dot{
+ width:7px;height:7px;border-radius:50%;
+ background:rgba(255,255,255,.65);
+ border:1px solid rgba(20,40,49,.12);
+ transition:width .25s ease,background .25s ease,transform .25s ease;
+}
+.home-promo-banner .promo-dot.active{width:20px;border-radius:999px;background:#16aaa2;transform:scale(1.04)}
+@media(max-width:700px){
+ .home-promo-overlay p{padding:7px 11px;border-radius:12px;font-size:12px;margin-top:8px}
+ .home-promo-banner .promo-slide-dots{bottom:10px;padding:6px 9px;gap:5px}
+ .home-promo-banner .promo-dot{width:6px;height:6px}
+ .home-promo-banner .promo-dot.active{width:17px}
+}
