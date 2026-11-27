@@ -4978,3 +4978,34 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
 .cart-page-footer{position:static!important;width:100%;border-radius:20px;padding:20px;background:var(--surface,#fff);border:1px solid var(--border-color,#dce5e5);box-shadow:none!important}
 .cart-page-footer .page-back-link{margin-top:12px;width:100%;padding:12px;border-radius:12px;background:transparent;border:1px solid #d4e1e0;color:#167f79;font-weight:800}
 .cart-page .empty-state{padding:40px;text-align:center}
+
+/* Desktop-only storefront refinement; mobile/tablet styles remain untouched */
+@media (min-width:1024px){
+ body{background:#f3f7f7}
+ main{max-width:1440px;margin-inline:auto;padding-inline:28px}
+ .store-search-section{max-width:1380px;margin:34px auto 24px;padding:44px 52px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(360px,.8fr);gap:42px;align-items:center;border-radius:30px}
+ .store-search-intro{max-width:760px}
+ .store-search-brand{font-size:clamp(36px,3vw,52px)}
+ .store-search-intro h1{font-size:clamp(30px,3vw,42px);line-height:1.4}
+ .store-search-intro p{font-size:18px;max-width:700px}
+ .store-hero-actions{gap:14px;margin-top:24px}
+ .store-hero-trust{gap:12px;margin-top:20px}
+ .store-hero-search{padding:26px;border-radius:22px;min-width:0}
+ .store-hero-search-label{font-size:20px}
+ .store-search-box{min-height:72px}
+ .home-promo-banner{width:100%;max-width:1380px;min-height:clamp(340px,32vw,480px);margin:26px auto 34px;border-radius:26px}
+ .home-promo-overlay{max-width:48%;padding:36px}
+ .home-promo-overlay h2{font-size:clamp(30px,3vw,44px)}
+ .home-promo-overlay p{font-size:18px}
+ .home-collection-section,.home-category-section,.home-quick-section{max-width:1380px;margin:30px auto;padding:28px;border-radius:26px}
+ .home-collection-track{grid-auto-columns:minmax(220px,calc((100% - 4*16px)/5));gap:16px}
+ .home-section-heading h2{font-size:30px}
+ .home-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+ .home-category-card{min-height:150px;padding:24px}
+ .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+ .site-footer{margin-top:50px}
+}
+@media(min-width:1440px){
+ main{padding-inline:40px}
+ .home-collection-track{grid-auto-columns:minmax(220px,calc((100% - 5*18px)/6));gap:18px}
+}
