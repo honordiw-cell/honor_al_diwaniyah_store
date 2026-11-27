@@ -4580,3 +4580,9 @@ body.theme-dark #page-product-detail .product-mobile-buybar b{color:#45d0c5}
 body.theme-dark .mobile-bottom-nav{background:rgba(18,29,34,.98);border-color:#334650}
 body.theme-dark #page-product-detail .landing-no-image{color:#6b7d80}
 @media(prefers-reduced-motion:reduce){#page-product-detail .landing-thumb,#page-product-detail .landing-related-card{transition:none}}
+
+#page-product-detail .product-single-color{margin:10px 0;padding:8px 11px;border:1px solid #e0e9e7;border-radius:10px;background:#f7faf9;color:#64777b;font-size:11px;font-weight:700}
+#page-product-detail .product-single-color strong{color:#30484c}
+@media(max-width:700px){#page-product-detail .product-single-color{margin:8px 0;padding:7px 9px;font-size:10px}}
+body.theme-dark #page-product-detail .product-single-color{background:#202f39;border-color:#40535e;color:#b9c8ce}
+body.theme-dark #page-product-detail .product-single-color strong{color:#eef4f6}
