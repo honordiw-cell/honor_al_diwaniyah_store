@@ -3774,3 +3774,19 @@ body.theme-dark .installment-calculator-monthly strong{color:#72d8d0}
 .catalog-availability select,.catalog-search input{min-height:50px!important;width:100%!important;border-radius:14px!important;border:1px solid #e1e9e8!important;background:#fff!important;padding:10px 13px!important;font-size:13px!important;box-shadow:none!important}
 .catalog-search input:focus,.catalog-availability select:focus{border-color:#16aaa2!important;outline:0!important;box-shadow:0 0 0 3px rgba(22,170,162,.10)!important}
 @media(max-width:600px){.catalog-filter-panel.product-page-filters{gap:15px!important;padding:15px!important}.catalog-type-option{min-height:52px!important;font-size:13px!important}.catalog-brand-area{padding-top:14px!important}.catalog-brand-area.brands-open .brand-block-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+
+/* UI audit: keyboard focus and reduced-motion safeguards (non-layout changes). */
+:where(a,button,input,select,textarea,[role="button"],summary):focus-visible{
+  outline:3px solid #16aaa2!important;
+  outline-offset:3px!important;
+  box-shadow:0 0 0 3px rgba(22,170,162,.16)!important;
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
