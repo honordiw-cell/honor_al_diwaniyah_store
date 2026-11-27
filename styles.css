@@ -2751,18 +2751,14 @@ body.theme-light #page-product-detail .product-detail-back span { color:#8a96a7;
 
 
 /* Brand name hierarchy and compact slogan in homepage search hero */
-.store-search-intro .store-search-brand{
- display:inline-flex;align-items:center;color:#168f89;
- font-family:'Cairo',sans-serif;font-size:clamp(22px,2.4vw,27px);
- font-weight:900;letter-spacing:0;margin:0 0 5px
-}
+.store-search-intro .store-search-brand{display:inline-flex;align-items:center;margin:0 0 5px;max-width:100%}\n.store-search-brand img{display:block;width:min(100%,420px);height:auto;max-height:120px;object-fit:contain}
 .store-search-intro h1{font-size:clamp(25px,3vw,34px);line-height:1.42;margin:0;font-weight:850}
 .store-search-intro h1 em{font-style:normal;color:#16aaa2}
 .store-search-box:focus-within{border-color:#16aaa2;box-shadow:0 0 0 4px rgba(22,170,162,.12)}
 .store-search-symbol{color:#16aaa2}
 @media(max-width:700px){
  .store-search-section{grid-template-columns:1fr;gap:16px;margin:14px auto 16px;padding:20px 17px;border-radius:18px}
- .store-search-intro .store-search-brand{font-size:25px;margin-bottom:4px}
+ .store-search-intro .store-search-brand{margin-bottom:4px}\n .store-search-brand img{width:min(100%,330px);max-height:96px}
  .store-search-intro h1{font-size:clamp(21px,5.5vw,25px);line-height:1.5;margin:0}
  .store-search-box{min-height:54px;border-radius:13px}
  .store-search-box input{min-height:50px;font-size:13px}
