@@ -4945,3 +4945,20 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
 .home-promo-price{display:inline-flex;align-self:flex-start;width:max-content;max-width:100%;margin:8px 0 0;padding:8px 13px;border-radius:13px;background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.72);color:#193e47;font-weight:900;font-size:clamp(15px,2vw,23px);line-height:1.4;box-shadow:0 6px 20px rgba(12,40,52,.09);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .home-promo-price.hidden{display:none!important}
 @media(max-width:700px){.home-promo-price{margin-top:6px;padding:6px 10px;border-radius:11px;font-size:clamp(13px,4vw,19px)}}
+
+/* Compact repositioning of the optional banner price: avoid covering product artwork */
+.home-promo-banner{position:relative}
+.home-promo-price:not(.hidden){
+ position:absolute!important;z-index:6!important;
+ top:12px!important;right:12px!important;left:auto!important;bottom:auto!important;
+ display:inline-flex!important;align-self:auto!important;width:auto!important;
+ max-width:42%!important;margin:0!important;padding:5px 9px!important;
+ border-radius:10px!important;background:rgba(255,255,255,.78)!important;
+ color:#183b43!important;border:1px solid rgba(255,255,255,.65)!important;
+ font-size:clamp(10px,2.8vw,14px)!important;font-weight:800!important;
+ line-height:1.3!important;box-shadow:0 3px 12px rgba(12,40,52,.07)!important;
+ backdrop-filter:blur(7px)!important;-webkit-backdrop-filter:blur(7px)!important;
+}
+@media(max-width:700px){
+ .home-promo-price:not(.hidden){top:12px!important;right:12px!important;max-width:46%!important;padding:5px 8px!important;font-size:12px!important;border-radius:9px!important}
+}
