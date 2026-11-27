@@ -5070,3 +5070,8 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
   .store-products-section .product-grid,.product-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
   .product-image{height:250px}
 }
+
+/* Improve legibility of unavailable RAM/storage variants without fading their labels */
+.variant-option:disabled{opacity:1!important;background:#f4f6f7!important;border-color:#d6dfe1!important}
+.variant-option:disabled .variant-option-top b,.variant-option:disabled .variant-option-top span{color:#66757a!important;opacity:1!important}
+.variant-option:disabled>strong{color:#b94b3d!important;opacity:1!important}
