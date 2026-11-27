@@ -153,7 +153,7 @@ function bindReviewForm(productId){const form=$("product-review-form");if(!form)
 function showProductDetails(id){
  const p=products.find(x=>String(x.id)===String(id));
  if(!p)return;
- try{let r=JSON.parse(localStorage.getItem("honor-recently-viewed")||"[]");r=[String(id),...r.filter(x=>String(x)!==String(id))].slice(0,8);localStorage.setItem("honor-recently-viewed",JSON.stringify(r));}catch{}
+ try{let r=readStoreList("honor-recently-viewed");r=[String(id),...r.filter(x=>String(x)!==String(id))].slice(0,8);localStorage.setItem("honor-recently-viewed",JSON.stringify(r));renderRecentlyViewed();}catch{}
  const content=$("product-details-content");
  if(!content)return;
  const images=[...new Set([p.image,...(Array.isArray(p.images)?p.images:[])].filter(Boolean))];
