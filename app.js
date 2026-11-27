@@ -79,7 +79,8 @@ function renderProducts(){
  // المتوفر أولاً، ثم نفذت الكمية مع الحفاظ على ترتيب المنتجات داخل كل مجموعة.
   const sortedProducts=[...filtered].sort((a,b)=>(Number(b.stock)>0?1:0)-(Number(a.stock)>0?1:0));
   const visibleProducts=sortedProducts.slice(0,visibleProductCount);
- $("product-grid").innerHTML=visibleProducts.map(p=>`<article class="product-card">
+ if(productLoadMessage==="جاري تحميل المنتجات..."){$("product-grid").innerHTML=Array.from({length:6},()=>`<article class="product-card product-skeleton"><div class="skeleton-image"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div><div class="skeleton-line price"></div></article>`).join("");}
+ else $("product-grid").innerHTML=visibleProducts.map(p=>`<article class="product-card">
    ${p.tag?`<span class="product-tag">${escapeHtml(p.tag)}</span>`:""}
    <button type="button" class="product-view" data-details="${escapeHtml(p.id)}" aria-label="تفاصيل ${escapeHtml(p.name)}">
      <div class="product-image">${p.image?`<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" decoding="async">`:`<div class="product-placeholder"><span>${escapeHtml(p.brand||"TECH")}</span><b>${escapeHtml(p.name)}</b><small>HONOR AL-DIWANIYAH</small></div>`}</div>
@@ -95,7 +96,9 @@ function renderProducts(){
  const empty=$("empty-state");
  empty.classList.toggle("hidden",filtered.length>0);
  if(!filtered.length && productLoadMessage) empty.textContent=productLoadMessage;
+ else if(!filtered.length) empty.innerHTML="ما لقينا منتجات بهذا البحث.<br>جرّب اسم أقصر أو امسح الفلاتر.<br><button type=\"button\" class=\"empty-search-reset\" id=\"empty-search-reset\">عرض كل المنتجات</button>";
  else empty.textContent="ماكو منتجات تطابق بحثك حالياً.";
+ $("empty-search-reset")?.addEventListener("click",()=>{if($("products-search-input"))$("products-search-input").value="";if($("search-input"))$("search-input").value="";selectedBrand="الكل";selectedDeviceType="الكل";selectedAvailability="all";visibleProductCount=productsPerPage;renderProducts()});
  const moreButton=$("load-more-products");
  if(moreButton){
    moreButton.classList.toggle("hidden",filtered.length<=visibleProductCount);
@@ -158,7 +161,7 @@ function showProductDetails(id){
  const gallery=images.length?'<div class="landing-gallery"><div class="landing-gallery-count">'+(images.length>1?'1 / '+images.length:'صورة المنتج')+'</div><div class="landing-main-image"><img id="landing-main-image" src="'+escapeHtml(images[0])+'" alt="'+escapeHtml(p.name)+'" fetchpriority="high" decoding="async"></div>'+(images.length>1?'<div class="landing-thumbs">'+images.map((src,i)=>'<button type="button" class="landing-thumb '+(i===0?'active':'')+'" data-gallery-image="'+i+'" aria-label="عرض الصورة '+(i+1)+'"><img src="'+escapeHtml(src)+'" alt="" loading="lazy"></button>').join('')+'</div>':'')+'</div>':'<div class="landing-gallery"><div class="landing-main-image landing-no-image">صورة المنتج غير متوفرة حالياً</div></div>';
  content.innerHTML=
  '<div class="product-landing">'+
-  '<div class="landing-topline"><span class="eyebrow">HONOR AL-DIWANIYAH</span><span id="detail-stock-state" class="landing-stock '+stockClass(variantState())+'">'+stockLabel(variantState())+'</span></div>'+
+  '<div class="landing-topline"><span class="eyebrow">HONOR AL-DIWANIYAH</span><span id="detail-stock-state" class="landing-stock '+stockClass(variantState())+'">'+stockLabel(variantState())+'</span><button type="button" class="product-share-btn" id="product-share-link" aria-label="مشاركة رابط المنتج">مشاركة المنتج ↗</button></div>'+
   '<div class="landing-overview">'+gallery+
    '<div class="landing-buy-panel"><span class="landing-brand">'+escapeHtml(p.brand||p.category||"متجر هونر الديوانية")+'</span>'+
     '<h1>'+escapeHtml(p.name)+'</h1>'+
@@ -180,6 +183,7 @@ function showProductDetails(id){
 
   '<div class="product-mobile-buybar"><div><small>السعر</small><b id="detail-mobile-price">'+money(selectedVariant.price)+'</b></div><button type="button" id="detail-mobile-buy" '+(variantStock(selectedVariant)<=0?'disabled':'')+'>اطلب الآن</button></div>'+
  '</div>';
+ $("product-share-link")?.addEventListener("click",async()=>{const url=location.href;try{if(navigator.share){await navigator.share({title:p.name,text:p.name+" من HONOR AL-DIWANIYAH",url});}else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url);toast("تم نسخ رابط المنتج");}else{prompt("انسخ رابط المنتج:",url)}}catch(err){if(err?.name!=="AbortError")toast("تعذر مشاركة الرابط");}});
  loadProductReviews(p.id);
  const mainImage=$("landing-main-image");
  document.querySelectorAll("[data-gallery-image]").forEach(b=>b.addEventListener("click",()=>{
