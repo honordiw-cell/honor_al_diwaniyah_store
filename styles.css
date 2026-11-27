@@ -4825,3 +4825,15 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
 @media(max-width:360px){
  .store-search-intro h1{font-size:18px}
 }
+
+/* Swipe-only promo carousel with subtle slide motion */
+.promo-slide-arrow,.promo-slide-dots{display:none!important}
+.home-promo-banner{touch-action:pan-y;cursor:grab}
+.home-promo-banner.promo-animate>img{animation:promo-image-swipe .48s cubic-bezier(.22,.72,.2,1) both}
+.home-promo-banner.promo-animate .home-promo-overlay{animation:promo-copy-swipe .4s ease-out both}
+.home-promo-banner[data-swipe-direction="prev"].promo-animate>img{animation-name:promo-image-swipe-prev}
+.home-promo-banner[data-swipe-direction="prev"].promo-animate .home-promo-overlay{animation-name:promo-copy-swipe-prev}
+@keyframes promo-image-swipe{from{opacity:.65;transform:translateX(24px) scale(1.025)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes promo-image-swipe-prev{from{opacity:.65;transform:translateX(-24px) scale(1.025)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes promo-copy-swipe{from{opacity:.2;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+@keyframes promo-copy-swipe-prev{from{opacity:.2;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
