@@ -4586,3 +4586,7 @@ body.theme-dark #page-product-detail .landing-no-image{color:#6b7d80}
 @media(max-width:700px){#page-product-detail .product-single-color{margin:8px 0;padding:7px 9px;font-size:10px}}
 body.theme-dark #page-product-detail .product-single-color{background:#202f39;border-color:#40535e;color:#b9c8ce}
 body.theme-dark #page-product-detail .product-single-color strong{color:#eef4f6}
+
+/* Fixed mobile product purchase bar intentionally removed */
+#page-product-detail .product-mobile-buybar{display:none!important}
+@media(max-width:600px){#page-product-detail .product-landing{padding-bottom:18px!important}}
