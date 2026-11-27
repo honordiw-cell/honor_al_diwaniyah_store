@@ -4689,3 +4689,39 @@ body.theme-dark #page-product-detail .installment-details span{background:#f7f9f
 body.theme-dark #page-product-detail .landing-section-title>span{color:#80929c!important}
 body.theme-dark #page-product-detail .product-info-tab{color:#71828c!important}
 body.theme-dark #page-product-detail .product-info-tab.active{color:#183144!important}
+
+/* PRODUCT PAGE FINISH: unified dark theme, purchase hierarchy, compact installments, footer transition */
+#page-product-detail .landing-price-line strong,
+#page-product-detail .variant-option strong,
+#page-product-detail .installment-monthly strong,
+#page-product-detail .landing-related-card strong{color:#d84632!important}
+#page-product-detail .landing-actions{gap:8px;margin:11px 0 8px}
+#page-product-detail .landing-actions #detail-order-now{order:1;background:#0f8f83!important;border-color:#0f8f83!important;color:#fff!important;box-shadow:0 5px 14px rgba(15,143,131,.16)}
+#page-product-detail .landing-actions #detail-add-cart{order:2;background:#fff!important;color:#183144!important;border:1px solid #dce5eb!important}
+#page-product-detail .landing-actions .landing-whatsapp-btn{order:3}
+#page-product-detail .installment-offer{margin:10px 0 12px;padding:12px}
+#page-product-detail .installment-offer-head{margin-bottom:6px}
+#page-product-detail .installment-monthly{margin:6px 0}
+#page-product-detail .installment-details{gap:6px;margin:8px 0}
+#page-product-detail .installment-disclaimer{margin-top:7px;line-height:1.65}
+#page-product-detail .product-info-tabs{margin-top:20px}
+#page-product-detail .product-landing{padding-bottom:clamp(22px,5vw,38px)}
+#page-product-detail .product-info-tabs::after{content:"";display:block;height:14px;margin:16px -12px -10px;background:linear-gradient(to bottom,rgba(245,248,250,0),rgba(245,248,250,.85));pointer-events:none}
+body.theme-dark #page-product-detail,body.theme-dark #page-product-detail .product-landing,body.theme-dark #page-product-detail .landing-buy-panel,body.theme-dark #page-product-detail .landing-main-image{background:#111c24!important;color:#e8f0f3!important}
+body.theme-dark #page-product-detail .landing-main-image{border-radius:14px!important}
+body.theme-dark #page-product-detail .landing-brand,body.theme-dark #page-product-detail .landing-memory,body.theme-dark #page-product-detail .landing-stock-detail{color:#9eb0bb!important}
+body.theme-dark #page-product-detail .landing-buy-panel h1,body.theme-dark #page-product-detail .landing-section-title h2,body.theme-dark #page-product-detail .landing-spec b,body.theme-dark #page-product-detail .product-info-tab.active{color:#e8f0f3!important}
+body.theme-dark #page-product-detail .landing-price-line strong,body.theme-dark #page-product-detail .installment-monthly strong,body.theme-dark #page-product-detail .landing-related-card strong{color:#d84632!important}
+body.theme-dark #page-product-detail .landing-spec,body.theme-dark #page-product-detail .product-delivery-feature-grid article,body.theme-dark #page-product-detail .landing-related-card{background:#1b2a34!important;border-color:#344752!important}
+body.theme-dark #page-product-detail .landing-spec span,body.theme-dark #page-product-detail .landing-spec small,body.theme-dark #page-product-detail .product-tab-panel{color:#c1d0d7!important}
+body.theme-dark #page-product-detail .installment-offer{background:#1b2a34!important;border-color:#344752!important;box-shadow:none!important}
+body.theme-dark #page-product-detail .installment-offer-head b,body.theme-dark #page-product-detail .installment-details span{color:#e2edf1!important}
+body.theme-dark #page-product-detail .installment-details span{background:#263945!important;border-color:#344752!important}
+body.theme-dark #page-product-detail .installment-disclaimer{color:#9eb0bb!important}
+body.theme-dark #page-product-detail .product-info-tab{color:#9eb0bb!important}
+body.theme-dark #page-product-detail .product-info-tab.active{border-bottom-color:#d84632!important}
+body.theme-dark #page-product-detail .product-tab-buttons,body.theme-dark #page-product-detail .product-info-tabs{border-color:#344752!important}
+body.theme-dark #page-product-detail .landing-actions #detail-add-cart{background:#263945!important;color:#eaf2f5!important;border-color:#344752!important}
+body.theme-dark #page-product-detail .landing-actions .landing-whatsapp-btn{background:#1b352f!important;color:#9de0bf!important;border-color:#2c4b43!important}
+body.theme-dark #page-product-detail .landing-purchase-summary span{background:#1b352f!important;border-color:#2c4b43!important;color:#9de0bf!important}
+body.theme-dark #page-product-detail .product-info-tabs::after{background:linear-gradient(to bottom,rgba(17,28,36,0),rgba(17,28,36,.85))}
