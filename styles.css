@@ -4435,3 +4435,15 @@ body.theme-dark .feature-disclaimer{color:#aebdca}
  .product-mobile-buybar button{min-width:132px}
 }
 @media(prefers-reduced-motion:reduce){#page-product-detail .landing-thumb,#page-product-detail .landing-related-card{transition:none}}
+
+/* Product page follow-up refinements */
+#page-product-detail .landing-spec b[dir="auto"],#page-product-detail .landing-description[dir="auto"]{unicode-bidi:isolate;direction:auto;text-align:start;}
+#page-product-detail .landing-gallery-count{unicode-bidi:isolate;direction:ltr;}
+#page-product-detail .landing-brand{font-size:12px;color:#91a4a8;}
+#page-product-detail .landing-section-title>span{font-size:11px;color:#82b9b5;}
+#page-product-detail .landing-related-card:has(.landing-related-placeholder){display:none;}
+#page-product-detail .product-color-picker:has(.product-color-hint){display:none;}
+body:has(#page-product-detail:not(.hidden)) #recently-viewed-section{display:none!important;}
+#page-product-detail .landing-buy-panel:after{content:"جهاز أصلي  •  ضمان حسب سياسة الجهاز  •  التوصيل حسب المنطقة";display:block;margin:14px 0 0;padding:11px 12px;border:1px solid #cfe7e2;border-radius:12px;background:#f1faf8;color:#177f76;font-size:12px;font-weight:700;line-height:1.8;}
+#page-product-detail .landing-actions .landing-whatsapp-btn,#page-product-detail .installment-whatsapp{background:#e9f6f0!important;color:#26744e!important;border-color:#d0e8da!important;}
+@media(max-width:700px){#page-product-detail .landing-buy-panel{padding-bottom:18px;}#page-product-detail .landing-spec span{font-size:13px;color:#9aaeb2;font-weight:700;}}
