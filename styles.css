@@ -4940,3 +4940,8 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
  .home-promo-banner .promo-dot{width:6px;height:6px}
  .home-promo-banner .promo-dot.active{width:17px}
 }
+
+/* Premium separate banner price badge */
+.home-promo-price{display:inline-flex;align-self:flex-start;width:max-content;max-width:100%;margin:8px 0 0;padding:8px 13px;border-radius:13px;background:rgba(255,255,255,.84);border:1px solid rgba(255,255,255,.72);color:#193e47;font-weight:900;font-size:clamp(15px,2vw,23px);line-height:1.4;box-shadow:0 6px 20px rgba(12,40,52,.09);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.home-promo-price.hidden{display:none!important}
+@media(max-width:700px){.home-promo-price{margin-top:6px;padding:6px 10px;border-radius:11px;font-size:clamp(13px,4vw,19px)}}
