@@ -383,8 +383,7 @@ async function loadProducts(){
    renderProducts();
  }
 }
-async 
-function showOrderSuccess(orderNumber,order,orderedCart){
+async function showOrderSuccess(orderNumber,order,orderedCart){
  const items=(orderedCart||[]).map(x=>({name:x.name,qty:x.qty,price:x.price,color:x.color,ram:x.ram,storage:x.storage,variantKey:x.variantKey}));
  const subtotal=items.reduce((sum,x)=>sum+Number(x.price||0)*Number(x.qty||0),0),fee=6000+Math.floor(subtotal/1000000)*2000,total=subtotal+fee;
  const numberText=String(orderNumber);
