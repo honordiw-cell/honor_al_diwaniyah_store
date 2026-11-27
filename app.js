@@ -521,7 +521,7 @@ document.addEventListener("click",e=>{const f=e.target.closest("[data-favorite]"
 bindFeatureForms();
 $("compare-open")?.addEventListener("click",()=>{renderCompare();$("compare-dialog").showModal();});
 $("compare-close")?.addEventListener("click",()=>$("compare-dialog").close());
-$("compare-clear")?.addEventListener("click",()=>{compareIds=[];localStorage.setItem("honor-compare","[]");renderCompareDock();});
+$("compare-clear")?.addEventListener("click",()=>{compareIds=[];localStorage.setItem("honor-compare","[]");renderCompareDock();renderProducts();renderCompare();toast("تم مسح المقارنة");});
 
 $("home-deals-more")?.addEventListener("click",()=>{selectedDeviceType="الكل";$("device-type-filter").value="الكل";selectedBrand="الكل";$("brand-filter").value="الكل";selectedAvailability="available";$("availability-filter").value="available";$("products-search-input").value="";visibleProductCount=productsPerPage;renderProducts();showStorePage("products");});
 function showStorePage(page,{push=true}={}){
