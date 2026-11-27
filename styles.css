@@ -5075,3 +5075,16 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
 .variant-option:disabled{opacity:1!important;background:#f4f6f7!important;border-color:#d6dfe1!important}
 .variant-option:disabled .variant-option-top b,.variant-option:disabled .variant-option-top span{color:#66757a!important;opacity:1!important}
 .variant-option:disabled>strong{color:#b94b3d!important;opacity:1!important}
+
+/* Order success summary dialog */
+.order-success-dialog{width:min(560px,calc(100% - 24px));max-width:560px;border:0;border-radius:26px;padding:0;box-shadow:0 30px 90px #0004;color:#173536}
+.order-success-dialog::backdrop{background:#10252599;backdrop-filter:blur(4px)}
+.order-success-content{position:relative;padding:28px;direction:rtl;text-align:center}
+.order-success-content .close-btn{position:absolute;left:16px;top:16px}
+.order-success-mark{width:64px;height:64px;margin:12px auto;border-radius:50%;display:grid;place-items:center;background:#e2f7ef;color:#15805d;font-size:32px;font-weight:900}
+.order-success-content h2{margin:12px 0 6px;font-size:26px}.order-success-subtitle{color:#718181;margin:0 0 20px}
+.order-success-number{background:#edf7f6;border-radius:16px;padding:15px;font-size:18px;margin-bottom:18px}.order-success-number strong{font-size:26px;color:#07877e}
+.success-order-details{display:flex;flex-direction:column;gap:10px;text-align:right}
+.success-order-item,.success-order-fee{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e7eeee;font-size:14px}
+.success-order-total{display:flex;justify-content:space-between;align-items:center;padding:18px 0;font-size:18px}.success-order-total strong{color:#07877e;font-size:24px}
+.order-success-actions{display:grid;gap:10px}.order-success-hint{font-size:13px;color:#788787;margin:16px 0 0}
