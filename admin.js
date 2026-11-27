@@ -214,12 +214,12 @@ function renderBanners(){
  el.innerHTML=banners.length?banners.map(x=>'<article class="banner-admin-row"><img src="'+esc(x.image_url)+'" alt=""><div class="banner-admin-copy"><b>'+esc(x.title||"بانر بدون عنوان")+'</b><small>'+esc(x.subtitle||"")+'</small><span class="badge '+(x.is_active?"good":"off")+'">'+(x.is_active?"ظاهر بالواجهة":"غير مفعل")+'</span></div><div class="banner-admin-actions"><button class="action-btn" data-banner-edit="'+x.id+'">تعديل</button><button class="action-btn" data-banner-toggle="'+x.id+'">'+(x.is_active?"إيقاف":"تفعيل")+'</button><button class="action-btn danger" data-banner-delete="'+x.id+'">حذف</button></div></article>').join(""):'<div class="empty-row">ماكو بانرات محفوظة. أضف أول بانر من النموذج أعلاه.</div>';
 }
 function resetBannerForm(){
- const f=$("banner-form");f.reset();f.elements.id.value="";f.elements.image_url.value="";f.elements.button_text.value="اكتشف العرض";f.elements.link_url.value="#products";f.elements.is_active.checked=true;
+ const f=$("banner-form");f.reset();f.elements.id.value="";f.elements.image_url.value="";f.elements.button_text.value="تسوّق الجهاز";f.elements.link_url.value="#products";f.elements.is_active.checked=true;
  if(bannerPreviewUrl)URL.revokeObjectURL(bannerPreviewUrl);bannerPreviewUrl="";bannerFile=null;$("banner-image").value="";$("banner-form-heading").textContent="إضافة بانر جديد";$("banner-image-preview").innerHTML='<small class="muted">لم يتم اختيار صورة بعد.</small>';setError("banner-form-error","");
 }
 function openBanner(id){
  resetBannerForm();const x=banners.find(v=>v.id===id);if(!x)return;const f=$("banner-form");
- f.elements.id.value=x.id;f.elements.title.value=x.title||"";f.elements.subtitle.value=x.subtitle||"";f.elements.button_text.value=x.button_text||"اكتشف العرض";f.elements.link_url.value=x.link_url||"#products";f.elements.image_url.value=x.image_url;f.elements.is_active.checked=!!x.is_active;
+ f.elements.id.value=x.id;f.elements.title.value=x.title||"";f.elements.subtitle.value=x.subtitle||"";f.elements.price_text.value=x.price_text||"";f.elements.button_text.value=x.button_text||"تسوّق الجهاز";f.elements.link_url.value=x.link_url||"#products";f.elements.image_url.value=x.image_url;f.elements.is_active.checked=!!x.is_active;
  $("banner-form-heading").textContent="تعديل البانر";$("banner-image-preview").innerHTML='<img src="'+esc(x.image_url)+'" alt="معاينة البانر"><small>الصورة الحالية — ارفع صورة جديدة لاستبدالها</small>';
 }
 async function saveBanner(e){
@@ -229,7 +229,7 @@ async function saveBanner(e){
  btn.disabled=true;btn.textContent="جاري رفع الصورة والحفظ...";
  try{let imageUrl=current;if(bannerFile){const ext=({"image/jpeg":"jpg","image/png":"png","image/webp":"webp","image/avif":"avif"})[bannerFile.type]||"jpg";const path="banners/"+crypto.randomUUID()+"."+ext;const up=await db.storage.from(BUCKET).upload(path,bannerFile,{cacheControl:"31536000",contentType:bannerFile.type,upsert:false});if(up.error)throw up.error;imageUrl=db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl}
  const id=f.elements.id.value,active=f.elements.is_active.checked;
- const payload={title:f.elements.title.value.trim(),subtitle:f.elements.subtitle.value.trim(),button_text:f.elements.button_text.value.trim()||"اكتشف العرض",link_url:f.elements.link_url.value.trim()||"#products",image_url:imageUrl,is_active:active,updated_at:new Date().toISOString()};
+ const payload={title:f.elements.title.value.trim(),subtitle:f.elements.subtitle.value.trim(),button_text:f.elements.button_text.value.trim()||"تسوّق الجهاز",price_text:f.elements.price_text.value.trim(),link_url:f.elements.link_url.value.trim()||"#products",image_url:imageUrl,is_active:active,updated_at:new Date().toISOString()};
  const result=id?await db.from("home_banners").update(payload).eq("id",id):await db.from("home_banners").insert(payload);if(result.error)throw result.error;
  toast(id?"تم تحديث البانر":"تمت إضافة البانر");resetBannerForm();await loadAll();
  }catch(err){console.error(err);setError("banner-form-error","تعذر حفظ البانر: "+(err.message||"تحقق من الاتصال والصلاحيات"))}finally{btn.disabled=false;btn.textContent="حفظ البانر"}
