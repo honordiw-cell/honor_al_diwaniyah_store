@@ -4711,3 +4711,9 @@ body.theme-dark #page-product-detail .product-purchase-controls{background:#fff!
 body.theme-dark #page-product-detail .product-quantity-control{background:#fff!important;border-color:#e6ebef!important}
 body.theme-dark #page-product-detail .product-quantity-control button,body.theme-dark #page-product-detail .product-quantity-control b{color:#243e50!important}
 body.theme-dark #page-product-detail .product-secondary-actions button,body.theme-dark #page-product-detail .product-secondary-actions a{color:#657986!important}
+
+
+/* Fix contrast of installment inquiry button on product pages */
+#page-product-detail .landing-actions .landing-whatsapp-btn{background:#e6f5ed!important;color:#17633f!important;border:1px solid #b9dfca!important;text-shadow:none!important;opacity:1!important}
+#page-product-detail .landing-actions .landing-whatsapp-btn *{color:#17633f!important;opacity:1!important}
+#page-product-detail .landing-actions .landing-whatsapp-btn:hover{background:#d6eee2!important;color:#124f34!important}
