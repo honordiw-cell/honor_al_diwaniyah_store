@@ -113,8 +113,8 @@ function renderProducts(){
  renderFavorites();
 }
 async function loadHomeBanner(){
- const section=$("home-promo-banner");if(!section||!sb)return;
- try{const result=await sb.from("home_banners").select("title,subtitle,image_url,button_text,link_url").eq("is_active",true).order("updated_at",{ascending:false});if(result.error)throw result.error;const data=result.data||[];if(!data.length){section.classList.add("hidden");return}
+ const section=$("home-promo-banner");if(!section)return;
+ try{if(!sb){section.classList.add("hidden");return}const result=await sb.from("home_banners").select("title,subtitle,image_url,button_text,link_url").eq("is_active",true).order("updated_at",{ascending:false});if(result.error)throw result.error;const data=result.data||[];if(!data.length){section.classList.add("hidden");return}
  let index=0,timer=null;const img=$("home-promo-image"),title=$("home-promo-title"),sub=$("home-promo-subtitle"),btn=$("home-promo-button"),link=$("home-promo-link");
  const show=(i,direction="next")=>{index=(i+data.length)%data.length;const b=data[index];section.dataset.swipeDirection=direction;section.classList.remove("promo-animate");void section.offsetWidth;img.src=b.image_url||"";img.alt=b.title||"عرض خاص";title.textContent=b.title||"";sub.textContent=b.subtitle||"";btn.textContent=b.button_text||"اكتشف العرض";link.href=safeBannerLink(b.link_url);section.classList.toggle("single-slide",data.length===1);section.classList.add("promo-animate")};
  const restart=()=>{if(timer)clearInterval(timer);if(data.length>1)timer=setInterval(()=>show(index+1,"next"),6000)};
