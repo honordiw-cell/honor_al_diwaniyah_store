@@ -4962,3 +4962,6 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
 @media(max-width:700px){
  .home-promo-price:not(.hidden){top:12px!important;right:12px!important;max-width:46%!important;padding:5px 8px!important;font-size:12px!important;border-radius:9px!important}
 }
+
+/* Hide empty optional promo price badge entirely */
+.home-promo-price:empty,.home-promo-price.hidden{display:none!important;visibility:hidden!important;}
