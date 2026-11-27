@@ -14,9 +14,10 @@ const cfg = window.STORE_CONFIG || {};
 const hasBackend = !!(cfg.supabaseUrl && cfg.supabaseAnonKey);
 let sb = null;
 let products = hasBackend ? [] : [...demoProducts];
-let cart = JSON.parse(localStorage.getItem("honor-cart")||"[]");
-let favoriteIds = JSON.parse(localStorage.getItem("honor-favorites")||"[]");
-let compareIds = JSON.parse(localStorage.getItem("honor-compare")||"[]");
+function readStoreList(key){try{const value=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(value)?value:[]}catch{return []}}
+let cart = readStoreList("honor-cart");
+let favoriteIds = readStoreList("honor-favorites");
+let compareIds = readStoreList("honor-compare");
 let deliveryRates = [];
 let selectedBrand = "الكل";
 let selectedDeviceType = "الكل";
@@ -375,11 +376,11 @@ async function submitOrder(e){
  if(!cart.length){toast("السلة فارغة");return}
  const orderStockGroups=new Map();
  for(const item of cart){
-   const key=String(item.id)+"|"+String(item.variantKey||"");
+   const key=JSON.stringify([String(item.id),String(item.variantKey||"")]);
    orderStockGroups.set(key,(orderStockGroups.get(key)||0)+Number(item.qty||0));
  }
  for(const [key,qty] of orderStockGroups){
-   const [id,variantKey]=key.split("|");
+   const [id,variantKey]=JSON.parse(key);
    const p=products.find(p=>String(p.id)===id);
    const stock=Math.max(0,Number(variantKey?p?.variants?.find(v=>v.variant_key===variantKey)?.stock:p?.stock)||0);
    if(!p||stock<=0||qty>stock){
