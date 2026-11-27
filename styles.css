@@ -4837,3 +4837,56 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
 @keyframes promo-image-swipe-prev{from{opacity:.65;transform:translateX(-24px) scale(1.025)}to{opacity:1;transform:translateX(0) scale(1)}}
 @keyframes promo-copy-swipe{from{opacity:.2;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
 @keyframes promo-copy-swipe-prev{from{opacity:.2;transform:translateX(-14px)}to{opacity:1;transform:translateX(0)}}
+
+
+/* Premium product-feature banner CTA and lighter image shading */
+.home-promo-banner:after{
+  background:linear-gradient(90deg,rgba(12,24,35,.015) 0%,rgba(12,24,35,.06) 38%,rgba(12,24,35,.28) 100%);
+}
+.home-promo-overlay a{
+  gap:14px;
+  margin-top:19px;
+  padding:12px 19px;
+  min-height:48px;
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:15px;
+  background:rgba(255,255,255,.94);
+  color:#183b43;
+  box-shadow:0 7px 22px rgba(15,42,49,.10),inset 0 1px 0 rgba(255,255,255,.9);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:0;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  transition:transform .22s ease,box-shadow .22s ease,background .22s ease;
+}
+.home-promo-overlay a b{
+  display:grid;
+  place-items:center;
+  width:25px;
+  height:25px;
+  border-radius:8px;
+  background:rgba(22,170,162,.11);
+  color:#159b94;
+  font-size:17px;
+  line-height:1;
+}
+.home-promo-overlay a:hover{
+  transform:translateY(-2px);
+  background:#fff;
+  box-shadow:0 10px 26px rgba(15,42,49,.14),inset 0 1px 0 rgba(255,255,255,.95);
+}
+@media(max-width:700px){
+  .home-promo-banner:after{
+    background:linear-gradient(180deg,rgba(12,24,35,0) 44%,rgba(12,24,35,.08) 69%,rgba(12,24,35,.24) 100%);
+  }
+  .home-promo-overlay a{
+    gap:12px;
+    min-height:44px;
+    margin-top:13px;
+    padding:9px 15px;
+    border-radius:14px;
+    font-size:11px;
+    box-shadow:0 5px 17px rgba(15,42,49,.10);
+  }
+}
