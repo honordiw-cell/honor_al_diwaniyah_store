@@ -449,9 +449,9 @@ async function submitOrder(e){
  }
 }
 
-// Dark mode removed: keep the storefront consistently in light mode.
-document.body.classList.remove("theme-dark");
-document.body.classList.add("theme-light");
+// Theme switch removed. Keep the default storefront styles; do not force legacy theme classes.
+document.body.classList.remove("theme-dark", "theme-light");
+localStorage.removeItem("honor-store-theme");
 
 // Category buttons are rendered dynamically from Supabase categories.
 $("search-input").addEventListener("input",()=>{if($("products-search-input"))$("products-search-input").value=$("search-input").value;visibleProductCount=productsPerPage;renderProducts()});
