@@ -272,14 +272,8 @@ function changeQty(index,d){
  }
  x.qty+=d;cart=cart.filter(x=>x.qty>0);persistCart();
 }
-function openCart(){
- $("overlay").classList.add("show");
- $("cart-drawer").classList.add("open");
-}
-function closeCart(){
- $("overlay").classList.remove("show");
- $("cart-drawer").classList.remove("open");
-}
+function openCart(){renderCart();showStorePage("cart");}
+function closeCart(){showStorePage("home");}
 function initGovernors(){
  $("checkout-form").governorate.innerHTML='<option value="">اختر المحافظة</option>'+IRAQI_GOVERNORATES.map(x=>`<option>${x}</option>`).join("");
 }
@@ -536,7 +530,7 @@ $("compare-clear")?.addEventListener("click",()=>{compareIds=[];localStorage.set
 
 $("home-deals-more")?.addEventListener("click",()=>{selectedDeviceType="الكل";$("device-type-filter").value="الكل";selectedBrand="الكل";$("brand-filter").value="الكل";selectedAvailability="available";$("availability-filter").value="available";$("products-search-input").value="";visibleProductCount=productsPerPage;renderProducts();showStorePage("products");});
 function showStorePage(page,{push=true}={}){
- const allowed=["home","departments","products","accessories","maintenance","finder","repair","tradein","product-detail","tracking"];
+ const allowed=["home","departments","products","accessories","maintenance","finder","repair","tradein","product-detail","tracking","cart"];
  if(!allowed.includes(page))page="home";
  document.querySelectorAll("[data-page-view]").forEach(view=>view.classList.toggle("active",view.dataset.pageView===page));
  document.querySelectorAll("[data-page]").forEach(link=>{
