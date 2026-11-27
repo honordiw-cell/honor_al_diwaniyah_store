@@ -5111,3 +5111,16 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
  .product-detail-back{margin-bottom:16px!important}
  .product-detail-back span{font-size:9px!important}
 }
+
+
+/* Readability fix: order confirmation modal */
+.order-success-dialog{background:#111817!important;color:#f4fbfa!important}
+.order-success-content{background:#111817!important;color:#f4fbfa!important}
+.order-success-content h2{color:#f4fbfa!important}
+.order-success-subtitle,.order-success-hint{color:#b9cfcd!important}
+.success-order-item,.success-order-fee{color:#e7f3f2!important;border-color:#40504f!important}
+.success-order-item span,.success-order-fee span{color:#c7d9d7!important}
+.success-order-item strong,.success-order-fee strong{color:#f4fbfa!important}
+.success-order-total span{color:#b9cfcd!important}
+.order-success-actions .secondary-btn{background:#33413f!important;color:#fff!important;border:1px solid #526361!important}
+.order-success-actions .primary-btn{color:#fff!important}
