@@ -4965,3 +4965,8 @@ body.theme-dark #page-product-detail .installment-whatsapp *{color:#bcebd4!impor
 
 /* Hide empty optional promo price badge entirely */
 .home-promo-price:empty,.home-promo-price.hidden{display:none!important;visibility:hidden!important;}
+
+/* Ensure empty promo text slots never render as stray pills */
+.home-promo-overlay p:empty{display:none!important}
+.home-promo-price:empty{display:none!important}
+.home-promo-price.hidden{display:none!important}
