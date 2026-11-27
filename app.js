@@ -70,7 +70,7 @@ function stockLabel(s){return s==='out'?'غير متوفر':s==='low'?'كمية 
 function stockClass(s){return s==='out'?'out-stock':s==='low'?'low-stock':'in-stock'}
 function renderProducts(){
  const q=($("products-search-input")?.value||$("search-input").value).trim().toLowerCase();
- const filtered=products.filter(p=>{
+ const filtered=products.filter(p=>Number(p.stock)>0).filter(p=>{
    const type=p.deviceType||"phone";
    const brand=String(p.brand||"").trim()||"بدون ماركة";
    return (selectedBrand==="الكل"||brand.toLowerCase()===selectedBrand.toLowerCase()) &&
