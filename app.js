@@ -383,6 +383,21 @@ async function loadProducts(){
    renderProducts();
  }
 }
+async 
+function showOrderSuccess(orderNumber,order,orderedCart){
+ const items=(orderedCart||[]).map(x=>({name:x.name,qty:x.qty,price:x.price,color:x.color,ram:x.ram,storage:x.storage,variantKey:x.variantKey}));
+ const subtotal=items.reduce((sum,x)=>sum+Number(x.price||0)*Number(x.qty||0),0),fee=6000+Math.floor(subtotal/1000000)*2000,total=subtotal+fee;
+ const numberText=String(orderNumber);
+ $("success-order-number").textContent="#"+numberText;
+ $("success-order-total").textContent=money(total);
+ $("success-order-details").innerHTML=items.map(x=>'<div class="success-order-item"><span>'+escapeHtml(x.name)+(x.variantKey?' ('+escapeHtml(x.ram||'')+' / '+escapeHtml(x.storage||'')+')':'')+(x.color?' — '+escapeHtml(x.color):'')+' × '+Number(x.qty)+'</span><b>'+money(Number(x.price||0)*Number(x.qty||0))+'</b></div>').join('')+'<div class="success-order-fee"><span>أجور التوصيل</span><b>'+money(fee)+'</b></div>';
+ const textDetails='طلب هونر الديوانية #'+numberText+'\n'+items.map(x=>x.name+(x.variantKey?' ('+(x.ram||'')+' / '+(x.storage||'')+')':'')+(x.color?' — '+x.color:'')+' × '+x.qty+' — '+money(Number(x.price||0)*Number(x.qty||0))).join('\n')+'\nأجور التوصيل: '+money(fee)+'\nالمجموع: '+money(total);
+ $("success-copy-order").onclick=()=>{if(navigator.clipboard?.writeText)navigator.clipboard.writeText(textDetails).then(()=>toast("تم نسخ تفاصيل الطلب")).catch(()=>toast("تعذر النسخ"));else toast("النسخ غير متاح بهذا المتصفح")};
+ $("success-track-order").onclick=()=>{$("order-success-dialog").close();showStorePage("tracking");};
+ $("order-success-close").onclick=()=> $("order-success-dialog").close();
+ const dlg=$("order-success-dialog");if(dlg&&!dlg.open)dlg.showModal();
+}
+
 async function submitOrder(e){
  e.preventDefault();
  const formEl=e.currentTarget;
@@ -431,6 +446,7 @@ async function submitOrder(e){
      });
      if(error)throw error;
      $("form-message").textContent="تم استلام طلبك بنجاح. رقم طلبك: "+orderNumber;
+     showOrderSuccess(orderNumber,order,cart);
    }else{
      const localOrders=JSON.parse(localStorage.getItem("honor-demo-orders")||"[]");
      order.id="DEMO-"+Date.now();localOrders.push(order);
@@ -438,7 +454,7 @@ async function submitOrder(e){
      $("form-message").textContent="تم تسجيل طلب تجريبي على هذا الجهاز. اربط قاعدة البيانات لاستقبال طلبات حقيقية.";
    }
    cart=[];persistCart();await loadProducts();formEl.reset();updateCheckoutTotals();
-   setTimeout(()=>$("checkout-dialog").close(),3000);
+   if($("checkout-dialog").open)$("checkout-dialog").close();
  }catch(error){
    console.error("Order submission failed:",error);
    $("form-message").textContent=error?.message||"تعذر إرسال الطلب حالياً. حاول مرة ثانية.";
